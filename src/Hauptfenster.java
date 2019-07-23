@@ -29,6 +29,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class Hauptfenster extends JFrame {
 
@@ -60,6 +62,7 @@ public class Hauptfenster extends JFrame {
 	 * Create the frame.
 	 */
 	public Hauptfenster() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("Z:\\Sonstiges\\Markus\\Weiterbildung\\Java\\workspace\\SimSTB\\bilder\\settings-gears.png"));
 		setResizable(false);
 		setTitle("SimSTB - Simulationsumgebung");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -384,7 +387,6 @@ public class Hauptfenster extends JFrame {
 			// TODO Auto-generated method stub		
 		}
 		public void editingStopped(ChangeEvent e) {
-			System.out.println("Hallo");
 			double wert = Double.parseDouble( (String) tblAE.getModel().getValueAt( tblAE.getSelectedRow(), 1));
 			int id = tblAE.getSelectedRow();
 			Setzer.anaEin(id, wert);
