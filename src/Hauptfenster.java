@@ -9,7 +9,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import java.awt.event.ActionListener;
@@ -19,9 +21,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
@@ -41,7 +47,11 @@ public class Hauptfenster extends JFrame {
 	private JTable tblAA;
 	private JLabel lblDatum;
 	private JLabel lblZeit;
+	private JButton btnAufz;
 
+	private boolean aufzeichnung = false;
+	private Datenaufzeichner aufzeichner;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -121,18 +131,21 @@ public class Hauptfenster extends JFrame {
 		panel_2.setLayout(null);
 		
 		JButton btnModelle = new JButton("Modelle");
+		btnModelle.addActionListener( actModelle);
 		btnModelle.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnModelle.setBackground(new Color(220, 220, 220));
 		btnModelle.setBounds(10, 11, 130, 50);
 		panel_2.add(btnModelle);
 		
 		JButton btnTesten = new JButton("Testautomaten");
+		btnTesten.addActionListener( actTest);
 		btnTesten.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnTesten.setBackground(new Color(220, 220, 220));
 		btnTesten.setBounds(10, 72, 130, 50);
 		panel_2.add(btnTesten);
 		
 		JButton btnGen = new JButton("Generatoren");
+		btnGen.addActionListener( actGen);
 		btnGen.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnGen.setBackground(new Color(220, 220, 220));
 		btnGen.setBounds(10, 133, 130, 50);
@@ -302,7 +315,8 @@ public class Hauptfenster extends JFrame {
 		tblAA.setBounds(120, 370, 105, 128);
 		panel.add(tblAA);
 		
-		JButton btnAufz = new JButton("Datenaufzeichnung");
+		btnAufz = new JButton("Datenaufzeichnung");
+		btnAufz.addActionListener( actAufzeichner);
 		btnAufz.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnAufz.setBackground(new Color(220, 220, 220));
 		btnAufz.setBounds(20, 610, 130, 50);
@@ -345,6 +359,8 @@ public class Hauptfenster extends JFrame {
 			  }
 			});
 		t.start();
+		
+		
 	}
 	
 	ActionListener actAlles0 = new ActionListener() {				// Action Handler für Knopf "Alles 0"
@@ -382,7 +398,29 @@ public class Hauptfenster extends JFrame {
 		}
 	};
 
-    CellEditorListener actAETBL = new CellEditorListener() {
+	ActionListener actModelle = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			JOptionPane.showMessageDialog(rootPane, "Leider nocht nicht implementiert.\nSW-Modelle mit GUI zum Testen von Lösungen.\nAnforderungswunsch R6", "Hinweis",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+	};
+ 
+	ActionListener actTest = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			JOptionPane.showMessageDialog(rootPane, "Leider nocht nicht implementiert.\nAutomatisiertes Testablaufmodul.\nAnforderungswunsch R9", "Hinweis",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+	};
+ 
+	ActionListener actGen = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			JOptionPane.showMessageDialog(rootPane, "Leider nocht nicht implementiert.\nFunktionsgenerator für analoge Eingangssignale.\nAnforderungswunsch R5", "Hinweis",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+	};
+ 
+	
+	CellEditorListener actAETBL = new CellEditorListener() {
  		public void editingCanceled(ChangeEvent arg0) {
 			// TODO Auto-generated method stub		
 		}
@@ -405,6 +443,29 @@ public class Hauptfenster extends JFrame {
 				Setzer.digEin(id, 0);
 				}
 			tblDE.clearSelection();
+		}
+	};
+
+	ActionListener actAufzeichner = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			if( aufzeichnung == false) {
+				AufzeichnerDialog dialog = new AufzeichnerDialog( );
+				dialog.setModal(true);
+				boolean erg = dialog.run();
+				if( erg == true) {
+					aufzeichnung = true;
+					int intervall = dialog.getIntervall();
+					String dateiname = dialog.getDateiname();
+					aufzeichner = new Datenaufzeichner( intervall, dateiname);
+					aufzeichner.start();
+					btnAufz.setText("Aufzeichnung beenden");
+				}
+			}
+			else {
+				aufzeichnung = false;
+				aufzeichner.stop();
+				btnAufz.setText("Datenaufzeichnung");
+			}
 		}
 	};
 
@@ -465,4 +526,5 @@ public class Hauptfenster extends JFrame {
 			e.printStackTrace();
 		}
 	}
+
 }
