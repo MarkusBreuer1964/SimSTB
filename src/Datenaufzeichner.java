@@ -13,6 +13,7 @@ public class Datenaufzeichner {
 	private int intervall;
 	private String dateiname;
 	private Timer t;
+	private int anzahlDatensaetze;
 	
 	public Datenaufzeichner(int intervall, String dateiname) {
 		super();
@@ -48,6 +49,8 @@ public class Datenaufzeichner {
 			writer.flush();
 			writer.close();			
 
+			anzahlDatensaetze = 0;
+			
 			t = new Timer( 1000 * intervall, new ActionListener() {		
 				  public void actionPerformed( ActionEvent e ) {
 				    schreiben();
@@ -109,7 +112,9 @@ public void schreiben() {
 
 			writer.write(System.getProperty("line.separator"));
 			writer.flush();
-			writer.close();			
+			writer.close();	
+			
+			anzahlDatensaetze++;
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -119,5 +124,13 @@ public void schreiben() {
 	
 	public void stop() {
 		t.stop();
+	}
+
+	public int getAnzahlDatensaetze() {
+		return anzahlDatensaetze;
+	}
+
+	public String getDateiname() {
+		return dateiname;
 	}
 }

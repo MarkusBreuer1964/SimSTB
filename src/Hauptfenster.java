@@ -72,7 +72,7 @@ public class Hauptfenster extends JFrame {
 	 * Create the frame.
 	 */
 	public Hauptfenster() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("Z:\\Sonstiges\\Markus\\Weiterbildung\\Java\\workspace\\SimSTB\\bilder\\settings-gears.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Hauptfenster.class.getResource("/bilder/settings-gears.png")));
 		setResizable(false);
 		setTitle("SimSTB - Simulationsumgebung");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -464,6 +464,9 @@ public class Hauptfenster extends JFrame {
 			else {
 				aufzeichnung = false;
 				aufzeichner.stop();
+				String msg = "Datenaufzeichnung beendet.\n" + aufzeichner.getAnzahlDatensaetze() + " Datensätze in Datei " 
+				           + aufzeichner.getDateiname() + " geschrieben.";
+				JOptionPane.showMessageDialog(rootPane, msg, "Datenaufzeichnung", JOptionPane.INFORMATION_MESSAGE);
 				btnAufz.setText("Datenaufzeichnung");
 			}
 		}

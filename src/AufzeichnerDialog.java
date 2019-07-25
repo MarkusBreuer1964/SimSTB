@@ -3,6 +3,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Toolkit;
@@ -55,6 +56,7 @@ public class AufzeichnerDialog extends JDialog implements ActionListener {
 		textField_1.setColumns(10);
 		
 		JButton btnDatei = new JButton("Datei");
+		btnDatei.addActionListener( actDatei);
 		btnDatei.setBounds(472, 32, 89, 23);
 		contentPanel.add(btnDatei);
 		{
@@ -106,5 +108,21 @@ public class AufzeichnerDialog extends JDialog implements ActionListener {
 	public String getDateiname() {
 		return dateiname;
 	}
+
+	ActionListener actDatei = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+	        try {
+	            JFileChooser chooser = new JFileChooser();
+	            int rueckgabeWert = chooser.showOpenDialog(null);
+	            if(rueckgabeWert == JFileChooser.APPROVE_OPTION) {
+	            	dateiname = chooser.getSelectedFile().getAbsolutePath();
+	            	textField_1.setText( dateiname);
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+			
+		}
+	};
 
 }
