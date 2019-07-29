@@ -4,7 +4,7 @@
     <!--ANT 1.7 is required                                        -->
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="${dir.buildfile}/../../.."/>
+    <property name="dir.workspace" value="Z:/Sonstiges/Markus/Weiterbildung/Java/workspace/SimSTB/javaprojekte"/>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
     <target name="create_run_jar">
         <jar destfile="${dir.jarfile}/SimSTB.jar" filesetmanifest="mergewithoutmain">
@@ -13,7 +13,7 @@
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="${dir.workspace}/SimSTB/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/SimSTB/bilder/bilder.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="Z:/Sonstiges/Markus/Weiterbildung/Java/workspace/SimSTB/bilder/bilder.jar"/>
         </jar>
     </target>
 </project>

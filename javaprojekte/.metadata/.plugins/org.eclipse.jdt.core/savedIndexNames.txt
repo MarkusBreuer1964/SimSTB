@@ -1,0 +1,19 @@
+INDEX VERSION 1.130+Z:\Sonstiges\Markus\Weiterbildung\Java\workspace\SimSTB\javaprojekte\.metadata\.plugins\org.eclipse.jdt.core
+2759217061.index
+2257728515.index
+649745328.index
+2080974966.index
+3887499507.index
+438810254.index
+707998324.index
+1093195567.index
+2318257873.index
+3123490737.index
+3813248155.index
+3062910999.index
+136320240.index
+2070070664.index
+889346204.index
+600441928.index
+386549679.index
+2619129865.index
