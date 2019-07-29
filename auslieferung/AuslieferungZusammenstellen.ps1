@@ -27,7 +27,7 @@
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	28.07.2019
+		Letzte Änderung:	29.07.2019
 
 #>
 
@@ -63,10 +63,10 @@ Copy-Item $quelldateien $zielodrdner
 Write-Host ""
 
 write-Host "3.b C/C++ - Schnittstelle kopieren"
-$quelldatei = $simSTBordner + "\C\simlib\simlib\simulation.h"               # Header kopieren
+$quelldatei = $simSTBordner + "\cprojekte\simlib\simlib\simulation.h"       # Header kopieren
 $zielodrdner = $auslierungsordner + "\sim\header"
 Copy-Item $quelldatei $zielodrdner
-$quelldatei = $simSTBordner + "\C\simlib\Debug\simlib.lib"                  # Lib kopieren
+$quelldatei = $simSTBordner + "\cprojekte\simlib\Debug\simlib.lib"          # Lib kopieren
 $zielodrdner = $auslierungsordner + "\sim\lib"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
@@ -75,7 +75,7 @@ write-Host "3.c Dokumentation und Beispiele kopieren"
 $quelldatei = $simSTBordner + "\doc\SimSTB-Benutzerdokumentation.pdf"       # Dokumentation kopieren
 $zielodrdner = $auslierungsordner + "\sim\dokumentation"
 Copy-Item $quelldatei $zielodrdner
-$quelldatei = $simSTBordner + "\C\beispiel\beispiel\beispiel.cpp"           # Beispiele kopieren
+$quelldatei = $simSTBordner + "\cprojekte\beispiel\beispiel\beispiel.cpp"   # Beispiele kopieren
 $zielodrdner = $auslierungsordner + "\sim\beispiele"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
