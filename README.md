@@ -47,6 +47,8 @@ Mit Hilfe des Programms SimSTB.exe können Sie digitalen und analogen Ein- und A
 und die Eingänge setzen. Die Werte werden im Sekundentakt aktualisiert. Starten können Sie das Programm 
 über einen einfachen Doppelklick auf die Exe-Datei.
 
+![SimSTB Benutzeroberfläche](/bilder/SimSTB-GUI.png)
+
 ### 2. Erstellung eigener Programme für die Simulationsumgebung SimSTB
 
 Mit Hilfe der vier Funktionen:
