@@ -13,7 +13,9 @@ mittels Simulation durchzuführen.
 ## Installation
 
 1. Kontrollieren sie, ob die Java-Laufzeit-Umgebung (JRE) installiert ist.
-2. Kopieren Sie das bereitgestellte Simulationsverzeichnis samt Unterverzeichnissen nach „C:\“
+2. Kopieren Sie das bereitgestellte Simulationsverzeichnis (in GitHub /auslieferung/sim) 
+samt Unterverzeichnissen nach „C:\“. Solange Sie nur die Simulationsumgebung nutzen wollen 
+und keine Modifikationen an deren Quellcode vornehmen wollen brauchen Sie keine weiteren Dateien. 
 3. Kontrollieren Sie, ob folgende Verzeichnis-Struktur und Dateien vorhanden sind.
 
 ```
