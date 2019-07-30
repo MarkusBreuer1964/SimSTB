@@ -78,6 +78,12 @@ Copy-Item $quelldatei $zielodrdner
 $quelldatei = $simSTBordner + "\cprojekte\beispiel\beispiel\beispiel.cpp"   # Beispiele kopieren
 $zielodrdner = $auslierungsordner + "\sim\beispiele"
 Copy-Item $quelldatei $zielodrdner
+$quelldatei = $simSTBordner + "\README.md"                                  # README und LICENSE kopieren
+$zielodrdner = $auslierungsordner + "\sim"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $simSTBordner + "\LICENSE.txt"                                
+$zielodrdner = $auslierungsordner + "\sim"
+Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
 write-Host "4.a Ausführbare-Jar-Datei SimSTB.jar erzeugen"                  # Ausführbare Jar-Datei SimSTB.jar erzeugen
