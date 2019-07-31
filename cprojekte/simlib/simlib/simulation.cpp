@@ -1,6 +1,6 @@
 //
 //	Inhalt:
-//		Projekt: 			SimMonitor
+//		Projekt: 			SimSTB
 //		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
 //		Datei:				Basisfunktionen und Zugriffsfunktionen auf die Austauschdateien
 //
@@ -10,7 +10,7 @@
 //
 //	Datum:
 //		Erstellt:			15.10.2018
-//		Letzte Änderung:	26.07.2019
+//		Letzte Änderung:	31.07.2019
 //
 
 #include <iostream>
@@ -27,31 +27,31 @@ static void dateiOeffnenEingabeStrom( ifstream *datei, string dateiname);
 static void dateiOeffnenAusgabeStrom( ofstream *datei, string dateiname);
 
 //
-//	Basisfunktionen zur Simulation digitaler und analoger Ein- und Ausgänge
+//	Realisierung der 4 Schnittstellenfunktionen
 //
 
-bool digEin( int id)
+bool digEin( int id)												// Digitale Eingabe
 {
-	locale::global(locale("German_germany"));															// Zeichensatz deutsch
+	locale::global(locale("German_germany"));															
 	return digEinLesen( id);
 }
 
-void digAus( int id, bool wert)
+void digAus( int id, bool wert)										// Digitale Ausgabe
 {
-	locale::global(locale("German_germany"));															// Zeichensatz deutsch
+	locale::global(locale("German_germany"));														
 	digAusSchreiben( id, wert);
 	return;
 }
 
-double anaEin( int id)
+double anaEin( int id)												// Analoge Eingabe
 {
-	locale::global(locale("German_germany"));															// Zeichensatz deutsch
+	locale::global(locale("German_germany"));														
 	return anaEinLesen( id);
 }
 
-void anaAus( int id, double wert)
+void anaAus( int id, double wert)									// Analoge Ausgabe
 {
-	locale::global(locale("German_germany"));															// Zeichensatz deutsch
+	locale::global(locale("German_germany"));													
 	anaAusSchreiben( id, wert);
 	return;
 }
@@ -93,8 +93,8 @@ bool digEinLesen( int id)
 	bool wert;
 	bool eingabeVektor[ DIGMAXLAENGE];
  	
-	digEinLesen( eingabeVektor);								// Eingabevektor holen
-	wert = eingabeVektor[ id];                                  // Rückgabewert extrahieren
+	digEinLesen( eingabeVektor);								
+	wert = eingabeVektor[ id];                                  
 	return wert;
 }
 
@@ -103,7 +103,7 @@ void digEinLesen( bool eingabeVektor[])
 	ifstream datei;
 	dateiOeffnenEingabeStrom( &datei, digEinDateiname);
 
-    for( int i = 0; i < DIGMAXLAENGE; i++)							// Digitalen Eingabevektor lesen
+    for( int i = 0; i < DIGMAXLAENGE; i++)							
     {		
 		eingabeVektor[ i] = 0;
  		datei >> eingabeVektor[ i];
@@ -120,11 +120,11 @@ void digEinSchreiben( int id, bool wert)
 
 	digEinLesen( eingabeVektor);
 
-	eingabeVektor[ id] = wert;                                  // Wert setzen
+	eingabeVektor[ id] = wert;                                  
 
 	dateiOeffnenAusgabeStrom( &eingabedatei, digEinDateiname);
 
-    for( int i = 0; i < DIGMAXLAENGE; i++)                        // Digitalen Eingabevektor zurückschreiben
+    for( int i = 0; i < DIGMAXLAENGE; i++)                        
     {
         eingabedatei << eingabeVektor[ i] << endl;
     }
@@ -140,7 +140,7 @@ void digEinSchreiben( bool eingabeVektor[])
 
 	dateiOeffnenAusgabeStrom( &eingabedatei, digEinDateiname);
 
-    for( int i = 0; i < DIGMAXLAENGE; i++)                        // Digitalen Eingabevektor zurückschreiben
+    for( int i = 0; i < DIGMAXLAENGE; i++)                        
     {
         eingabedatei << eingabeVektor[ i] << endl;
     }
@@ -159,8 +159,8 @@ bool digAusLesen( int id)
 	bool wert;
 	bool ausgabeVektor[ DIGMAXLAENGE];
 
-	digAusLesen( ausgabeVektor);								// Ausgabevektor holen
-	wert = ausgabeVektor[ id];                                  // Rückgabewert extrahieren
+	digAusLesen( ausgabeVektor);								
+	wert = ausgabeVektor[ id];                                  
 	return wert;
 }
 
@@ -169,7 +169,7 @@ void digAusLesen( bool ausgabeVektor[])
 	ifstream datei;
 	dateiOeffnenEingabeStrom( &datei, digAusDateiname);
 
-    for( int i = 0; i < DIGMAXLAENGE; i++)					 	// Digitalen Ausgabevektor lesen
+    for( int i = 0; i < DIGMAXLAENGE; i++)					 	
     {		
 		ausgabeVektor[ i] = 0;
  		datei >> ausgabeVektor[ i];
@@ -187,10 +187,10 @@ void digAusSchreiben( int id, bool wert)
 
 	digAusLesen( ausgabeVektor);
 
-	ausgabeVektor[ id] = wert;                                  // Wert setzen
+	ausgabeVektor[ id] = wert;                                  
 
 	dateiOeffnenAusgabeStrom( &ausgabedatei, digAusDateiname);
-    for( int i = 0; i < DIGMAXLAENGE; i++)                       // Digitalen Ausgabevektor zurückschreiben
+    for( int i = 0; i < DIGMAXLAENGE; i++)                       
     {
         ausgabedatei << ausgabeVektor[ i] << endl;
     }
@@ -210,7 +210,7 @@ double anaEinLesen( int id)
 	double eingabeVektor[ ANAMAXLAENGE];
 
 	anaEinLesen( eingabeVektor);
-	wert = eingabeVektor[ id];                                  // Rückgabewert extrahieren
+	wert = eingabeVektor[ id];                                 
 	return wert;
 }
 
@@ -219,7 +219,7 @@ void anaEinLesen( double eingabeVektor[])
 	ifstream datei;
 	dateiOeffnenEingabeStrom( &datei, anaEinDateiname);
 	
-    for( int i = 0; i < ANAMAXLAENGE; i++)							// Digitalen Eingabevektor lesen
+    for( int i = 0; i < ANAMAXLAENGE; i++)							
     {		
 		eingabeVektor[ i] = 0;
  		datei >> eingabeVektor[ i];
@@ -238,10 +238,10 @@ void anaEinSchreiben( int id, double wert)
 
 	anaEinLesen( eingabeVektor);
 
-	eingabeVektor[ id] = wert;                                  // Wert setzen
+	eingabeVektor[ id] = wert;                                  
 
 	dateiOeffnenAusgabeStrom( &eingabedatei, anaEinDateiname);
-    for( int i = 0; i < ANAMAXLAENGE; i++)                        // Digitalen Eingabevektor zurückschreiben
+    for( int i = 0; i < ANAMAXLAENGE; i++)                        
     {
         eingabedatei << eingabeVektor[ i] << endl;
     }
@@ -255,7 +255,7 @@ void anaEinSchreiben( double eingabeVektor[])
 	ofstream eingabedatei;
 
 	dateiOeffnenAusgabeStrom( &eingabedatei, anaEinDateiname);
-    for( int i = 0; i < ANAMAXLAENGE; i++)                        // Digitalen Eingabevektor zurückschreiben
+    for( int i = 0; i < ANAMAXLAENGE; i++)                        
     {
         eingabedatei << eingabeVektor[ i] << endl;
     }
@@ -275,7 +275,7 @@ double anaAusLesen( int id)
 	double ausgabeVektor[ ANAMAXLAENGE];
 
 	anaAusLesen( ausgabeVektor);
-	wert = ausgabeVektor[ id];                                  // Rückgabewert extrahieren
+	wert = ausgabeVektor[ id];                                  
 	return wert;
 }
 
@@ -284,7 +284,7 @@ void anaAusLesen( double ausgabeVektor[])
 	ifstream datei;
 	dateiOeffnenEingabeStrom( &datei, anaAusDateiname);
 
-    for( int i = 0; i < ANAMAXLAENGE; i++)					 	// Digitalen Ausgabevektor lesen
+    for( int i = 0; i < ANAMAXLAENGE; i++)					 	
     {		
 		ausgabeVektor[ i] = 0;
  		datei >> ausgabeVektor[ i];

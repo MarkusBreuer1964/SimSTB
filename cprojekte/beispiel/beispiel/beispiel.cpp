@@ -1,7 +1,8 @@
 //
 //	Inhalt:
-//		Projekt: 			Beispiel_ls4_01
-//		Thema:				Beispiel für die Nutzung analoger Eingabesignale bei der Simulation
+//		Projekt: 			SimSTB
+//		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
+//		Datei:				Beispieldatei für die Nutzung der Schnittstelle
 //
 //	Autor:
 //		Name:				Markus Breuer
@@ -9,7 +10,7 @@
 //
 //	Datum:
 //		Erstellt:			24.12.2018
-//		Letzte Änderung:	26.07.2019
+//		Letzte Änderung:	31.07.2019
 //
 
 #include <cstdlib>
@@ -25,7 +26,7 @@ int main()
 	bool	ende = false;
 	double	wert;
 	
-	locale::global(locale("German_germany"));															// Zeichensatz deutsch
+	locale::global(locale("German_germany"));						// Zeichensatz deutsch
 
 	cout << "Beispielprogramm für Simulationsumgebung" << endl;
 	cout << "----------------------------------------" << endl << endl;

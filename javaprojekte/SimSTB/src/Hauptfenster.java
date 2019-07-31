@@ -1,3 +1,18 @@
+//
+//	Inhalt:
+//		Projekt: 			SimSTB
+//		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
+//		Datei:				Hauptfenster und Startpunkt des Steuerungs- und Monitor-Programms
+//
+//	Autor:
+//		Name:				Markus Breuer
+//		Organisaion:		STB
+//
+//	Datum:
+//		Erstellt:			20.07.2019
+//		Letzte Änderung:	31.07.2019
+//
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 

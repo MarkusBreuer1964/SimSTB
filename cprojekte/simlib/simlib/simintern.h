@@ -1,11 +1,16 @@
 //
+//	Inhalt:
+//		Projekt: 			SimSTB
+//		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
+//		Datei:				Interne Header-Datei der C/C++-Schnittstelle
+//
 //	Autor:
 //		Name:				Markus Breuer
 //		Organisaion:		STB
 //
 //	Datum:
-//		Erstellt:			24.12.2018
-//		Letzte Änderung:	26.07.2019
+//		Erstellt:			15.10.2018
+//		Letzte Änderung:	31.07.2019
 //
 
 #include "simulation.h"

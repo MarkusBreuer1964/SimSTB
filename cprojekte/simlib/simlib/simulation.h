@@ -1,6 +1,6 @@
 //
 //	Inhalt:
-//		Projekt: 			SimMonitor
+//		Projekt: 			SimSTB
 //		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
 //		Datei:				Zentrale Header-Datei der C/C++-Schnittstelle
 //
@@ -10,7 +10,7 @@
 //
 //	Datum:
 //		Erstellt:			15.10.2018
-//		Letzte Änderung:	26.07.2019
+//		Letzte Änderung:	31.07.2019
 //
 
 #define digEinDateiname "C:\\Sim\\digein.txt"
@@ -21,7 +21,7 @@
 const int DIGMAXLAENGE = 16;
 const int ANAMAXLAENGE = 8;
 
-bool digEin( int id);
+bool digEin( int id);						// Schnittstellen-Funktionen
 void digAus( int id, bool wert);
 
 double anaEin( int id);
