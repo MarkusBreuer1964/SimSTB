@@ -1,8 +1,9 @@
 # Java Binaries ausschliessen
 javaprojekte/SimSTB/bin/
 
-# Java Binaries ausschliessen
-javaprojekte/.metadata
+# Eclipse Einstellungen ausschliessen
+javaprojekte/.metadata/
+javaprojekte/.recommenders/
 
 # Unnützes der C-Library-Erstellung und des C++-Beispiels ausschliessen
 cprojekte/simlib/Debug/
