@@ -1,14 +1,20 @@
 ﻿# SimSTB - Simulationsumgebung für digitale und analoge Ein- und Ausgänge 
 
-Oft muss ein Programm nicht nur über die Konsole oder eine graphische Benutzeroberfläche mit dem Benutzer kommunizieren, 
+Die Simulationsumgebung SimSTB ist für die Ausbildung im Bereich C/C++-Programmierung geeignet. Sie ist insbesondere
+für den Unterricht bei (elektro)technischen Schülern gedacht.
+
+Oft muss ein Programm nicht nur über die Konsole oder eine graphische Oberfläche mit dem Benutzer kommunizieren, 
 sondern auch über analoge und digitale Schnittstellen mit einem technischen System.
 Die Simulationsumgebung SimSTB erlaubt es, dies für Schulungszwecke auch ohne zusätzliche Hardware 
 mittels Simulation durchzuführen.
 
+![Einsatzkontext](/bilder/Einsatzkontext.png)
+
+
 ## Requirements
 
 - Die Java-Laufzeit-Umgebung (JRE) muss installiert sein.
-
+- Die Library ist für das an der Schule im Einsatz befindliche VS C++ 2010 ausgelegt.
 
 ## Installation
 
