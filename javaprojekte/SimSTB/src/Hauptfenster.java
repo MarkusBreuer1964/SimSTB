@@ -219,7 +219,7 @@ public class Hauptfenster extends JFrame {
 		panel.add(tblDE);
 		
 		JLabel LblDA = new JLabel("<html>Digitale <br/>\r\nAusg\u00E4nge</html>");
-		LblDA.setBounds(90, 9, 70, 30);
+		LblDA.setBounds(121, 9, 70, 30);
 		panel.add(LblDA);
 		
 		tblDA = new JTable();
@@ -257,7 +257,7 @@ public class Hauptfenster extends JFrame {
 		});
 		tblDA.getColumnModel().getColumn(0).setResizable(false);
 		tblDA.getColumnModel().getColumn(1).setResizable(false);
-		tblDA.setBounds(90, 50, 70, 256);
+		tblDA.setBounds(120, 50, 70, 256);
 		panel.add(tblDA);
 		
 		JLabel LblAE = new JLabel("<html>Analoge <br/>\r\nEing\u00E4nge</html>");

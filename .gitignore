@@ -1,0 +1,23 @@
+# Java Binaries ausschliessen
+javaprojekte/SimSTB/bin/
+
+# Java Binaries ausschliessen
+javaprojekte/.metadata
+
+# Unnützes der C-Library-Erstellung und des C++-Beispiels ausschliessen
+cprojekte/simlib/Debug/
+cprojekte/simlib/Release/
+cprojekte/simlib/ipch/
+cprojekte/simlib/simlib/Debug/
+cprojekte/simlib/simlib/Release/
+
+cprojekte/beispiel/Debug/
+cprojekte/beispiel/Release/
+cprojekte/beispiel/ipch/
+cprojekte/beispiel/beispiel/Debug/
+cprojekte/beispiel/beispiel/Release/
+
+# Log-Daten (Datenaufzeichnung) ausschliessen
+*.log
+# Zip-Daten (Auslieferung) ausschliessen
+*.zip
