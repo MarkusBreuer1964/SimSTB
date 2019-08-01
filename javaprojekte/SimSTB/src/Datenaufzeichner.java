@@ -1,3 +1,19 @@
+//
+//	Inhalt:
+//		Projekt: 			SimSTB
+//		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
+//		Datei:				Datenaufzeichner
+//
+//	Autor:
+//		Name:				Markus Breuer
+//		Organisaion:		STB
+//
+//	Datum:
+//		Erstellt:			20.07.2019
+//		Letzte Änderung:	01.08.2019
+//
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -10,10 +26,10 @@ import javax.swing.Timer;
 
 public class Datenaufzeichner {
 
-	private int intervall;
-	private String dateiname;
-	private Timer t;
-	private int anzahlDatensaetze;
+	private int intervall;													// Aufzeichnungsintervall
+	private String dateiname;												// Name der Log-Datei
+	private Timer t;														// Timer; s.u.
+	private int anzahlDatensaetze;											// Anzahl der aufgezeichneten datensätze
 	
 	public Datenaufzeichner(int intervall, String dateiname) {
 		super();
@@ -21,26 +37,26 @@ public class Datenaufzeichner {
 		this.dateiname = dateiname;
 	}
 	
-	public void start() {
+	public void start() {													// Start der Datenaufzeichnung
 		try {
-			FileWriter writer = new FileWriter( dateiname, false);											// bestehende Datei löschen
-			writer.write("Zeit" );
-			for( int i = 0; i < 16; i++) {								// Tabelle DE füllen
+			FileWriter writer = new FileWriter( dateiname, false);			// bestehende Datei löschen
+			writer.write("Zeit" );											// Überschriftenzeile ausgeben
+			for( int i = 0; i < 16; i++) {								
 				writer.write(" ; ");
 				String s = "DE" + String.valueOf(i);
 				writer.write(s );
 		    }
-			for( int i = 0; i < 16; i++) {								// Tabelle DA füllen
+			for( int i = 0; i < 16; i++) {								
 				writer.write(" ; ");
 				String s = "DA" + String.valueOf(i);
 				writer.write(s );
 			}
-			for( int i = 0; i < 8; i++) {								// Tabelle AE füllen
+			for( int i = 0; i < 8; i++) {								
 				writer.write(" ; ");
 				String s = "AE" + String.valueOf(i);
 				writer.write(s );
 			}
-			for( int i = 0; i < 8; i++) {								// Tabelle AA füllen
+			for( int i = 0; i < 8; i++) {								
 				writer.write(" ; ");
 				String s = "AA" + String.valueOf(i);
 				writer.write(s );
@@ -51,7 +67,7 @@ public class Datenaufzeichner {
 
 			anzahlDatensaetze = 0;
 			
-			t = new Timer( 1000 * intervall, new ActionListener() {		
+			t = new Timer( 1000 * intervall, new ActionListener() {			// Timer, um periodisch jeweils eine Aufzeichnungszeile zu erzeugen
 				  public void actionPerformed( ActionEvent e ) {
 				    schreiben();
 				  }
@@ -65,14 +81,14 @@ public class Datenaufzeichner {
 	
 	}
 
-public void schreiben() {
+public void schreiben() {													// Eine Aufzeichnungszeile herausschreiben
     	
 		try {
 			FileWriter writer = new FileWriter( dateiname, true);
-			DigDatei de = new DigDatei( Konfig.getDIGMAXLAENGE(), "C:\\Sim\\digein.txt");
-			DigDatei da = new DigDatei( Konfig.getDIGMAXLAENGE(), "C:\\Sim\\digaus.txt");
-			AnaDatei ae = new AnaDatei( Konfig.getANAMAXLAENGE(), "C:\\Sim\\anaein.txt");
-			AnaDatei aa = new AnaDatei( Konfig.getANAMAXLAENGE(), "C:\\Sim\\anaaus.txt");
+			DigDatei de = new DigDatei( Konfig.getDIGMAXLAENGE(), Konfig.getDIGEIN());
+			DigDatei da = new DigDatei( Konfig.getDIGMAXLAENGE(), Konfig.getDIGAUS());
+			AnaDatei ae = new AnaDatei( Konfig.getANAMAXLAENGE(), Konfig.getANAEIN());
+			AnaDatei aa = new AnaDatei( Konfig.getANAMAXLAENGE(), Konfig.getANAAUS());
 			int[] dvektor = new int[ Konfig.getDIGMAXLAENGE()];
 			double[] avektor = new double[ Konfig.getANAMAXLAENGE()];
 			String s;
@@ -122,7 +138,7 @@ public void schreiben() {
 		}
 	}
 	
-	public void stop() {
+	public void stop() {																		// Datenaufzeichnung beenden
 		t.stop();
 	}
 

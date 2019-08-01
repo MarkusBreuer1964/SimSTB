@@ -16,6 +16,7 @@
 
 import java.io.IOException;
 
+
 public class Setzer {
 
 	public static void anaAus0() {																// Alle analogen Ausgänge auf 0 setzen

@@ -2,7 +2,9 @@
 //	Inhalt:
 //		Projekt: 			SimSTB
 //		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
-//		Datei:				Hauptfenster und Startpunkt des Steuerungs- und Monitor-Programms
+//		Datei:				Hauptfenster und Startpunkt des Steuerungs- und Monitor-Programms 
+//							- GUI grösstenteils mit WindowBuilder generiert
+//							- Actionhandler jeweils als eingebettete Klassen realisiert
 //
 //	Autor:
 //		Name:				Markus Breuer
@@ -10,8 +12,9 @@
 //
 //	Datum:
 //		Erstellt:			20.07.2019
-//		Letzte Änderung:	31.07.2019
+//		Letzte Änderung:	01.08.2019
 //
+
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -53,6 +56,7 @@ import java.awt.event.InputMethodEvent;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 
+
 public class Hauptfenster extends JFrame {
 
 	private JPanel contentPane;
@@ -64,8 +68,8 @@ public class Hauptfenster extends JFrame {
 	private JLabel lblZeit;
 	private JButton btnAufz;
 
-	private boolean aufzeichnung = false;
-	private Datenaufzeichner aufzeichner;
+	private boolean aufzeichnung = false;				// Merker, ob Datenaufzeichnung läuft
+	private Datenaufzeichner aufzeichner;				// Datenaufzeichner
 	
 	/**
 	 * Launch the application.
@@ -366,9 +370,9 @@ public class Hauptfenster extends JFrame {
 		lblZeit.setBounds(170, 55, 106, 14);
 		contentPane.add(lblZeit);
 		
-		tabellenFuellen();																	// Tabellen initial füllen
+		tabellenFuellen();											// Tabellen initial füllen
 
-		Timer t = new Timer( 1000, new ActionListener() {									// Timer zum periodischen füllen anlegen und aktivieren
+		Timer t = new Timer( 1000, new ActionListener() {			// Timer zum periodischen füllen anlegen und aktivieren
 			  public void actionPerformed( ActionEvent e ) {
 			    aktualisieren();
 			  }
@@ -435,11 +439,11 @@ public class Hauptfenster extends JFrame {
 	};
  
 	
-	CellEditorListener actAETBL = new CellEditorListener() {
+	CellEditorListener actAETBL = new CellEditorListener() {		// Action Handler für Tabelle "Analoge Eingänge"	
  		public void editingCanceled(ChangeEvent arg0) {
-			// TODO Auto-generated method stub		
+			// Nicht genutzter Stub		
 		}
-		public void editingStopped(ChangeEvent e) {
+		public void editingStopped(ChangeEvent e) {				// Wert in Austauschdatei setzen
 			double wert = Double.parseDouble( (String) tblAE.getModel().getValueAt( tblAE.getSelectedRow(), 1));
 			int id = tblAE.getSelectedRow();
 			Setzer.anaEin(id, wert);
@@ -447,8 +451,8 @@ public class Hauptfenster extends JFrame {
 		}
     };	
     
-	MouseListener actDETBL = new MouseAdapter() {
-		public void mouseClicked(MouseEvent arg0) {
+	MouseListener actDETBL = new MouseAdapter() {					// Action Handler für Tabelle "Digitale Eingänge"
+		public void mouseClicked(MouseEvent arg0) {				// Wert in Austauschdatei setzen			
 			int alterWert = (int) tblDE.getModel().getValueAt( tblDE.getSelectedRow(), 1);
 			int id = tblDE.getSelectedRow();
 			if( alterWert == 0) {
@@ -461,22 +465,22 @@ public class Hauptfenster extends JFrame {
 		}
 	};
 
-	ActionListener actAufzeichner = new ActionListener() {
+	ActionListener actAufzeichner = new ActionListener() {											// ActionListener für Datenaufzeichnung
 		public void actionPerformed(ActionEvent arg0) {
-			if( aufzeichnung == false) {
-				AufzeichnerDialog dialog = new AufzeichnerDialog( );
+			if( aufzeichnung == false) {											// Datenaufzeichnung starten
+				AufzeichnerDialog dialog = new AufzeichnerDialog( );				// Dialog für Einstellungen; muss modal sein				
 				dialog.setModal(true);
 				boolean erg = dialog.run();
 				if( erg == true) {
 					aufzeichnung = true;
 					int intervall = dialog.getIntervall();
 					String dateiname = dialog.getDateiname();
-					aufzeichner = new Datenaufzeichner( intervall, dateiname);
+					aufzeichner = new Datenaufzeichner( intervall, dateiname);		// eigentliche Aufzeichnung starten
 					aufzeichner.start();
 					btnAufz.setText("Aufzeichnung beenden");
 				}
 			}
-			else {
+			else {																	// Datenaufzeichnung beenden
 				aufzeichnung = false;
 				aufzeichner.stop();
 				String msg = "Datenaufzeichnung beendet.\n" + aufzeichner.getAnzahlDatensaetze() + " Datensätze in Datei " 
@@ -487,23 +491,23 @@ public class Hauptfenster extends JFrame {
 		}
 	};
 
-	void tabellenFuellen() {
-		for( int i = 0; i < 16; i++) {								// Tabelle DE füllen
+	void tabellenFuellen() {											// Tabellen initial mit Tabellenlabeln und 0 füllen
+		for( int i = 0; i < 16; i++) {					// Tabelle DE füllen
 			String s = "DE" + String.valueOf(i);
 			tblDE.getModel().setValueAt(s, i, 0);
 			tblDE.getModel().setValueAt(0, i, 1);
 		}
-		for( int i = 0; i < 16; i++) {								// Tabelle DA füllen
+		for( int i = 0; i < 16; i++) {					// Tabelle DA füllen
 			String s = "DA" + String.valueOf(i);
 			tblDA.getModel().setValueAt(s, i, 0);
 			tblDA.getModel().setValueAt(0, i, 1);
 		}
-		for( int i = 0; i < 8; i++) {								// Tabelle AE füllen
+		for( int i = 0; i < 8; i++) {					// Tabelle AE füllen
 			String s = "AE" + String.valueOf(i);
 			tblAE.getModel().setValueAt(s, i, 0);
 			tblAE.getModel().setValueAt(0, i, 1);
 		}
-		for( int i = 0; i < 8; i++) {								// Tabelle AA füllen
+		for( int i = 0; i < 8; i++) {					// Tabelle AA füllen
 			String s = "AA" + String.valueOf(i);
 			tblAA.getModel().setValueAt(s, i, 0);
 			tblAA.getModel().setValueAt(0, i, 1);
@@ -511,32 +515,32 @@ public class Hauptfenster extends JFrame {
 		
 	}
 	
-	void aktualisieren() {
+	void aktualisieren() {												// Benutzeroberfläche periodisch aktualisieren
 		try {																	
-			DigDatei de = new DigDatei( Konfig.getDIGMAXLAENGE(), "C:\\Sim\\digein.txt");
-			DigDatei da = new DigDatei( Konfig.getDIGMAXLAENGE(), "C:\\Sim\\digaus.txt");
-			AnaDatei ae = new AnaDatei( Konfig.getANAMAXLAENGE(), "C:\\Sim\\anaein.txt");
-			AnaDatei aa = new AnaDatei( Konfig.getANAMAXLAENGE(), "C:\\Sim\\anaaus.txt");
+			DigDatei de = new DigDatei( Konfig.getDIGMAXLAENGE(), Konfig.getDIGEIN());
+			DigDatei da = new DigDatei( Konfig.getDIGMAXLAENGE(), Konfig.getDIGAUS());
+			AnaDatei ae = new AnaDatei( Konfig.getANAMAXLAENGE(), Konfig.getANAEIN());
+			AnaDatei aa = new AnaDatei( Konfig.getANAMAXLAENGE(), Konfig.getANAAUS());
 			int[] dvektor = new int[ Konfig.getDIGMAXLAENGE()];
 			double[] avektor = new double[ Konfig.getANAMAXLAENGE()];
 
 			de.lesen(dvektor);
-			for( int i = 0; i < Konfig.getDIGMAXLAENGE(); i++) {								// Tabelle DE füllen
+			for( int i = 0; i < Konfig.getDIGMAXLAENGE(); i++) {				// Tabelle DE aktualisieren
 				tblDE.getModel().setValueAt(dvektor[i], i, 1);
 			}
 			da.lesen(dvektor);
-			for( int i = 0; i < Konfig.getDIGMAXLAENGE(); i++) {								// Tabelle DA füllen
+			for( int i = 0; i < Konfig.getDIGMAXLAENGE(); i++) {				// Tabelle DA aktualisieren
 				tblDA.getModel().setValueAt(dvektor[i], i, 1);
 			}		
 			ae.lesen(avektor);
-			for( int i = 0; i < Konfig.getANAMAXLAENGE(); i++) {								// Tabelle AE füllen
+			for( int i = 0; i < Konfig.getANAMAXLAENGE(); i++) {				// Tabelle AE aktualisieren
 				tblAE.getModel().setValueAt(avektor[i], i, 1);
 			}
 			aa.lesen(avektor);
-			for( int i = 0; i < Konfig.getANAMAXLAENGE(); i++) {								// Tabelle AA füllen
+			for( int i = 0; i < Konfig.getANAMAXLAENGE(); i++) {				// Tabelle AA aktualisieren
 				tblAA.getModel().setValueAt(avektor[i], i, 1);			
 			}	
-		SimpleDateFormat  formatDatum = new SimpleDateFormat("dd.MM.yyyy");
+		SimpleDateFormat  formatDatum = new SimpleDateFormat("dd.MM.yyyy");		// Datum und Zeit aktualisieren
 		lblDatum.setText( formatDatum.format(new Date()));
 		SimpleDateFormat  formatZeit = new SimpleDateFormat("HH:mm:ss");
 		lblZeit.setText( formatZeit.format(new Date()));

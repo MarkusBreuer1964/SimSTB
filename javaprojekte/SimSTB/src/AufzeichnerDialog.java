@@ -1,3 +1,19 @@
+//
+//	Inhalt:
+//		Projekt: 			SimSTB
+//		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
+//		Datei:				Dialog zur Datenaufzeichnung; größtenteils mit WindowBuilder generiert
+//
+//	Autor:
+//		Name:				Markus Breuer
+//		Organisaion:		STB
+//
+//	Datum:
+//		Erstellt:			20.07.2019
+//		Letzte Änderung:	01.08.2019
+//
+
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -82,10 +98,10 @@ public class AufzeichnerDialog extends JDialog implements ActionListener {
 		}
 	}
 	
-	   public void actionPerformed(ActionEvent arg0) {
+	   public void actionPerformed(ActionEvent arg0) {									// Callback für OK und Cancel
 		      Object source = arg0.getSource();
 		      if (source == okButton) {
-		    	  result = true;
+		    	  result = true;														// Attribute für Dialogresultate setzen
 		    	  intervall = Integer.parseInt(textField.getText());
 		    	  dateiname = textField_1.getText();
 		      }
@@ -96,20 +112,20 @@ public class AufzeichnerDialog extends JDialog implements ActionListener {
 		   }
 	   
 
-	public boolean run() {
+	public boolean run() {																// Haupteinsteigspunkt für Dialog
 		      this.setVisible(true);
-		      return result;
+		      return result;															// OK -> true: Cancael -> false
 		   }
 
-	public int getIntervall() {
+	public int getIntervall() {															// Get-Methode für Intervall
 		return intervall;
 	}
 
-	public String getDateiname() {
+	public String getDateiname() {														// Get-Methode für Dateiname
 		return dateiname;
 	}
 
-	ActionListener actDatei = new ActionListener() {
+	ActionListener actDatei = new ActionListener() {									// Dateiauswahl mit Standardauswahldialog
 		public void actionPerformed(ActionEvent arg0) {
 	        try {
 	            JFileChooser chooser = new JFileChooser();

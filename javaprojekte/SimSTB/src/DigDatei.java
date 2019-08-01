@@ -1,3 +1,19 @@
+//
+//	Inhalt:
+//		Projekt: 			SimSTB
+//		Thema:				Simulation digitaler und analoger Ein- und Ausgaben
+//		Datei:				Klasse zur Handhabung der digitalen Austauschdateien
+//
+//	Autor:
+//		Name:				Markus Breuer
+//		Organisaion:		STB
+//
+//	Datum:
+//		Erstellt:			20.07.2019
+//		Letzte Änderung:	01.08.2019
+//
+
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -5,8 +21,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class DigDatei {
-	int MAXLAENGE;
-	String	dateiname;
+	int MAXLAENGE;											// Dateilänge
+	String	dateiname;										// Dateiname
 	
 	public DigDatei(int MAXLAENGE, String dateiname) {
 		super();
@@ -14,17 +30,16 @@ public class DigDatei {
 		this.dateiname = dateiname;
 	}
 
-	public int lesen( int id) throws FileNotFoundException {
+	public int lesen( int id) throws FileNotFoundException {					// Einzelwert aus Datei lesen
 		int wert;
 		int[] vektor = new int[ MAXLAENGE];
 	 	
-		lesen( vektor);											// Vektor holen
-		wert = vektor[ id];                                  	// Rückgabewert extrahieren
+		lesen( vektor);											// Alle Werte lesen											
+		wert = vektor[ id];                                   	// Einzelwert extrahieren
 		return wert;		
 	}
 
-	public void lesen( int wertVektor[]) throws FileNotFoundException {
-
+	public void lesen( int wertVektor[]) throws FileNotFoundException {			// Alle Werte aus Datei lesen
 		String s;
 		Scanner input = new Scanner( new FileReader( dateiname) );
 
@@ -37,15 +52,18 @@ public class DigDatei {
 	    return;
 	}
 
-	public void schreiben( int id, int wert) throws IOException {
+	public void schreiben( int id, int wert) throws IOException {				// Einzelwert in Datei zurückschreiben
 		int[] vektor = new int[ MAXLAENGE];
-		lesen( vektor);
-		vektor[ id] = wert;
-		schreiben( vektor);
+		
+		lesen( vektor);											// Alle Werte lesen
+		vektor[ id] = wert;										// Einzelwert setzen
+		schreiben( vektor);										// Alle Werte zurückschreiben
+		return;
 	}
 
 	public void schreiben( int wertVektor[]) throws IOException {
 		FileWriter writer = new FileWriter( dateiname);
+		
 	    for( int i = 0; i < MAXLAENGE; i++)                        // Digitalen Eingabevektor zurückschreiben
 	    {
 			writer.write(Integer.toString(wertVektor[ i]) );
@@ -53,5 +71,6 @@ public class DigDatei {
 	    }
 		writer.flush();
 		writer.close();		
+		return;
 	}
 }
