@@ -8,6 +8,11 @@ sondern auch über analoge und digitale Schnittstellen mit einem technischen Sys
 Die Simulationsumgebung SimSTB erlaubt es, dies für Schulungszwecke auch ohne zusätzliche Hardware 
 mittels Simulation durchzuführen.
 
+Durch das Einbinden der Bibliothek simlib stehen dem Schüler vier einfach zu nutzende Funktionen für die digitale und
+analoge Ein- und Ausgabe zur Verfügung. Die analogen und digitalen Werte können über eine graphische Oberfläche
+bequem überwacht und gesetzt werden.
+
+
 ![Einsatzkontext](/bilder/Einsatzkontext.png)
 
 
