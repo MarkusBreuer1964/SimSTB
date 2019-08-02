@@ -80,6 +80,24 @@ in Ihren Quellcode inkludieren und die Bibliothek simlib.lib in Ihr Projekt einb
 In der Datei SimSTB-Benutzerdokumentation.pdf finden Sie eine ausführrliche Beschreibung.
 
 
+## Contribute
+
+Es gibt mehrere Möglichkeiten zum Projet SimSTB beizutragen:
+- Benutzen Sie privat oder im Unterrichtseinsatz SimSTB und geben Sie Erfahrungen zurück. 
+- Die Erstellung einer Bibliothek, die völlig unabhängig von der erstellenden Entwicklungsumgebung
+  und deren Version ist, ist noch nicht optimal gelöst.
+
+
+## Documentation
+
+README - Erster Überblick über das Projekt SimSTB; diese lesen Sie gerade
+SimSTB-Benutzerdokumentation - Benutzerdokumentation; beschreibt wie Sie die Simulationsumgebung 
+                               installieren und benutzen; wenn Sie die Simulationsumgebung nur nutzen
+                               und keine eigenen Änderungen vornehmen wollen, das einzige, was Sie lesen sollten.
+SimSTB-Plannung - Erweiterungswünsche, Restrukturierungsideen und Versionsübersicht
+SimSTB-Intern - Hinweise zur Architektur und zum Design der Simulationsumgebung; Vorgehensweise bei dem Projekt.
+
+
 ## License
 
 [MIT](LICENSE.txt) © [Markus Breuer].
