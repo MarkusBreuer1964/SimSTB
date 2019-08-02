@@ -12,6 +12,7 @@
         4.b Wrapper-Exe SimSTB.exe erzeugen
         4.c SimSTB.exe kopieren
         4.d Temporäre Zwischendateien weglöschen
+        4.e JRE Bundle kopieren
         5. Zip-Datei erzeugen
         6. Lokale Laufzeitumgebung aktualisieren
 
@@ -104,6 +105,10 @@ Set-Location $jarexeordner
 Remove-Item *.exe
 Remove-Item *.jar
 Set-Location $auslierungsordner
+write-Host "4.e JRE Bundle kopieren"                                        # JRE Bundle kopieren
+$quelldatei = $auslierungsordner +"\JarExe\bundlejre"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner -Recurse
 Write-Host ""
 
 write-Host "5. Zip-Datei erzeugen"

@@ -18,16 +18,16 @@ bequem überwacht und gesetzt werden.
 
 ## Requirements
 
-- Die Java-Laufzeit-Umgebung (JRE) muss installiert sein.
+- Java Runtime Environment (JRE); für den Fall, das diese nicht vorhanden ist, ist eine Bundle-JRE vorhanden,
+  so dass keine Installation der JRE notwendig ist.
 - Die Library ist für das an der Schule im Einsatz befindliche VS C++ 2010 ausgelegt.
 
 ## Installation
 
-1. Kontrollieren sie, ob die Java-Laufzeit-Umgebung (JRE) installiert ist.
-2. Kopieren Sie das bereitgestellte Simulationsverzeichnis (in GitHub /auslieferung/sim) 
+1. Kopieren Sie das bereitgestellte Simulationsverzeichnis (in GitHub /auslieferung/sim) 
 samt Unterverzeichnissen nach „C:\“. Solange Sie nur die Simulationsumgebung nutzen wollen 
 und keine Modifikationen an deren Quellcode vornehmen wollen brauchen Sie keine weiteren Dateien. 
-3. Kontrollieren Sie, ob folgende Verzeichnis-Struktur und Dateien vorhanden sind.
+2. Kontrollieren Sie, ob folgende Verzeichnis-Struktur und Dateien vorhanden sind.
 
 ```
 
@@ -43,6 +43,7 @@ C:
     │   └── beispiel.cpp
     ├── bin
     │   └── SimSTB.exe
+    │       └── bundlejre ...
     ├── dokumentation
     │   └── SimSTB-Benutzerdokumentation.pdf
     ├── header

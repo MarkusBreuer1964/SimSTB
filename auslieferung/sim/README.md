@@ -1,20 +1,33 @@
 ﻿# SimSTB - Simulationsumgebung für digitale und analoge Ein- und Ausgänge 
 
-Oft muss ein Programm nicht nur über die Konsole oder eine graphische Benutzeroberfläche mit dem Benutzer kommunizieren, 
+Die Simulationsumgebung SimSTB ist für die Ausbildung im Bereich C/C++-Programmierung geeignet. Sie ist insbesondere
+für den Unterricht bei (elektro)technischen Schülern gedacht.
+
+Oft muss ein Programm nicht nur über die Konsole oder eine graphische Oberfläche mit dem Benutzer kommunizieren, 
 sondern auch über analoge und digitale Schnittstellen mit einem technischen System.
 Die Simulationsumgebung SimSTB erlaubt es, dies für Schulungszwecke auch ohne zusätzliche Hardware 
 mittels Simulation durchzuführen.
 
+Durch das Einbinden der Bibliothek simlib stehen dem Schüler vier einfach zu nutzende Funktionen für die digitale und
+analoge Ein- und Ausgabe zur Verfügung. Die analogen und digitalen Werte können über eine graphische Oberfläche
+bequem überwacht und gesetzt werden.
+
+
+![Einsatzkontext](/bilder/Einsatzkontext.png)
+
+
 ## Requirements
 
-- Die Java-Laufzeit-Umgebung (JRE) muss installiert sein.
-
+- Java Runtime Environment (JRE); für den Fall, das diese nicht vorhanden ist, ist eine Bundle-JRE vorhanden,
+  so dass keine Installation der JRE notwendig ist.
+- Die Library ist für das an der Schule im Einsatz befindliche VS C++ 2010 ausgelegt.
 
 ## Installation
 
-1. Kontrollieren sie, ob die Java-Laufzeit-Umgebung (JRE) installiert ist.
-2. Kopieren Sie das bereitgestellte Simulationsverzeichnis samt Unterverzeichnissen nach „C:\“
-3. Kontrollieren Sie, ob folgende Verzeichnis-Struktur und Dateien vorhanden sind.
+1. Kopieren Sie das bereitgestellte Simulationsverzeichnis (in GitHub /auslieferung/sim) 
+samt Unterverzeichnissen nach „C:\“. Solange Sie nur die Simulationsumgebung nutzen wollen 
+und keine Modifikationen an deren Quellcode vornehmen wollen brauchen Sie keine weiteren Dateien. 
+2. Kontrollieren Sie, ob folgende Verzeichnis-Struktur und Dateien vorhanden sind.
 
 ```
 
@@ -30,6 +43,7 @@ C:
     │   └── beispiel.cpp
     ├── bin
     │   └── SimSTB.exe
+    │       └── bundlejre ...
     ├── dokumentation
     │   └── SimSTB-Benutzerdokumentation.pdf
     ├── header
@@ -65,6 +79,24 @@ Um die vier Funktionen zu nutzen, müssen Sie die Header-Datei simulation.h
 in Ihren Quellcode inkludieren und die Bibliothek simlib.lib in Ihr Projekt einbinden.
 
 In der Datei SimSTB-Benutzerdokumentation.pdf finden Sie eine ausführrliche Beschreibung.
+
+
+## Contribute
+
+Es gibt mehrere Möglichkeiten zum Projet SimSTB beizutragen:
+- Benutzen Sie privat oder im Unterrichtseinsatz SimSTB und geben Sie Erfahrungen zurück. 
+- Die Erstellung einer Bibliothek, die völlig unabhängig von der erstellenden Entwicklungsumgebung
+  und deren Version ist, ist noch nicht optimal gelöst.
+
+
+## Documentation
+
+README - Erster Überblick über das Projekt SimSTB; diese lesen Sie gerade
+SimSTB-Benutzerdokumentation - Benutzerdokumentation; beschreibt wie Sie die Simulationsumgebung 
+                               installieren und benutzen; wenn Sie die Simulationsumgebung nur nutzen
+                               und keine eigenen Änderungen vornehmen wollen, das einzige, was Sie lesen sollten.
+SimSTB-Plannung - Erweiterungswünsche, Restrukturierungsideen und Versionsübersicht
+SimSTB-Intern - Hinweise zur Architektur und zum Design der Simulationsumgebung; Vorgehensweise bei dem Projekt.
 
 
 ## License

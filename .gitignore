@@ -1,3 +1,6 @@
+# JRE Bundle ausschliessen
+auslieferung/JarExe/bundlejre/
+
 # Java Binaries ausschliessen
 javaprojekte/SimSTB/bin/
 
