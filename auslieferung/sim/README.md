@@ -20,7 +20,8 @@ bequem überwacht und gesetzt werden.
 
 - Java Runtime Environment (JRE); für den Fall, das diese nicht vorhanden ist, ist eine Bundle-JRE vorhanden,
   so dass keine Installation der JRE notwendig ist.
-- Die Library ist für das an der Schule im Einsatz befindliche VS C++ 2010 ausgelegt.
+- Die Library ist für das an der Schule im Einsatz befindliche VS C++ 2010 ausgelegt. Eine Library für VS C++ 2019
+  wurde beigefügt.
 
 ## Installation
 
@@ -91,12 +92,12 @@ Es gibt mehrere Möglichkeiten zum Projet SimSTB beizutragen:
 
 ## Documentation
 
-README - Erster Überblick über das Projekt SimSTB; diese lesen Sie gerade
-SimSTB-Benutzerdokumentation - Benutzerdokumentation; beschreibt wie Sie die Simulationsumgebung 
+- README - Erster Überblick über das Projekt SimSTB; diese lesen Sie gerade
+- SimSTB-Benutzerdokumentation - Benutzerdokumentation; beschreibt wie Sie die Simulationsumgebung 
                                installieren und benutzen; wenn Sie die Simulationsumgebung nur nutzen
                                und keine eigenen Änderungen vornehmen wollen, das einzige, was Sie lesen sollten.
-SimSTB-Plannung - Erweiterungswünsche, Restrukturierungsideen und Versionsübersicht
-SimSTB-Intern - Hinweise zur Architektur und zum Design der Simulationsumgebung; Vorgehensweise bei dem Projekt.
+- SimSTB-Plannung - Erweiterungswünsche, Restrukturierungsideen und Versionsübersicht
+- SimSTB-Intern - Hinweise zur Architektur und zum Design der Simulationsumgebung; Vorgehensweise bei dem Projekt.
 
 
 ## License

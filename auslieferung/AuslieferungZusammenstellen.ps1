@@ -70,6 +70,9 @@ Copy-Item $quelldatei $zielodrdner
 $quelldatei = $simSTBordner + "\cprojekte\simlib\Debug\simlib.lib"          # Lib kopieren
 $zielodrdner = $auslierungsordner + "\sim\lib"
 Copy-Item $quelldatei $zielodrdner
+$quelldatei = $simSTBordner + "\cprojekte\simlib2019.lib"                   # Workaround-Lib kopieren
+$zielodrdner = $auslierungsordner + "\sim\lib"
+Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
 write-Host "3.c Dokumentation und Beispiele kopieren"
