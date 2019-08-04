@@ -76,7 +76,7 @@ Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
 write-Host "3.c Dokumentation und Beispiele kopieren"
-$quelldatei = $simSTBordner + "\doc\SimSTB-Benutzerdokumentation.pdf"       # Dokumentation kopieren
+$quelldatei = $simSTBordner + "\docs\SimSTB-Benutzerdokumentation.pdf"       # Dokumentation kopieren
 $zielodrdner = $auslierungsordner + "\sim\dokumentation"
 Copy-Item $quelldatei $zielodrdner
 $quelldatei = $simSTBordner + "\cprojekte\beispiel\beispiel\beispiel.cpp"   # Beispiele kopieren
