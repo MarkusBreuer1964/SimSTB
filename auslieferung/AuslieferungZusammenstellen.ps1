@@ -13,6 +13,7 @@
         4.c SimSTB.exe kopieren
         4.d Temporäre Zwischendateien weglöschen
         4.e JRE Bundle kopieren
+        4.f bat-Dateien zum Starten kopieren
         5. Zip-Datei erzeugen
         6. Lokale Laufzeitumgebung aktualisieren
 
@@ -28,7 +29,7 @@
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	29.07.2019
+		Letzte Änderung:	06.01.2020
 
 #>
 
@@ -90,16 +91,21 @@ $zielodrdner = $auslierungsordner + "\sim"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
-write-Host "4.a Ausführbare-Jar-Datei SimSTB.jar erzeugen"                  # Ausführbare Jar-Datei SimSTB.jar erzeugen
+write-Host "4.a Ausführbare-Jar-Dateien erzeugen"                           # Ausführbare Jar-Dateien erzeugen
 ant -buildfile .\JarExe\exportjar.xml
+ant -buildfile .\JarExe\exportjarFktGen.xml
 Write-Host ""
-write-Host "4.b Wrapper-Exe SimSTB.exe erzeugen"                            # Wrapper Exe erzeugen
+write-Host "4.b Wrapper-Exen SimSTB.exe und SimSTBFktGen.exe erzeugen"      # Wrapper Exen erzeugen
 $launcherConfig = $auslierungsordner +"\JarExe\config.xml"
 &($launch4jc) $launcherConfig  
+$launcherConfig = $auslierungsordner +"\JarExe\configFktGen.xml"
+&($launch4jc) $launcherConfig  
 Write-Host ""
-write-Host "4.c SimSTB.exe kopieren"
-$quelldatei = $auslierungsordner +"\JarExe\SimSTB.exe"                      # Steuerprogramm kopieren
+write-Host "4.c SimSTB.exe und SimSTBFktGen.exe kopieren"                   # Exen in bin-Ordner kopieren
+$quelldatei = $auslierungsordner +"\JarExe\SimSTB.exe"                      
 $zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $auslierungsordner +"\JarExe\SimSTBFktGen.exe"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 write-Host "4.d Temporäre Zwischendateien weglöschen"                       # Temporäre Zwischendateien weglöschen
@@ -112,6 +118,11 @@ write-Host "4.e JRE Bundle kopieren"                                        # JR
 $quelldatei = $auslierungsordner +"\JarExe\bundlejre"                      
 $zielodrdner = $auslierungsordner + "\sim\bin"
 Copy-Item $quelldatei $zielodrdner -Recurse
+Write-Host ""
+write-Host "4.f bat-Dateien zum Starten kopieren"                           # Bat-Dateien in bin-Ordner kopieren
+$quelldatei = $simSTBordner + "\javaprojekte\SimSTB\start-fktgen.bat"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
 write-Host "5. Zip-Datei erzeugen"

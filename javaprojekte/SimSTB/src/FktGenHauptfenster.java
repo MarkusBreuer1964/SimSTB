@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 
@@ -20,7 +21,9 @@ public class FktGenHauptfenster extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
-
+	private JComboBox comboBox;
+	private JComboBox comboBox_1;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -61,7 +64,7 @@ public class FktGenHauptfenster extends JFrame {
 		lblU2.setBounds(170, 5, 150, 50);
 		contentPane.add(lblU2);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"AE0", "AE1", "AE2", "AE3", "AE4", "AE5", "AE6", "AE7"}));
 		comboBox.setBounds(105, 66, 67, 20);
 		contentPane.add(comboBox);
@@ -74,7 +77,7 @@ public class FktGenHauptfenster extends JFrame {
 		lblSignalform.setBounds(10, 97, 70, 14);
 		contentPane.add(lblSignalform);
 		
-		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1 = new JComboBox();
 		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Zufall", "Sinus"}));
 		comboBox_1.setBounds(105, 97, 67, 20);
 		contentPane.add(comboBox_1);
@@ -98,6 +101,7 @@ public class FktGenHauptfenster extends JFrame {
 		textField_1.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Start");
+		btnNewButton.addActionListener(act1);
 		btnNewButton.setBounds(190, 66, 130, 50);
 		contentPane.add(btnNewButton);
 		
@@ -113,4 +117,28 @@ public class FktGenHauptfenster extends JFrame {
 		contentPane.add(btnBeenden);
 
 	}
+	
+	ActionListener act1 = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			MyWorker1 worker = new MyWorker1();
+			worker.execute();
+		}
+	};
+	
+	class MyWorker1 extends SwingWorker<Void, Void> {
+		protected Void doInBackground() throws Exception {
+			int		id = comboBox.getSelectedIndex();
+			Signalform form = Signalform.ZUFALL;
+			if( comboBox_1.getSelectedIndex() == 0) { form = Signalform.ZUFALL; }
+			else if( comboBox_1.getSelectedIndex() == 1) { form = Signalform.SINUS; }
+			double 	A = Double.parseDouble(textField.getText());
+			double 	T = Double.parseDouble(textField_1.getText());
+			GenOpt	opt = new GenOpt( id, form, A, T);
+			FktGen 	gen = new FktGen();
+			gen.generate(opt);			
+			return null;
+		}	
+	}
+
+
 }

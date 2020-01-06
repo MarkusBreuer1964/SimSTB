@@ -12,7 +12,7 @@
 //
 //	Datum:
 //		Erstellt:			20.07.2019
-//		Letzte Änderung:	01.08.2019
+//		Letzte Änderung:	06.01.2020
 //
 
 
@@ -34,6 +34,7 @@ import javax.swing.Timer;
 
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -163,7 +164,7 @@ public class Hauptfenster extends JFrame {
 		btnTesten.setBounds(10, 72, 130, 50);
 		panel_2.add(btnTesten);
 		
-		JButton btnGen = new JButton("Generatoren");
+		JButton btnGen = new JButton("Funktionsgenerator");
 		btnGen.addActionListener( actGen);
 		btnGen.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnGen.setBackground(new Color(220, 220, 220));
@@ -433,8 +434,13 @@ public class Hauptfenster extends JFrame {
  
 	ActionListener actGen = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			JOptionPane.showMessageDialog(rootPane, "Leider nocht nicht implementiert.\nFunktionsgenerator für analoge Eingangssignale.\nAnforderungswunsch R5", "Hinweis",
-					JOptionPane.INFORMATION_MESSAGE);
+			try {
+				Runtime.getRuntime().exec("start-fktgen.bat");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				JOptionPane.showMessageDialog(rootPane, "Funktionsgenerator konnte nicht gestartet werden", "Fehler",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	};
  
