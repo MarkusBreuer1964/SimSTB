@@ -14,6 +14,7 @@
         4.d Temporäre Zwischendateien weglöschen
         4.e JRE Bundle kopieren
         4.f bat-Dateien zum Starten kopieren
+        4.g Benötigte Bild-Dateien kopieren
         5. Zip-Datei erzeugen
         6. Lokale Laufzeitumgebung aktualisieren
 
@@ -29,7 +30,7 @@
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	06.01.2020
+		Letzte Änderung:	18.01.2020
 
 #>
 
@@ -111,8 +112,9 @@ Write-Host ""
 write-Host "4.d Temporäre Zwischendateien weglöschen"                       # Temporäre Zwischendateien weglöschen
 $jarexeordner = $auslierungsordner + "\JarExe"
 Set-Location $jarexeordner
-Remove-Item *.exe
-Remove-Item *.jar
+#Remove-Item *.exe
+#Remove-Item *.jar
+Write-Host ""
 Set-Location $auslierungsordner
 write-Host "4.e JRE Bundle kopieren"                                        # JRE Bundle kopieren
 $quelldatei = $auslierungsordner +"\JarExe\bundlejre"                      
@@ -124,13 +126,20 @@ $quelldatei = $simSTBordner + "\javaprojekte\SimSTB\start-fktgen.bat"
 $zielodrdner = $auslierungsordner + "\sim\bin"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
+write-Host "4.g Benötigte Bild-Dateien kopieren"                            # Benötigte Bild-Dateien in bin-Ordner kopieren
+$quelldatei = $simSTBordner + "\bilder\bilder.jar"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
+Write-Host ""
 
+<#
 write-Host "5. Zip-Datei erzeugen"
 if( (Test-Path -Path sim.zip) -eq $true) {                                      # Zip-Datei erzeugen
     Remove-Item sim.zip  
     }
 Compress-Archive -Path sim/* -DestinationPath sim.zip
 Write-Host ""
+#>
 
 $titel = "Laufzeitumgebung?"
 $meldung = "Laufzeitumgebung aktualisieren?"

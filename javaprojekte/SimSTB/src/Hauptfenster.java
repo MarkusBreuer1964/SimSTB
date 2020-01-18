@@ -12,7 +12,7 @@
 //
 //	Datum:
 //		Erstellt:			20.07.2019
-//		Letzte Änderung:	06.01.2020
+//		Letzte Änderung:	18.01.2020
 //
 
 
@@ -459,7 +459,7 @@ public class Hauptfenster extends JFrame {
     
 	MouseListener actDETBL = new MouseAdapter() {					// Action Handler für Tabelle "Digitale Eingänge"
 		public void mouseClicked(MouseEvent arg0) {				// Wert in Austauschdatei setzen			
-			int alterWert = (int) tblDE.getModel().getValueAt( tblDE.getSelectedRow(), 1);
+			int alterWert =  (Integer) tblDE.getModel().getValueAt( tblDE.getSelectedRow(), 1);
 			int id = tblDE.getSelectedRow();
 			if( alterWert == 0) {
 				Setzer.digEin(id, 1);
