@@ -20,8 +20,7 @@ bequem überwacht und gesetzt werden.
 
 - Java Runtime Environment (JRE); für den Fall, das diese nicht vorhanden ist, ist eine Bundle-JRE vorhanden,
   so dass keine Installation der JRE notwendig ist.
-- Die C/C++ Bibliothek ist für das an der Schule im Einsatz befindliche VS C++ 2010 ausgelegt. Eine Bibliothek für VS C++ 2019
-  wurde beigefügt.
+- Die C/C++ Bibliothek ist für das an der Schule im Einsatz befindliche VS C++ 2019 ausgelegt.
 
 ## Installation
 
