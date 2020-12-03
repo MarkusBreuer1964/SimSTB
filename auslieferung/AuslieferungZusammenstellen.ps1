@@ -30,7 +30,7 @@
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	18.01.2020
+		Letzte Änderung:	03.12.2020
 
 #>
 
@@ -70,9 +70,6 @@ $quelldatei = $simSTBordner + "\cprojekte\simlib\simlib\simulation.h"       # He
 $zielodrdner = $auslierungsordner + "\sim\header"
 Copy-Item $quelldatei $zielodrdner
 $quelldatei = $simSTBordner + "\cprojekte\simlib\Debug\simlib.lib"          # Lib kopieren
-$zielodrdner = $auslierungsordner + "\sim\lib"
-Copy-Item $quelldatei $zielodrdner
-$quelldatei = $simSTBordner + "\cprojekte\simlib2019.lib"                   # Workaround-Lib kopieren
 $zielodrdner = $auslierungsordner + "\sim\lib"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
