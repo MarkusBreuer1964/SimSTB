@@ -1,13 +1,3 @@
-# JRE Bundle ausschliessen
-auslieferung/JarExe/bundlejre/
-
-# Java Binaries ausschliessen
-javaprojekte/SimSTB/bin/
-
-# Eclipse Einstellungen ausschliessen
-javaprojekte/.metadata/
-javaprojekte/.recommenders/
-
 # Unnützes der C-Library-Erstellung und des C++-Beispiels ausschliessen
 cprojekte/simlib/Debug/
 cprojekte/simlib/Release/
@@ -28,3 +18,16 @@ python\__pycache__
 *.log
 # Zip-Daten (Auslieferung) ausschliessen
 *.zip
+
+#### Alte Java Einstellungen #######
+
+# JRE Bundle ausschliessen
+auslieferung/JarExe/bundlejre/
+
+# Java Binaries ausschliessen
+javaprojekte/SimSTB/bin/
+
+# Eclipse Einstellungen ausschliessen
+javaprojekte/.metadata/
+javaprojekte/.recommenders/
+

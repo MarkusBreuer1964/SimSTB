@@ -8,15 +8,11 @@
         3.a Austauschdateien kopieren
         3.b C/C++ - Schnittstelle kopieren
         3.c Dokumentation und Beispiele kopieren
-        4.a Ausführbare-Jar-Datei SimSTB.jar erzeugen
-        4.b Wrapper-Exe SimSTB.exe erzeugen
-        4.c SimSTB.exe kopieren
-        4.d Temporäre Zwischendateien weglöschen
-        4.e JRE Bundle kopieren
-        4.f bat-Dateien zum Starten kopieren
-        4.g Benötigte Bild-Dateien kopieren
-        5. Zip-Datei erzeugen
-        6. Lokale Laufzeitumgebung aktualisieren
+        4.a simstb_gui.exe erzeugen
+        4.b simstb_gui.exe.exe kopieren
+        4.c Temporäre Zwischendateien weglöschen
+        4.d Benötigte Bild-Dateien kopieren
+        5. Lokale Laufzeitumgebung aktualisieren
 
 .NOTES
 
@@ -30,13 +26,13 @@
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	03.12.2020
+		Letzte Änderung:	03.08.2021
 
 #>
 
-$simSTBordner = "Z:\Sonstiges\Markus\Weiterbildung\Java\workspace\SimSTB"
+$simSTBordner = "Z:\Sonstiges\Markus\Weiterbildung\SimSTB"
 $auslierungsordner = $simSTBordner + "\auslieferung"
-$launch4jc = "C:\Program Files (x86)\Launch4j\launch4jc.exe"
+$pythonordner = $simSTBordner + "\python"
 $laufzeitUmgebung = "C:\Sim"
 
 Clear-Host
@@ -89,54 +85,25 @@ $zielodrdner = $auslierungsordner + "\sim"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
-write-Host "4.a Ausführbare-Jar-Dateien erzeugen"                           # Ausführbare Jar-Dateien erzeugen
-ant -buildfile .\JarExe\exportjar.xml
-ant -buildfile .\JarExe\exportjarFktGen.xml
+write-Host "4.a SimSTB.exe  erzeugen"      #  Exe erzeugen
+Set-Location $pythonordner
+pyinstaller --clean --onefile  --icon simstb.ico --window simstb_gui.py
 Write-Host ""
-write-Host "4.b Wrapper-Exen SimSTB.exe und SimSTBFktGen.exe erzeugen"      # Wrapper Exen erzeugen
-$launcherConfig = $auslierungsordner +"\JarExe\config.xml"
-&($launch4jc) $launcherConfig  
-$launcherConfig = $auslierungsordner +"\JarExe\configFktGen.xml"
-&($launch4jc) $launcherConfig  
-Write-Host ""
-write-Host "4.c SimSTB.exe und SimSTBFktGen.exe kopieren"                   # Exen in bin-Ordner kopieren
-$quelldatei = $auslierungsordner +"\JarExe\SimSTB.exe"                      
+write-Host "4.b SimSTB.exekopieren"                   # Exen in bin-Ordner kopieren
+$quelldatei = $pythonordner +"\dist\simstb_gui.exe"                      
 $zielodrdner = $auslierungsordner + "\sim\bin"
 Copy-Item $quelldatei $zielodrdner
-$quelldatei = $auslierungsordner +"\JarExe\SimSTBFktGen.exe"
-Copy-Item $quelldatei $zielodrdner
 Write-Host ""
-write-Host "4.d Temporäre Zwischendateien weglöschen"                       # Temporäre Zwischendateien weglöschen
-$jarexeordner = $auslierungsordner + "\JarExe"
-Set-Location $jarexeordner
-#Remove-Item *.exe
-#Remove-Item *.jar
+write-Host "4.c Temporäre Zwischendateien weglöschen"                       # Temporäre Zwischendateien weglöschen
+Remove-Item dist
+Remove-Item build
 Write-Host ""
 Set-Location $auslierungsordner
-write-Host "4.e JRE Bundle kopieren"                                        # JRE Bundle kopieren
-$quelldatei = $auslierungsordner +"\JarExe\bundlejre"                      
-$zielodrdner = $auslierungsordner + "\sim\bin"
-Copy-Item $quelldatei $zielodrdner -Recurse
-Write-Host ""
-write-Host "4.f bat-Dateien zum Starten kopieren"                           # Bat-Dateien in bin-Ordner kopieren
-$quelldatei = $simSTBordner + "\javaprojekte\SimSTB\start-fktgen.bat"                      
+write-Host "4.d Benötigte Bild-Dateien kopieren"                            # Benötigte Bild-Dateien in bin-Ordner kopieren
+$quelldatei = $simSTBordner + "\python\simstb.ico"                      
 $zielodrdner = $auslierungsordner + "\sim\bin"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
-write-Host "4.g Benötigte Bild-Dateien kopieren"                            # Benötigte Bild-Dateien in bin-Ordner kopieren
-$quelldatei = $simSTBordner + "\bilder\bilder.jar"                      
-$zielodrdner = $auslierungsordner + "\sim\bin"
-Copy-Item $quelldatei $zielodrdner
-Write-Host ""
-
-<#
-write-Host "5. Zip-Datei erzeugen"
-if( (Test-Path -Path sim.zip) -eq $true) {                                      # Zip-Datei erzeugen
-    Remove-Item sim.zip  
-    }
-Compress-Archive -Path sim/* -DestinationPath sim.zip
-Write-Host ""
-#>
 
 $titel = "Laufzeitumgebung?"
 $meldung = "Laufzeitumgebung aktualisieren?"
@@ -145,7 +112,7 @@ $nein = New-Object System.Management.Automation.Host.ChoiceDescription "&Nein", 
 $optionen = [System.Management.Automation.Host.ChoiceDescription[]]($ja, $nein)
 $auswahl=$host.ui.PromptForChoice($titel, $meldung, $optionen, 1)
 if( $auswahl -eq 0) {
-    write-Host "6. Laufzeitumgebung aktualisieren"
+    write-Host "5. Laufzeitumgebung aktualisieren"
     if( (Test-Path -Path $laufzeitUmgebung) -eq $true) {                        # Alte Laufzeitumgebung löschen
         Remove-Item $laufzeitUmgebung -Recurse -Force 
         }
