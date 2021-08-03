@@ -18,8 +18,6 @@ bequem überwacht und gesetzt werden.
 
 ## Requirements
 
-- Java Runtime Environment (JRE); für den Fall, das diese nicht vorhanden ist, ist eine Bundle-JRE vorhanden,
-  so dass keine Installation der JRE notwendig ist.
 - Die C/C++ Bibliothek ist für das an der Schule im Einsatz befindliche VS C++ 2019 ausgelegt.
 
 ## Installation
@@ -100,7 +98,7 @@ Es gibt mehrere Möglichkeiten zum Projet SimSTB beizutragen:
 
 ## Version
 
-V 0.2
+V 0.3
 
 
 ## License

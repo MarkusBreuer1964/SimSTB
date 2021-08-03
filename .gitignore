@@ -21,6 +21,9 @@ cprojekte/beispiel/ipch/
 cprojekte/beispiel/beispiel/Debug/
 cprojekte/beispiel/beispiel/Release/
 
+# Python Zwischendateien ausschliessen
+python\__pycache__
+
 # Log-Daten (Datenaufzeichnung) ausschliessen
 *.log
 # Zip-Daten (Auslieferung) ausschliessen
