@@ -38,24 +38,23 @@ C:
     ├── LICENSE.txt
     ├── README.md
     ├── beispiele
-    │   └── beispiel.cpp
+    │   └── beispiel.cpp
     ├── bin
-    │   └── SimSTB.exe
-    │       └── bundlejre ...
+    │   ├── simstb_gui.exe
+    │   └── sim_stb.ico
     ├── dokumentation
-    │   └── SimSTB-Benutzerdokumentation.pdf
+    │   └── SimSTB-Benutzerdokumentation.pdf
     ├── header
-    │   └── simulation.h
+    │   └── simulation.h
     └── lib
          └── simlib.lib
-
 ```
 
 ## Usage
 
 ### 1. Simulations Steuerung und Monitor
 
-Mit Hilfe des Programms SimSTB.exe können Sie digitalen und analogen Ein- und Ausgänge überwachen 
+Mit Hilfe des Programms simstb_guikönnen Sie digitalen und analogen Ein- und Ausgänge überwachen 
 und die Eingänge setzen. Die Werte werden im Sekundentakt aktualisiert. Starten können Sie das Programm 
 über einen einfachen Doppelklick auf die Exe-Datei.
 
