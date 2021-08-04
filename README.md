@@ -54,7 +54,7 @@ C:
 
 ### 1. Simulations Steuerung und Monitor
 
-Mit Hilfe des Programms simstb_guikönnen Sie digitalen und analogen Ein- und Ausgänge überwachen 
+Mit Hilfe des Programms simstb_gui können Sie digitalen und analogen Ein- und Ausgänge überwachen 
 und die Eingänge setzen. Die Werte werden im Sekundentakt aktualisiert. Starten können Sie das Programm 
 über einen einfachen Doppelklick auf die Exe-Datei.
 

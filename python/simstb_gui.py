@@ -8,7 +8,7 @@
     Organisaion:        STB
 
     Erstellt:           27.07.2021
-    Letzte Änderung:    02.08.2021
+    Letzte Änderung:    04.08.2021
     """
 
 from tkinter import *
@@ -256,11 +256,12 @@ class GUI:
         return True
 
     def auto_aktualisieren_analoge_eingaenge( self):
+        wiederholen = self.funktionsgenerator_gui_aktiv()
         ae_zugriff = DateiZugriff(Konfig.ANAEIN, Konfig.ANAMAXLAENGE)
         ae_daten= ae_zugriff.lesen_alle()
         for i in range(Konfig.ANAMAXLAENGE):
             self.AE[i].set(ae_daten[i])
-        if self.funktionsgenerator_gui_aktiv() == True:
+        if wiederholen == True:
             self.fenster.after(1000, self.auto_aktualisieren_analoge_eingaenge)
 
     def funktionsgenerator( self):

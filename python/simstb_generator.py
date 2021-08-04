@@ -15,7 +15,7 @@
     Organisaion:        STB
 
     Erstellt:           28.07.2021
-    Letzte Änderung:    02.08.2021
+    Letzte Änderung:    04.08.2021
     """
 from tkinter import *
 from tkinter import ttk
@@ -198,7 +198,7 @@ class FunktionsGenerator:
             A = float(eintrag["amplitude"]) 
             T = float(eintrag["pdauer"]) 
             t = t % T
-            if t <= T/2:
+            if t < T/2:
                 wert = 0
             else:
                 wert = A
