@@ -93,7 +93,7 @@ class GeneratorGUI:
         ttk.Button(master=unterrahmen2, text="Stoppen", command=lambda: self.stop()).grid(column=2, row=2, sticky="NW")
         self.gen_status = StringVar()
         self.gen_status.set( "Generator nicht aktiv")
-        ttk.Label(master=unterrahmen2, textvariable=self.gen_status, style="BlockStatusLabel.TLabel").grid(column=3, row=2, columnspan=2, sticky="NE")
+        ttk.Label(master=unterrahmen2, textvariable=self.gen_status, style="BlockStatusLabelGen.TLabel").grid(column=3, row=2, columnspan=2, sticky="NE")
 
         # Globaler Knopf
         ttk.Button(master=hauptrahmen, text="Schließen", command=lambda: self.schliessen()).grid(column=2, row=5, sticky="NE")
@@ -119,7 +119,7 @@ class GeneratorGUI:
             self.controller.start( opt)
             self.gen_status.set( "Generator aktiv")
             sblock = ttk.Style()
-            sblock.configure( "BlockStatusLabel.TLabel", background = Konfig.AKTIVE_BACKGROUND)
+            sblock.configure( "BlockStatusLabelGen.TLabel", background = Konfig.AKTIVE_BACKGROUND)
 
     def stop(self):
         """ Generatorfenster schliessen """
@@ -127,7 +127,7 @@ class GeneratorGUI:
             self.controller.stop()
             self.gen_status.set( "Generator nicht aktiv")
             sblock = ttk.Style()
-            sblock.configure( "BlockStatusLabel.TLabel", background =Konfig.BLOCK_BACKGROUND)
+            sblock.configure( "BlockStatusLabelGen.TLabel", background =Konfig.BLOCK_BACKGROUND)
 
     def schliessen(self):
         """ Generatorfenster schliessen """

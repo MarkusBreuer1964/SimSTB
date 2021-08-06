@@ -22,6 +22,7 @@ from simstb_konfig import Konfig
 from simstb_dateizugriff import DateiZugriff
 from simstb_setzer import Setzer
 from simstb_generator import GeneratorGUI
+from simstb_datenaufzeichner import DatenaufzeichnerGUI
 
 
 
@@ -35,6 +36,7 @@ class GUI:
         self.fenster.protocol("WM_DELETE_WINDOW", lambda: self.beenden())
 
         self.gen_gui = None
+        self.dat_gui = None
         
         # Styles festlegen
         self.festlegen_Styles()
@@ -137,7 +139,8 @@ class GUI:
         sblock.configure( "Block.TFrame", background = Konfig.BLOCK_BACKGROUND, relief=RAISED)
         sblock.configure( "BlockLabel2.TLabel", background =Konfig.BLOCK_BACKGROUND, font=("Tahoma", 11, "bold"))
         sblock.configure( "BlockLabel.TLabel", background =Konfig.BLOCK_BACKGROUND)
-        sblock.configure( "BlockStatusLabel.TLabel", background =Konfig.BLOCK_BACKGROUND, font=("Tahoma", 11, "bold"))
+        sblock.configure( "BlockStatusLabelGen.TLabel", background =Konfig.BLOCK_BACKGROUND, font=("Tahoma", 11, "bold"))
+        sblock.configure( "BlockStatusLabelDat.TLabel", background =Konfig.BLOCK_BACKGROUND, font=("Tahoma", 11, "bold"))
         sblock.configure( "BlockCheckbutton.TCheckbutton", background = Konfig.BLOCK_BACKGROUND)
         sblock.configure( "Unterblock.TFrame", background = Konfig.BLOCK_BACKGROUND)
 
@@ -269,6 +272,19 @@ class GUI:
             self.gen_gui = GeneratorGUI(self.fenster)
             self.auto_aktualisieren_analoge_eingaenge()
 
+    # Callback-Funktion und Hilfsfunktionen für Datenaufzeichner - Unterrahmen 2
+
+    def datenaufzeichner_gui_aktiv(self):
+        if self.dat_gui == None:
+            return False
+        elif self.dat_gui.dat_gui_aktiv == False:
+            return False
+        return True
+
+    def datenaufzeichnen( self):
+        if self.datenaufzeichner_gui_aktiv() == False:
+            self.dat_gui = DatenaufzeichnerGUI(self.fenster)
+
     # Callback-Funktion für verschiedene noch nicht realisierte Funktionalitäten - Unterrahmen 2
 
     def modelle( self):
@@ -277,8 +293,6 @@ class GUI:
     def testautomaten( self):
         messagebox.showinfo(message="Leider nocht nicht implementiert.\nAutomatisiertes Testablaufmodul.", title="SimSTB Information")
 
-    def datenaufzeichnen( self):
-        messagebox.showinfo(message="Leider nocht nicht implementiert.\nAufzeichnung der Ein- und Ausgangswerte.", title="SimSTB Information")
 
     # Callback-Funktion fürs Beenden
 
