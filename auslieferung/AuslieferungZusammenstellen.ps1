@@ -12,6 +12,7 @@
         4.b simstb_gui.exe.exe kopieren
         4.c Temporäre Zwischendateien weglöschen
         4.d Benötigte Bild-Dateien kopieren
+        4.e Modell-Konfigurations-Datei kopieren
         5. Lokale Laufzeitumgebung aktualisieren
 
 .NOTES
@@ -26,7 +27,7 @@
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	03.08.2021
+		Letzte Änderung:	11.08.2021
 
 #>
 
@@ -41,9 +42,10 @@ Set-Location $auslierungsordner
 Write-Host "Aktuelle Auslierung von SimSTB zusammenstellen"
 Write-Host "----------------------------------------------`n"
 write-Host "1. Alte Auslieferungsumgebung löschen"
-if( (Test-Path -Path sim) -eq $true) {                                      # Alte Auslieferungsumgebung löschen
+if ( (Test-Path -Path sim) -eq $true) {
+    # Alte Auslieferungsumgebung löschen
     Remove-Item sim -Recurse -Force 
-    }
+}
 Write-Host ""
 
 write-Host "2.a Neue Verzeichnisstruktur aufbauen"
@@ -85,12 +87,20 @@ $zielodrdner = $auslierungsordner + "\sim"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
-write-Host "4.a SimSTB.exe  erzeugen"      #  Exe erzeugen
+write-Host "4.a SimSTB.exe und Modelle erzeugen"      #  Exe und Modelle erzeugen
 Set-Location $pythonordner
 pyinstaller --clean --onefile  --icon simstb.ico --window simstb_gui.py
+pyinstaller --clean --onefile  --icon simstb.ico --window simstb_modell_1.py
+pyinstaller --clean --onefile  --icon simstb.ico --window simstb_modell_2.py
 Write-Host ""
-write-Host "4.b SimSTB.exekopieren"                   # Exen in bin-Ordner kopieren
-$quelldatei = $pythonordner +"\dist\simstb_gui.exe"                      
+write-Host "4.b SimSTB.exe und Modelle kopieren"                   # Exen und Modelle in bin-Ordner kopieren
+$quelldatei = $pythonordner + "\dist\simstb_gui.exe"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $pythonordner + "\dist\simstb_modell_1.exe"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $pythonordner + "\dist\simstb_modell_2.exe"                      
 $zielodrdner = $auslierungsordner + "\sim\bin"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
@@ -103,6 +113,17 @@ write-Host "4.d Benötigte Bild-Dateien kopieren"                            # B
 $quelldatei = $simSTBordner + "\python\simstb.ico"                      
 $zielodrdner = $auslierungsordner + "\sim\bin"
 Copy-Item $quelldatei $zielodrdner
+$quelldatei = $simSTBordner + "\python\*.png"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $simSTBordner + "\python\*.gif"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
+Write-Host ""
+write-Host "4.e Modell-Konfigurations-Datei kopieren"                            # Modell-Konfigurations-Datei kopieren in bin-Ordner kopieren
+$quelldatei = $simSTBordner + "\python\modelle.json"                      
+$zielodrdner = $auslierungsordner + "\sim\bin"
+Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
 $titel = "Laufzeitumgebung?"
@@ -110,13 +131,14 @@ $meldung = "Laufzeitumgebung aktualisieren?"
 $ja = New-Object System.Management.Automation.Host.ChoiceDescription "&Ja", "Ja"
 $nein = New-Object System.Management.Automation.Host.ChoiceDescription "&Nein", "Nein"
 $optionen = [System.Management.Automation.Host.ChoiceDescription[]]($ja, $nein)
-$auswahl=$host.ui.PromptForChoice($titel, $meldung, $optionen, 1)
-if( $auswahl -eq 0) {
+$auswahl = $host.ui.PromptForChoice($titel, $meldung, $optionen, 1)
+if ( $auswahl -eq 0) {
     write-Host "5. Laufzeitumgebung aktualisieren"
-    if( (Test-Path -Path $laufzeitUmgebung) -eq $true) {                        # Alte Laufzeitumgebung löschen
+    if ( (Test-Path -Path $laufzeitUmgebung) -eq $true) {
+        # Alte Laufzeitumgebung löschen
         Remove-Item $laufzeitUmgebung -Recurse -Force 
-        }
+    }
     New-Item -Path $laufzeitUmgebung -ItemType directory   | Out-Null           # Neu Laufzeitumgebung kopieren
     $quelldateien = $auslierungsordner + "\sim\*"
     Copy-Item $quelldateien $laufzeitUmgebung -Recurse
-    }
+}

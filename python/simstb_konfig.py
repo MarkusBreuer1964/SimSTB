@@ -9,7 +9,7 @@
     Organisaion:        STB
 
     Erstellt:           28.07.2021
-    Letzte Änderung:    02.08.2021
+    Letzte Änderung:    10.08.2021
     """
 
 class Konfig:
@@ -23,3 +23,4 @@ class Konfig:
     AKTIVE_BACKGROUND =  "#90EE90"              # Hintergrundfarben
     HAUPT_BACKGROUND =  "#b7d7e8"
     BLOCK_BACKGROUND =  "#cfe0e8"
+    MODELL_DATEI = "modelle.json"

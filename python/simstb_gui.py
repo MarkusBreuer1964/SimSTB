@@ -8,7 +8,7 @@
     Organisaion:        STB
 
     Erstellt:           27.07.2021
-    Letzte Änderung:    04.08.2021
+    Letzte Änderung:    10.08.2021
     """
 
 from tkinter import *
@@ -23,7 +23,7 @@ from simstb_dateizugriff import DateiZugriff
 from simstb_setzer import Setzer
 from simstb_generator import GeneratorGUI
 from simstb_datenaufzeichner import DatenaufzeichnerGUI
-
+from simstb_modelle import ModellGUI
 
 
 class GUI:
@@ -37,6 +37,7 @@ class GUI:
 
         self.gen_gui = None
         self.dat_gui = None
+        self.mod_gui = None
         
         # Styles festlegen
         self.festlegen_Styles()
@@ -249,6 +250,19 @@ class GUI:
             self.aktualisieren_eingangswerte()
             return False
 
+    # Callback-Funktion und Hilfsfunktionen für Modelle zu starten - Unterrahmen 2
+
+    def modell_gui_aktiv(self):
+        if self.mod_gui == None:
+            return False
+        elif self.mod_gui.aktiv == False:
+            return False
+        return True
+
+    def modelle( self):
+         if self.modell_gui_aktiv() == False:
+            self.mod_gui = ModellGUI(self.fenster)
+
     # Callback-Funktion und Hilfsfunktionen für analogen Funktionsgenerator - Unterrahmen 2
 
     def funktionsgenerator_gui_aktiv(self):
@@ -286,9 +300,6 @@ class GUI:
             self.dat_gui = DatenaufzeichnerGUI(self.fenster)
 
     # Callback-Funktion für verschiedene noch nicht realisierte Funktionalitäten - Unterrahmen 2
-
-    def modelle( self):
-        messagebox.showinfo(message="Leider nocht nicht implementiert.\nSW-Modelle mit GUI zum Testen von Lösungen.", title="SimSTB Information")
 
     def testautomaten( self):
         messagebox.showinfo(message="Leider nocht nicht implementiert.\nAutomatisiertes Testablaufmodul.", title="SimSTB Information")
