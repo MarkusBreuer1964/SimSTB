@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['simstb_modell_1.py'],
-             pathex=['Z:\\Sonstiges\\Markus\\Weiterbildung\\SimSTB\\python'],
+             pathex=['Z:\\Sonstiges\\Markus\\Weiterbildung\\Projekt - SimSTB\\python'],
              binaries=[],
              datas=[],
              hiddenimports=[],

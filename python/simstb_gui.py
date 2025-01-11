@@ -14,6 +14,8 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import datetime
+import threading
 import time
 import sys
 from tkinter import font
@@ -25,6 +27,7 @@ from simstb_generator import GeneratorGUI
 from simstb_datenaufzeichner import DatenaufzeichnerGUI
 from simstb_modelle import ModellGUI
 
+INTERVALL = 1
 
 class GUI:
     """ Klasse GUI """
@@ -38,7 +41,7 @@ class GUI:
         self.gen_gui = None
         self.dat_gui = None
         self.mod_gui = None
-        
+
         # Styles festlegen
         self.festlegen_Styles()
 
@@ -122,8 +125,10 @@ class GUI:
         self.setzen_abstaende(hauptrahmen, unterrahmen1, unterrahmen2)
 
         # Werte laden und Timer starten
+        ZeitAktualisierer(self.datum, self.zeit)
         self.aktualisieren_eingangswerte()
-        self.aktualisieren()
+        AusgangsdatenAktualisierer(self.DA, self.AA)
+        # self.aktualisieren()
 
     def festlegen_Styles(self):
         """ Festlegen der genutzten Styles """
@@ -157,10 +162,12 @@ class GUI:
 
     # Callback-Funktion und Hilfsfunktionen für Daten laden und aktualisieren - Timer und Konstruktor
 
+    '''
     def aktualisieren(self):
-        self.aktualisieren_zeit()
+        # self.aktualisieren_zeit()
         self.aktualisieren_ausgangswerte()
         self.fenster.after(1000, self.aktualisieren)
+
 
     def aktualisieren_zeit(self):
         """ Sekündliches aktualisieren von Datum und Zeit"""
@@ -168,7 +175,8 @@ class GUI:
         self.zeit.set(zeit)
         datum = time.strftime("%d.%m.%Y")
         self.datum.set(datum)
-       
+        '''
+
     def aktualisieren_eingangswerte(self):
         de_zugriff = DateiZugriff(Konfig.DIGEIN, Konfig.DIGMAXLAENGE)
         de_daten= de_zugriff.lesen_alle()
@@ -179,6 +187,7 @@ class GUI:
         for i in range(Konfig.ANAMAXLAENGE):
             self.AE[i].set(ae_daten[i])
 
+
     def aktualisieren_ausgangswerte(self):
         da_zugriff = DateiZugriff(Konfig.DIGAUS, Konfig.DIGMAXLAENGE)
         da_daten= da_zugriff.lesen_alle()
@@ -188,6 +197,7 @@ class GUI:
         aa_daten= aa_zugriff.lesen_alle()
         for i in range(Konfig.ANAMAXLAENGE):
             self.AA[i].set(aa_daten[i])
+
 
     # Callback-Funktionen für die Knöpfe zum Setzen der Ein- und Ausgänge - Unterrahmen 1
 
@@ -201,7 +211,7 @@ class GUI:
         """ Alle Ausgänge auf 0 setzen """
         setzer = Setzer()
         setzer.setzen0_ausgaenge()
- 
+
     def setzen0_eingaenge(self):
         """ Alle Eingänge auf 0 setzen """
         setzer = Setzer()
@@ -226,7 +236,7 @@ class GUI:
         """ Digitale Eingänge setzen """
         de_daten = []
         for i in range(Konfig.DIGMAXLAENGE):
-            de_daten = de_daten + [int(self.DE[i].get())]        
+            de_daten = de_daten + [int(self.DE[i].get())]
         de_zugriff = DateiZugriff(Konfig.DIGEIN, Konfig.DIGMAXLAENGE)
         de_zugriff.schreiben_alle(de_daten)
         self.aktualisieren_eingangswerte()
@@ -235,7 +245,7 @@ class GUI:
         """ Analoge Eingänge setzen - Durchführung"""
         ae_daten = []
         for i in range(Konfig.ANAMAXLAENGE):
-            ae_daten = ae_daten + [float(self.AE[i].get())]        
+            ae_daten = ae_daten + [float(self.AE[i].get())]
         ae_zugriff = DateiZugriff(Konfig.ANAEIN, Konfig.ANAMAXLAENGE)
         ae_zugriff.schreiben_alle(ae_daten)
 
@@ -310,6 +320,76 @@ class GUI:
     def beenden(self):
         """ SimSTB beenden """
         sys.exit ("Simulator SimSTB beendet")
+
+class AusgangsdatenAktualisierer:
+    """Klasse zum Aktualisieren der Ausgangsdaten"""
+
+    def __init__(self, DA,AA):
+        """Konstruktor wirft die eigentliche Aktualisieren der Ausgangsdaten an"""
+        t_1 = threading.Thread(
+            target=AusgangsdatenAktualisierer.aktualisieren,
+            args=(DA,AA,),
+            daemon=True,
+        )
+        t_1.start()
+
+    @staticmethod
+    def aktualisieren(DA, AA):
+        """Aktualisieren der Daten für digitale und analoge Ausgänge"""
+        while True:
+            da_zugriff = DateiZugriff(Konfig.DIGAUS, Konfig.DIGMAXLAENGE)
+            da_daten= da_zugriff.lesen_alle()
+            for i in range(Konfig.DIGMAXLAENGE):
+                DA[i].set(da_daten[i])
+            aa_zugriff = DateiZugriff(Konfig.ANAAUS, Konfig.ANAMAXLAENGE)
+            aa_daten= aa_zugriff.lesen_alle()
+            for i in range(Konfig.ANAMAXLAENGE):
+                AA[i].set(aa_daten[i])
+                time.sleep(INTERVALL)
+
+class AnalogeEingangsdatenAktualisierer:
+    """Klasse zum Aktualisieren der Ausgangsdaten"""
+
+    def __init__(self, AE):
+        """Konstruktor wirft die eigentliche Aktualisieren der analogen Eingangsdaten an"""
+        t_1 = threading.Thread(
+            target=AnalogeEingangsdatenAktualisierer.aktualisieren,
+            args=(AE,),
+            daemon=True,
+        )
+        t_1.start()
+
+    @staticmethod
+    def aktualisieren(AE):
+        """Aktualisieren der Daten für analoge Eingänge"""
+        while True:
+            ae_zugriff = DateiZugriff(Konfig.ANAEIN, Konfig.ANAMAXLAENGE)
+            ae_daten= ae_zugriff.lesen_alle()
+            for i in range(Konfig.ANAMAXLAENGE):
+                AE[i].set(ae_daten[i])
+
+
+class ZeitAktualisierer:
+    """Klasse zum Aktualisieren der Zeit"""
+
+    def __init__(self, wertdatum, wertzeit):
+        """Konstruktor wirft die eigentliche Zeitsetzung an"""
+        t_2 = threading.Thread(
+            target=ZeitAktualisierer.aktualisieren,
+            args=(wertdatum, wertzeit,),
+            daemon=True,
+        )
+        t_2.start()
+
+    @staticmethod
+    def aktualisieren(wertdatum, wertzeit):
+        """Aktualisieren der Zeit"""
+        while True:
+            datum = str(datetime.datetime.now().strftime("%d.%m.%Y"))
+            wertdatum.set(datum)
+            zeit = str(datetime.datetime.now().strftime("%H:%M:%S"))
+            wertzeit.set(zeit)
+            time.sleep(INTERVALL)
 
 
 def hauptprogramm():

@@ -6,10 +6,11 @@
         1. Alte Auslieferungsumgebung löschen
         2 Neue Umgebung aufbauen
         3.a Austauschdateien kopieren
-        3.b C/C++ - Schnittstelle kopieren
+        3.b1 C/C++ - Schnittstelle kopieren
+        3.b2 Python - Schnittstelle kopieren
         3.c Dokumentation und Beispiele kopieren
         4.a simstb_gui.exe erzeugen
-        4.b simstb_gui.exe.exe kopieren
+        4.b simstb_gui.exe kopieren
         4.c Temporäre Zwischendateien weglöschen
         4.d Benötigte Bild-Dateien kopieren
         4.e Modell-Konfigurations-Datei kopieren
@@ -23,15 +24,15 @@
 
 	Autor:
 		Name:				Markus Breuer
-		Organisaion:		STB
+		Organisaion:		STMB
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	11.08.2021
+		Letzte Änderung:	21.06.2023
 
 #>
 
-$simSTBordner = "Z:\Sonstiges\Markus\Weiterbildung\SimSTB"
+$simSTBordner = "Z:\Sonstiges\Markus\Weiterbildung\Projekt - SimSTB"
 $auslierungsordner = $simSTBordner + "\auslieferung"
 $pythonordner = $simSTBordner + "\python"
 $laufzeitUmgebung = "C:\Sim"
@@ -53,6 +54,7 @@ New-Item -Path sim -ItemType directory  | Out-Null                          # Ne
 New-Item -Path sim/bin -ItemType directory   | Out-Null
 New-Item -Path sim/header -ItemType directory   | Out-Null
 New-Item -Path sim/lib -ItemType directory   | Out-Null
+New-Item -Path sim/python -ItemType directory   | Out-Null
 New-Item -Path sim/beispiele -ItemType directory   | Out-Null
 New-Item -Path sim/dokumentation -ItemType directory   | Out-Null
 Write-Host ""
@@ -63,7 +65,7 @@ $zielodrdner = $auslierungsordner + "\sim\"
 Copy-Item $quelldateien $zielodrdner
 Write-Host ""
 
-write-Host "3.b C/C++ - Schnittstelle kopieren"
+write-Host "3.b1 C/C++ - Schnittstelle kopieren"
 $quelldatei = $simSTBordner + "\cprojekte\simlib\simlib\simulation.h"       # Header kopieren
 $zielodrdner = $auslierungsordner + "\sim\header"
 Copy-Item $quelldatei $zielodrdner
@@ -72,11 +74,26 @@ $zielodrdner = $auslierungsordner + "\sim\lib"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
+write-Host "3.b2 Python - Schnittstelle kopieren"
+$quelldatei = $pythonordner + "\simulator.py"       
+$zielodrdner = $auslierungsordner + "\sim\python"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $pythonordner + "\simstb_dateizugriff.py"       
+$zielodrdner = $auslierungsordner + "\sim\python"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $pythonordner + "\simstb_konfig.py"       
+$zielodrdner = $auslierungsordner + "\sim\python"
+Copy-Item $quelldatei $zielodrdner
+Write-Host ""
+
 write-Host "3.c Dokumentation und Beispiele kopieren"
 $quelldatei = $simSTBordner + "\docs\SimSTB-Benutzerdokumentation.pdf"       # Dokumentation kopieren
 $zielodrdner = $auslierungsordner + "\sim\dokumentation"
 Copy-Item $quelldatei $zielodrdner
 $quelldatei = $simSTBordner + "\cprojekte\beispiel\beispiel\beispiel.cpp"   # Beispiele kopieren
+$zielodrdner = $auslierungsordner + "\sim\beispiele"
+Copy-Item $quelldatei $zielodrdner
+$quelldatei = $pythonordner + "\beispiel.py"   
 $zielodrdner = $auslierungsordner + "\sim\beispiele"
 Copy-Item $quelldatei $zielodrdner
 $quelldatei = $simSTBordner + "\README.md"                                  # README und LICENSE kopieren
@@ -105,8 +122,8 @@ $zielodrdner = $auslierungsordner + "\sim\bin"
 Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 write-Host "4.c Temporäre Zwischendateien weglöschen"                       # Temporäre Zwischendateien weglöschen
-Remove-Item dist
-Remove-Item build
+Remove-Item dist -Recurse
+Remove-Item build -Recurse
 Write-Host ""
 Set-Location $auslierungsordner
 write-Host "4.d Benötigte Bild-Dateien kopieren"                            # Benötigte Bild-Dateien in bin-Ordner kopieren

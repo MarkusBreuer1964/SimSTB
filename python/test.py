@@ -1,39 +1,36 @@
-from tkinter import *     
-from tkinter import ttk
+import tkinter as tk
 
-""""
-class Modell_1:
- 
-    def __init__(self, hauptfenster):
-        self.fenster = hauptfenster
-        self.fenster.iconbitmap("simstb.ico")
+# Hauptfenster erstellen
+root = tk.Tk()
+root.title("Hauptfenster mit Scrollbar")
 
-        img = PhotoImage(file="led_grau_transparent.png")      
-        label1 = ttk.Label(self.fenster, image=img)      
-        label1.grid(column=1, row=1) 
-        
+# Canvas erstellen, um das Scrollen zu ermöglichen
+canvas = tk.Canvas(root)
+canvas.grid(row=0, column=0, sticky="nsew")
 
+# Scrollbar erstellen und an den Canvas binden
+scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
+scrollbar.grid(row=0, column=1, sticky="ns")
 
-def hauptprogramm():
-    fenster = Tk(className="SimSTB - Modell 1 - LED-Anzeige")  # Rohes Fenster erstellen
-    TS = Modell_1(fenster)  # Oberfläche Simulator aufbauen
-    fenster.mainloop()  # Hauptschleife starten
+# Canvas mit der Scrollbar verbinden
+canvas.configure(yscrollcommand=scrollbar.set)
 
-hauptprogramm()
+# Frame erstellen, das alle Widgets enthält, die gescrollt werden sollen
+frame = tk.Frame(canvas)
+canvas.create_window((0, 0), window=frame, anchor="nw")
 
-"""
+# Einige Beispiel-Widgets hinzufügen, um den Scrollbereich zu füllen
+for i in range(50):  # 50 Labels als Beispiel
+    label = tk.Label(frame, text=f"Label {i+1}")
+    label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
 
-class Modell_1:
-    def __init__(self):
+# Das Scrollen anpassen, wenn sich der Inhalt ändert
+frame.update_idletasks()
+canvas.config(scrollregion=canvas.bbox("all"))
 
-        fenster = Tk(className="SimSTB - Modell 1 - LED-Anzeige")  # Rohes Fenster erstellen
-        fenster.iconbitmap("simstb.ico")
+# Die Größe des Hauptfensters anpassen
+root.grid_rowconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=1)
 
-        img = PhotoImage(file="led_blau_transparent.png") 
-        for i in range(8):   
-            label1 = ttk.Label(fenster, image=img)      
-            label1.grid(column=i+1, row=1) 
-
-        fenster.mainloop()  # Hauptschleife starten
-
-Modell_1()  # Hauptschleife starten
+# Tkinter Schleife starten
+root.mainloop()
