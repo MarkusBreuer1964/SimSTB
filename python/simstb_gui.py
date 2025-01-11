@@ -1,15 +1,8 @@
-""" SimSTB - GUI
-
-    SimSTB - Simulation digitaler und analoger Ein- und Ausgaben
-
-    Realisierung des Hauptfensters.
-
-    Name:               Markus Breuer
-    Organisaion:        STB
-
-    Erstellt:           27.07.2021
-    Letzte Änderung:    10.08.2021
+""" simstb_gui.py - GUI
+    Name, Organisaion:          Markus Breuer, STMB
+    Erstellt, Letzte Änderung:  27.07.2021, 10.01.2024
     """
+
 
 from tkinter import *
 from tkinter import ttk
@@ -27,60 +20,70 @@ from simstb_generator import GeneratorGUI
 from simstb_datenaufzeichner import DatenaufzeichnerGUI
 from simstb_modelle import ModellGUI
 
+
 INTERVALL = 1
+
 
 class GUI:
     """ Klasse GUI """
 
-    def __init__(self, hauptfenster):
+    def __init__(self):
         """ Konstruktor, in dem das GUI des Simulators aufgebaut wird """
-        self.fenster = hauptfenster
-        self.fenster.iconbitmap("simstb.ico")
-        self.fenster.protocol("WM_DELETE_WINDOW", lambda: self.beenden())
-
+        # Fremdwerkzeuge initialisieren
         self.gen_gui = None
         self.dat_gui = None
         self.mod_gui = None
-
-        # Styles festlegen
+        # GUI aufbauen
+        self.hauptrahmen_anlegen()
+        self.fensterelemente_festlegen()
         self.festlegen_Styles()
+        self.layout_feinschliff()
+        # Eingangswerte laden und Aktualisierer starten
+        self.aktualisieren_eingangswerte()
+        ZeitAktualisierer(self.datum, self.zeit)
+        AusgangsdatenAktualisierer(self.DA, self.AA)
+        # Hauptschleife GUI starten
+        self.fenster.mainloop()
 
-        # Hauptrahmen anlegen
-        hauptrahmen = ttk.Frame(master=self.fenster, padding="5", style="Haupt.TFrame")
-        hauptrahmen.grid(column=1, row=1, sticky="NWES")
-        self.fenster.columnconfigure(1, weight=1)
-        self.fenster.rowconfigure(1, weight=1)
+    def hauptrahmen_anlegen(self):
+        self.fenster = Tk(className="SimSTB - Simulationsumgebung")  # Rohes Fenster erstellen
+        self.fenster.iconbitmap("simstb.ico")
+        self.fenster.protocol("WM_DELETE_WINDOW", lambda: self.beenden())
+        self.hauptrahmen = ttk.Frame(master=self.fenster, padding="5", style="Haupt.TFrame")
+        self.hauptrahmen.grid(column=1, row=1, sticky="NWES")
+        return
 
+    def fensterelemente_festlegen(self):
         # Titelbereich einfügen
-        ttk.Label(master=hauptrahmen, text="SimSTB", style="HauptLabel1.TLabel").grid(column=1, row=1, sticky="NW")
-        ttk.Label(master=hauptrahmen, text="Simulationsumgebung für digitale\nund analoge Ein- und Ausgänge", style="HauptLabel2.TLabel").grid(column=2, row=1, columnspan=2, sticky="NW")
+        ttk.Label(master=self.hauptrahmen, text="SimSTB", style="HauptLabel1.TLabel").grid(column=1, row=1, sticky="NW")
+        ttk.Label(master=self.hauptrahmen, text="Simulationsumgebung für digitale\nund analoge Ein- und Ausgänge", style="HauptLabel2.TLabel").grid(column=2, row=1, columnspan=2, sticky="NW")
         self.datum = StringVar()
-        ttk.Label(master=hauptrahmen, textvariable=self.datum, style="HauptLabel2.TLabel").grid(column=1, row=2, sticky="NW")
+        ttk.Label(master=self.hauptrahmen, textvariable=self.datum, style="HauptLabel2.TLabel").grid(column=1, row=2, sticky="NW")
         self.zeit = StringVar()
-        ttk.Label(master=hauptrahmen, textvariable=self.zeit, style="HauptLabel2.TLabel").grid(column=2, row=2, sticky="NW")
+        ttk.Label(master=self.hauptrahmen, textvariable=self.zeit, style="HauptLabel2.TLabel").grid(column=2, row=2, sticky="NW")
 
         # Unterrahmen 1 und Knöpfe
-        unterrahmen1 = ttk.Frame(master=hauptrahmen, padding="5", style="Block.TFrame")
-        unterrahmen1.grid(column=1, row=3, sticky="NWES")
-        ttk.Button(master=unterrahmen1, text="Alles 0", command=lambda: self.setzen0_alles() ).grid(column=1, row=1, sticky="WE")
-        ttk.Button(master=unterrahmen1, text="Alle Ausgänge 0", command=lambda: self.setzen0_ausgaenge() ).grid(column=1, row=2, sticky="WE")
-        ttk.Button(master=unterrahmen1, text="Alle Eingänge 0", command=lambda: self.setzen0_eingaenge() ).grid(column=1, row=3, sticky="WE")
-        ttk.Button(master=unterrahmen1, text="Digitale Eingänge 0", command=lambda: self.setzen0_digitale_eingaenge() ).grid(column=1, row=4, sticky="WE")
-        ttk.Button(master=unterrahmen1, text="Digitale Eingänge 1", command=lambda: self.setzen1_digitale_eingaenge()  ).grid(column=1, row=5, sticky="WE")
+        self.unterrahmen1 = ttk.Frame(master=self.hauptrahmen, padding="5", style="Block.TFrame")
+        self.unterrahmen1.grid(column=1, row=3, sticky="NWES")
+        ttk.Button(master=self.unterrahmen1, text="Alles 0", command=lambda: self.setzen0_alles() ).grid(column=1, row=1, sticky="WE")
+        ttk.Button(master=self.unterrahmen1, text="Alle Ausgänge 0", command=lambda: self.setzen0_ausgaenge() ).grid(column=1, row=2, sticky="WE")
+        ttk.Button(master=self.unterrahmen1, text="Alle Eingänge 0", command=lambda: self.setzen0_eingaenge() ).grid(column=1, row=3, sticky="WE")
+        ttk.Button(master=self.unterrahmen1, text="Digitale Eingänge 0", command=lambda: self.setzen0_digitale_eingaenge() ).grid(column=1, row=4, sticky="WE")
+        ttk.Button(master=self.unterrahmen1, text="Digitale Eingänge 1", command=lambda: self.setzen1_digitale_eingaenge()  ).grid(column=1, row=5, sticky="WE")
 
         # Unterrahmen 2 und Knöpfe
-        unterrahmen2 = ttk.Frame(master=hauptrahmen, padding="5", style="Block.TFrame")
-        unterrahmen2.grid(column=1, row=4, sticky="NWES")
-        ttk.Button(master=unterrahmen2, text="Modelle", command=lambda: self.modelle() ).grid(column=1, row=1, sticky="WE")
-        ttk.Button(master=unterrahmen2, text="Testautomaten", command=lambda: self.testautomaten() ).grid(column=1, row=2, sticky="WE")
-        ttk.Button(master=unterrahmen2, text="Funktionsgenerator", command=lambda: self.funktionsgenerator()).grid(column=1, row=3, sticky="WE")
-        ttk.Button(master=unterrahmen2, text="Datenaufzeichnung", command=lambda: self.datenaufzeichnen() ).grid(column=1, row=4, sticky="NW")
+        self.unterrahmen2 = ttk.Frame(master=self.hauptrahmen, padding="5", style="Block.TFrame")
+        self.unterrahmen2.grid(column=1, row=4, sticky="NWES")
+        ttk.Button(master=self.unterrahmen2, text="Modelle", command=lambda: self.modelle() ).grid(column=1, row=1, sticky="WE")
+        ttk.Button(master=self.unterrahmen2, text="Testautomaten", command=lambda: self.testautomaten() ).grid(column=1, row=2, sticky="WE")
+        ttk.Button(master=self.unterrahmen2, text="Funktionsgenerator", command=lambda: self.funktionsgenerator()).grid(column=1, row=3, sticky="WE")
+        ttk.Button(master=self.unterrahmen2, text="Datenaufzeichnung", command=lambda: self.datenaufzeichnen() ).grid(column=1, row=4, sticky="NW")
 
         # Unterrahmen 3 und Inhalt
-        unterrahmen3 = ttk.Frame(master=hauptrahmen, padding="5", style="Block.TFrame")
-        unterrahmen3.grid(column=2, row=3, rowspan=2, sticky="NWES")
-        ttk.Label(master=unterrahmen3, text="Digitale\nEingänge", style="BlockLabel2.TLabel").grid(column=1, row=1, columnspan=2, sticky="NW")
-        unterrahmenDE = ttk.Frame(master=unterrahmen3, padding="5", style="Unterblock.TFrame")
+        self.unterrahmen3 = ttk.Frame(master=self.hauptrahmen, padding="5", style="Block.TFrame")
+        self.unterrahmen3.grid(column=2, row=3, rowspan=2, sticky="NWES")
+        ttk.Label(master=self.unterrahmen3, text="Digitale\nEingänge", style="BlockLabel2.TLabel").grid(column=1, row=1, columnspan=2, sticky="NW")
+        unterrahmenDE = ttk.Frame(master=self.unterrahmen3, padding="5", style="Unterblock.TFrame")
         unterrahmenDE.grid(column=1, row=2,  columnspan=2, sticky="NWES")
         self.DE = []
         for i in range(Konfig.DIGMAXLAENGE):
@@ -88,8 +91,8 @@ class GUI:
             eintrag.set(0)
             ttk.Checkbutton(master=unterrahmenDE, text="DE"+str(i), command=lambda: self.setzen_digitale_eingaenge(), variable=eintrag, style="BlockCheckbutton.TCheckbutton").grid(column=1, row=i+1, sticky="NW")
             self.DE.append(eintrag)
-        ttk.Label(master=unterrahmen3, text="Digitale\nAusgänge", style="BlockLabel2.TLabel").grid(column=3, row=1, columnspan=2, sticky="NW")
-        unterrahmenDA = ttk.Frame(master=unterrahmen3, padding="5", style="Unterblock.TFrame")
+        ttk.Label(master=self.unterrahmen3, text="Digitale\nAusgänge", style="BlockLabel2.TLabel").grid(column=3, row=1, columnspan=2, sticky="NW")
+        unterrahmenDA = ttk.Frame(master=self.unterrahmen3, padding="5", style="Unterblock.TFrame")
         unterrahmenDA.grid(column=3, row=2,  columnspan=2, sticky="NWES")
         self.DA = []
         for i in range(Konfig.DIGMAXLAENGE):
@@ -97,9 +100,9 @@ class GUI:
             eintrag.set(0)
             ttk.Checkbutton(master=unterrahmenDA, text="DA"+str(i), variable=eintrag, style="BlockCheckbutton.TCheckbutton", state=DISABLED).grid(column=1, row=i+1, sticky="NW")
             self.DA.append(eintrag)
-        ttk.Label(master=unterrahmen3, text="Analoge\nEingänge", style="BlockLabel2.TLabel").grid(column=1, row=3,  columnspan=2, sticky="NW")
+        ttk.Label(master=self.unterrahmen3, text="Analoge\nEingänge", style="BlockLabel2.TLabel").grid(column=1, row=3,  columnspan=2, sticky="NW")
         validationAE = (self.fenster.register(self.setzen_analoge_eingaenge_1),"%P")
-        unterrahmenAE = ttk.Frame(master=unterrahmen3, padding="5", style="Unterblock.TFrame")
+        unterrahmenAE = ttk.Frame(master=self.unterrahmen3, padding="5", style="Unterblock.TFrame")
         unterrahmenAE.grid(column=1, row=4, columnspan=2, sticky="NWES")
         self.AE = []
         for i in range(Konfig.ANAMAXLAENGE):
@@ -108,8 +111,8 @@ class GUI:
             ttk.Label(master=unterrahmenAE, text="AE"+str(i), style="BlockLabel.TLabel").grid(column=1, row=i+1, sticky="NW")
             ttk.Entry(master=unterrahmenAE, textvariable=eintrag, validate="focusout", validatecommand=validationAE).grid(column=2, row=i+1, sticky="NW")
             self.AE.append(eintrag)
-        ttk.Label(master=unterrahmen3, text="Analoge\nAusgänge", style="BlockLabel2.TLabel").grid(column=3, row=3, columnspan=2, sticky="NW")
-        unterrahmenAA = ttk.Frame(master=unterrahmen3, padding="5", style="Unterblock.TFrame")
+        ttk.Label(master=self.unterrahmen3, text="Analoge\nAusgänge", style="BlockLabel2.TLabel").grid(column=3, row=3, columnspan=2, sticky="NW")
+        unterrahmenAA = ttk.Frame(master=self.unterrahmen3, padding="5", style="Unterblock.TFrame")
         unterrahmenAA.grid(column=3, row=4, columnspan=2, sticky="NWES")
         self.AA = []
         for i in range(Konfig.ANAMAXLAENGE):
@@ -120,15 +123,8 @@ class GUI:
             self.AA.append(eintrag)
 
         # Globale Knöpfe einfügen
-        ttk.Button(master=hauptrahmen, text="Beenden", command=lambda: self.beenden()).grid(column=2, row=5, sticky="NE")
+        ttk.Button(master=self.hauptrahmen, text="Beenden", command=lambda: self.beenden()).grid(column=2, row=5, sticky="NE")
 
-        self.setzen_abstaende(hauptrahmen, unterrahmen1, unterrahmen2)
-
-        # Werte laden und Timer starten
-        ZeitAktualisierer(self.datum, self.zeit)
-        self.aktualisieren_eingangswerte()
-        AusgangsdatenAktualisierer(self.DA, self.AA)
-        # self.aktualisieren()
 
     def festlegen_Styles(self):
         """ Festlegen der genutzten Styles """
@@ -150,32 +146,21 @@ class GUI:
         sblock.configure( "BlockCheckbutton.TCheckbutton", background = Konfig.BLOCK_BACKGROUND)
         sblock.configure( "Unterblock.TFrame", background = Konfig.BLOCK_BACKGROUND)
 
-    def setzen_abstaende(self, hauptrahmen, unterrahmen1, unterrahmen2):
-        """ Feinschliff Layout - Abstände zwischen Fensterelementen setzen"""
-        for element in hauptrahmen.winfo_children():
+    def layout_feinschliff(self):
+        """ Feinschlif Layout - Abstände zwischen Fensterelementen setzen"""
+        # Abstände setzen
+        for element in self.hauptrahmen.winfo_children():
             element.grid_configure(padx="10", pady="10")
-        for element in unterrahmen1.winfo_children():
+        for element in self.unterrahmen1.winfo_children():
             element.grid_configure(padx="2", pady="2")
-        for element in unterrahmen2.winfo_children():
+        for element in self.unterrahmen2.winfo_children():
             element.grid_configure(padx="2", pady="2")
+        # Verhalten bei Größenänderungen festlegen
+        self.fenster.columnconfigure(1, weight=1)
+        self.fenster.rowconfigure(1, weight=1)
 
 
-    # Callback-Funktion und Hilfsfunktionen für Daten laden und aktualisieren - Timer und Konstruktor
-
-    '''
-    def aktualisieren(self):
-        # self.aktualisieren_zeit()
-        self.aktualisieren_ausgangswerte()
-        self.fenster.after(1000, self.aktualisieren)
-
-
-    def aktualisieren_zeit(self):
-        """ Sekündliches aktualisieren von Datum und Zeit"""
-        zeit = time.strftime("%H:%M:%S")
-        self.zeit.set(zeit)
-        datum = time.strftime("%d.%m.%Y")
-        self.datum.set(datum)
-        '''
+    # Callback-Funktion und Hilfsfunktionen für Daten laden und aktualisieren
 
     def aktualisieren_eingangswerte(self):
         de_zugriff = DateiZugriff(Konfig.DIGEIN, Konfig.DIGMAXLAENGE)
@@ -186,7 +171,6 @@ class GUI:
         ae_daten= ae_zugriff.lesen_alle()
         for i in range(Konfig.ANAMAXLAENGE):
             self.AE[i].set(ae_daten[i])
-
 
     def aktualisieren_ausgangswerte(self):
         da_zugriff = DateiZugriff(Konfig.DIGAUS, Konfig.DIGMAXLAENGE)
@@ -321,6 +305,7 @@ class GUI:
         """ SimSTB beenden """
         sys.exit ("Simulator SimSTB beendet")
 
+
 class AusgangsdatenAktualisierer:
     """Klasse zum Aktualisieren der Ausgangsdaten"""
 
@@ -346,6 +331,7 @@ class AusgangsdatenAktualisierer:
             for i in range(Konfig.ANAMAXLAENGE):
                 AA[i].set(aa_daten[i])
                 time.sleep(INTERVALL)
+
 
 class AnalogeEingangsdatenAktualisierer:
     """Klasse zum Aktualisieren der Ausgangsdaten"""
@@ -392,9 +378,5 @@ class ZeitAktualisierer:
             time.sleep(INTERVALL)
 
 
-def hauptprogramm():
-    fenster = Tk(className="SimSTB - Simulationsumgebung")  # Rohes Fenster erstellen
-    TS = GUI(fenster)  # Oberfläche Simulator aufbauen
-    fenster.mainloop()  # Hauptschleife starten
-
-hauptprogramm()
+# SimSTB starten
+GUI()
