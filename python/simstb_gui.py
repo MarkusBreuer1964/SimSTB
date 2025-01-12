@@ -360,6 +360,16 @@ class GUI:
 
     def beenden(self):
         """SimSTB beenden"""
+        # Hilfsfenster und Threads beenden
+        if self.funktionsgenerator_gui_aktiv():
+            self.gen_gui.stop()
+            self.gen_gui.schliessen()
+        if self.datenaufzeichner_gui_aktiv():
+            self.dat_gui.stop()
+            self.dat_gui.schliessen()
+        if self.modell_gui_aktiv():
+            self.mod_gui.schliessen()
+        # Hauptprogramm beenden
         sys.exit("Simulator SimSTB beendet")
 
 

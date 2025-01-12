@@ -1,6 +1,6 @@
 """ SimSTB - Dateizugriff auf Austauschdateien
-        Das Modul Dateizugriff stellt zwei Funktionen zum Lesen und Schreiben der Austauschdateien
-        zur Verfügung. Die Datenübergabe erfolgt jeweils als Liste.
+    Das Modul Dateizugriff stellt zwei Funktionen zum Lesen und Schreiben der Austauschdateien
+    zur Verfügung. Die Datenübergabe erfolgt jeweils als Liste.
     Name, Organisaion:          Markus Breuer, STMB
     Erstellt, Letzte Änderung:  28.07.2021, 10.01.2024
     """

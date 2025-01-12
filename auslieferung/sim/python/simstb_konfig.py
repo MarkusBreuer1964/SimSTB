@@ -1,4 +1,4 @@
-""" SimSTB - Konfigurationsdaten
+""" simstb_konfig.py - SimSTB - Konfigurationsdaten
     Das Modul Konfiguration stellt zentrale Konfigurationsdaten, wie z.B.
     Längen, Dateinamen inkl. Pfad oder Signalformen zur Verfügung.
     Name, Organisaion:          Markus Breuer, STMB
