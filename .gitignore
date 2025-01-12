@@ -18,6 +18,8 @@ python/__pycache__/
 *.log
 # Zip-Daten (Auslieferung) ausschliessen
 *.zip
+# Zwischedateien der Python->Exe Generierung (Auslieferung) ausschliessen
+*.spec
 
 #### Alte Java Einstellungen #######
 
