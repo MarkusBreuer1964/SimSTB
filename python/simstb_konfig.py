@@ -2,7 +2,7 @@
     Das Modul Konfiguration stellt zentrale Konfigurationsdaten, wie z.B.
     Längen, Dateinamen inkl. Pfad oder Signalformen zur Verfügung.
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  28.07.2021, 10.01.2024
+    Erstellt, Letzte Änderung:  28.07.2021, 14.01.2024
     """
 
 
@@ -21,3 +21,4 @@ class Konfig:
     BLOCK_BACKGROUND = "#cfe0e8"
     MODELL_DATEI = "modelle.json"
     LOGDATEI = "C:\\Sim\\simstb.log"
+    INTERVALL = 1 # Intervall in Sekunden für die Aktualisierung der Anzeige

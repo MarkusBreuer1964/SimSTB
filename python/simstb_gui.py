@@ -1,6 +1,6 @@
 """ simstb_gui.py - GUI
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  27.07.2021, 10.01.2024
+    Erstellt, Letzte Änderung:  27.07.2021, 13.01.2024
     """
 
 from tkinter import *
@@ -16,9 +16,6 @@ from simstb_setzer import Setzer
 from simstb_generator import GeneratorGUI
 from simstb_datenaufzeichner import DatenaufzeichnerGUI
 from simstb_modelle import ModellGUI
-
-
-INTERVALL = 1
 
 
 class GUI:
@@ -309,6 +306,7 @@ class GUI:
         return True
 
     def modelle(self):
+        """Modelle starten"""
         if self.modell_gui_aktiv() is False:
             self.mod_gui = ModellGUI(self.fenster)
 
@@ -322,23 +320,16 @@ class GUI:
             return False
         return True
 
-    def auto_aktualisieren_analoge_eingaenge(self):
-        wiederholen = self.funktionsgenerator_gui_aktiv()
-        ae_zugriff = DateiZugriff(Konfig.ANAEIN, Konfig.ANAMAXLAENGE)
-        ae_daten = ae_zugriff.lesen_alle()
-        for i in range(Konfig.ANAMAXLAENGE):
-            self.AE[i].set(ae_daten[i])
-        if wiederholen is True:
-            self.fenster.after(1000, self.auto_aktualisieren_analoge_eingaenge)
-
     def funktionsgenerator(self):
+        """Funktionsgenerator starten"""
         if self.funktionsgenerator_gui_aktiv() == False:
-            self.gen_gui = GeneratorGUI(self.fenster)
-            self.auto_aktualisieren_analoge_eingaenge()
+            self.gen_gui = GeneratorGUI(self.fenster, self.AE)
+            # self.auto_aktualisieren_analoge_eingaenge()
 
     # Callback-Funktion und Hilfsfunktionen für Datenaufzeichner - Unterrahmen 2
 
     def datenaufzeichner_gui_aktiv(self):
+        """Testen, ob der Datenaufzeichner aktiv ist"""
         if self.dat_gui is None:
             return False
         elif self.dat_gui.dat_gui_aktiv is False:
@@ -346,12 +337,14 @@ class GUI:
         return True
 
     def datenaufzeichnen(self):
+        """Datenaufzeichner starten"""
         if self.datenaufzeichner_gui_aktiv() is False:
             self.dat_gui = DatenaufzeichnerGUI(self.fenster)
 
     # Callback-Funktion für verschiedene noch nicht realisierte Funktionalitäten - Unterrahmen 2
 
     def testautomaten(self):
+        """Testautomaten starten"""
         messagebox.showinfo(
             message="Leider nocht nicht implementiert.\nAutomatisiertes Testablaufmodul.", title="SimSTB Information"
         )
@@ -400,29 +393,7 @@ class AusgangsdatenAktualisierer:
             aa_daten = aa_zugriff.lesen_alle()
             for i in range(Konfig.ANAMAXLAENGE):
                 AA[i].set(aa_daten[i])
-                time.sleep(INTERVALL)
-
-
-class AnalogeEingangsdatenAktualisierer:
-    """Klasse zum Aktualisieren der Ausgangsdaten"""
-
-    def __init__(self, AE):
-        """Konstruktor wirft die eigentliche Aktualisieren der analogen Eingangsdaten an"""
-        t_1 = threading.Thread(
-            target=AnalogeEingangsdatenAktualisierer.aktualisieren,
-            args=(AE,),
-            daemon=True,
-        )
-        t_1.start()
-
-    @staticmethod
-    def aktualisieren(AE):
-        """Aktualisieren der Daten für analoge Eingänge"""
-        while True:
-            ae_zugriff = DateiZugriff(Konfig.ANAEIN, Konfig.ANAMAXLAENGE)
-            ae_daten = ae_zugriff.lesen_alle()
-            for i in range(Konfig.ANAMAXLAENGE):
-                AE[i].set(ae_daten[i])
+            time.sleep(Konfig.INTERVALL)
 
 
 class ZeitAktualisierer:
@@ -448,7 +419,7 @@ class ZeitAktualisierer:
             wertdatum.set(datum)
             zeit = str(datetime.datetime.now().strftime("%H:%M:%S"))
             wertzeit.set(zeit)
-            time.sleep(INTERVALL)
+            time.sleep(Konfig.INTERVALL)
 
 
 # SimSTB starten
