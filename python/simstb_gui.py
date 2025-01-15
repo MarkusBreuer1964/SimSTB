@@ -44,7 +44,7 @@ class GUI:
         self.fenster = Tk(className="SimSTB - Simulationsumgebung")  # Rohes Fenster erstellen
         self.fenster.iconbitmap("simstb.ico")
         self.fenster.protocol("WM_DELETE_WINDOW", lambda: self.beenden())
-        self.fenster.geometry("600x850")
+        self.fenster.geometry("600x750")
         # Canvas in Fenster erstellen, um das Scrollen zu ermöglichen
         self.canvas = Canvas(self.fenster, bg=Konfig.HAUPT_BACKGROUND)
         self.canvas.grid(row=1, column=1, sticky="nsew")
