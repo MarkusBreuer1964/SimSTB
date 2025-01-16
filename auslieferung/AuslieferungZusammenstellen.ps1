@@ -28,7 +28,7 @@
 
 	Datum:
 		Erstellt:			27.07.2019
-		Letzte Änderung:	21.06.2023
+		Letzte Änderung:	12.01.2025
 
 #>
 
@@ -84,6 +84,9 @@ Copy-Item $quelldatei $zielodrdner
 $quelldatei = $pythonordner + "\simstb_konfig.py"       
 $zielodrdner = $auslierungsordner + "\sim\python"
 Copy-Item $quelldatei $zielodrdner
+$quelldatei = $pythonordner + "\simstb_logger.py"       
+$zielodrdner = $auslierungsordner + "\sim\python"
+Copy-Item $quelldatei $zielodrdner
 Write-Host ""
 
 write-Host "3.c Dokumentation und Beispiele kopieren"
@@ -124,6 +127,10 @@ Write-Host ""
 write-Host "4.c Temporäre Zwischendateien weglöschen"                       # Temporäre Zwischendateien weglöschen
 Remove-Item dist -Recurse
 Remove-Item build -Recurse
+$loeschdateien = $pythonordner + "\*.spec"
+Remove-Item $loeschdateien
+$loeschdateien = $pythonordner + "\*.exe"
+Remove-Item $loeschdateien
 Write-Host ""
 Set-Location $auslierungsordner
 write-Host "4.d Benötigte Bild-Dateien kopieren"                            # Benötigte Bild-Dateien in bin-Ordner kopieren

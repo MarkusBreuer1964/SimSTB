@@ -1,22 +1,18 @@
-""" SimSTB - Dateizugriff auf Analoger Funktionsgenerator
-
-    SimSTB - Simulation digitaler und analoger Ein- und Ausgaben
-
-    Das Modul Funktionsgenerator stellt drei Klassen zur Realisierung des
+""" simstb_generator.py - SimSTB -Analoger Funktionsgenerator
+    Das Modul Funktionsgenerator stellt vier Klassen zur Realisierung des
     analogen Funktionsgenerators zur Verfügung.
     1. In der Klasse GeneratorGUI wird ein Toplevel-Fenster erzeugt, in dem
-    der Benutzer die Generatoroptionen setzen kann und den Generator 
+    der Benutzer die Generatoroptionen setzen kann und den Generator
     starten und stoppen.
     2. Die Klasse GeneratorController sorgz dafür, dass der eigentliche
     Generator in einem eigenen Thread läuft.
     3. Die Klasse FunktionsGenerator enthält den eigentlichen Funktionsgenerator
-
-    Name:               Markus Breuer
-    Organisaion:        STB
-
-    Erstellt:           28.07.2021
-    Letzte Änderung:    04.08.2021
+    4. Eine Klasse zur Aktualisierung der analogen Eingänge
+    Name, Organisaion:          Markus Breuer, STMB
+    Erstellt, Letzte Änderung:  28.07.2021, 13.01.2024
     """
+
+
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -25,24 +21,29 @@ import time
 import random
 import math
 from datetime import datetime
-from simstb_konfig import Konfig
+import simstb_konfig as kfg
 from simstb_dateizugriff import DateiZugriff
+
 
 class GeneratorGUI:
     """ Klasse Funktionsgenerator GUI """
 
-    def __init__(self, hauptfenster):
+    def __init__(self, hauptfenster, AE):
         """ Konstruktor, in dem das GUI des Funktionsgenerator aufgebaut wird """
         self.gen_gui_aktiv = True
         self.hauptfenster = hauptfenster
+        self.AE = AE
         self.controller = GeneratorController()
 
         # Top-Level Fenster für Funktionsgenerator anlegen
-        self.generatorfenster = Toplevel(self.hauptfenster)  
+        self.generatorfenster = Toplevel(self.hauptfenster)
         self.generatorfenster.iconbitmap("simstb.ico")
-        self.generatorfenster.title("SimSTB - Funktionsgenerator")     
+        self.generatorfenster.title("SimSTB - Funktionsgenerator")
         self.generatorfenster.protocol("WM_DELETE_WINDOW", lambda: self.schliessen())
-       
+
+        self.eingangsaktualisierung_beenden = BooleanVar()
+        self.eingangsaktualisierung_beenden.set(False)
+
         # Hauptrahmen anlegen
         hauptrahmen = ttk.Frame(master=self.generatorfenster, padding="5", style="Haupt.TFrame")
         hauptrahmen.grid(column=1, row=1, sticky="NWES")
@@ -66,15 +67,15 @@ class GeneratorGUI:
         self.signalform = []
         self.amplitude = []
         self.pdauer = []
-        for i in range(Konfig.ANAMAXLAENGE):
+        for i in range(kfg.Konfig.ANAMAXLAENGE):
             ttk.Label(master=unterrahmen1, text="AE"+str(i), style="BlockLabel.TLabel").grid(column=1, row=i+3, sticky="NW") #Kanal
             eintrag_aktiviert = IntVar() #An/Aus
             eintrag_aktiviert.set(0)
             ttk.Checkbutton(master=unterrahmen1, variable=eintrag_aktiviert, style="BlockCheckbutton.TCheckbutton").grid(column=2, row=i+3, sticky="N")
             self.aktiviert.append(eintrag_aktiviert)
             eintrag_signalform = StringVar() # Signalform
-            eintrag_signalform.set(Konfig.SIGNALFORMEN[0])
-            ttk.Combobox(master=unterrahmen1, values=Konfig.SIGNALFORMEN, state="readonly", textvariable=eintrag_signalform).grid(column=3, row=i+3, sticky="NEW")
+            eintrag_signalform.set(kfg.Konfig.SIGNALFORMEN[0])
+            ttk.Combobox(master=unterrahmen1, values=kfg.Konfig.SIGNALFORMEN, state="readonly", textvariable=eintrag_signalform).grid(column=3, row=i+3, sticky="NEW")
             self.signalform.append(eintrag_signalform)
             eintrag_amplitude = DoubleVar() # Amplitude
             eintrag_amplitude.set(0)
@@ -84,7 +85,7 @@ class GeneratorGUI:
             eintrag_pdauer.set(0)
             ttk.Entry(master=unterrahmen1, textvariable=eintrag_pdauer).grid(column=5, row=i+3, sticky="NW")
             self.pdauer.append(eintrag_pdauer)
- 
+
         # Unterrahmen 2 und Knöpfe für Steuerung
         unterrahmen2 = ttk.Frame(master=hauptrahmen, padding="5", style="Block.TFrame")
         unterrahmen2.grid(column=1, row=4, columnspan=2, sticky="NWES")
@@ -107,7 +108,7 @@ class GeneratorGUI:
     def exrahiere_optionen( self):
         """ Liste mit Dictionaries für Funktionsgeneratoroptionen erstellen """
         opt = []
-        for i in range(Konfig.ANAMAXLAENGE):
+        for i in range(kfg.Konfig.ANAMAXLAENGE):
             eintrag = { "aktiviert": self.aktiviert[i].get(), "signalform":self.signalform[i].get(), "amplitude": self.amplitude[i].get(),"pdauer":self.pdauer[i].get()}
             opt = opt + [eintrag]
         return opt
@@ -116,18 +117,21 @@ class GeneratorGUI:
         """ Generatorfenster schliessen """
         opt= self.exrahiere_optionen()
         if self.controller.ist_am_laufen() == False:
+            self.eingangsaktualisierung_beenden.set(False)
+            AnalogeEingangsdatenAktualisierer( self.AE, self.eingangsaktualisierung_beenden)
             self.controller.start( opt)
             self.gen_status.set( "Generator aktiv")
             sblock = ttk.Style()
-            sblock.configure( "BlockStatusLabelGen.TLabel", background = Konfig.AKTIVE_BACKGROUND)
+            sblock.configure( "BlockStatusLabelGen.TLabel", background = kfg.Konfig.AKTIVE_BACKGROUND)
 
     def stop(self):
         """ Generatorfenster schliessen """
         if self.controller.ist_am_laufen() == True:
+            self.eingangsaktualisierung_beenden.set(True)
             self.controller.stop()
             self.gen_status.set( "Generator nicht aktiv")
             sblock = ttk.Style()
-            sblock.configure( "BlockStatusLabelGen.TLabel", background =Konfig.BLOCK_BACKGROUND)
+            sblock.configure( "BlockStatusLabelGen.TLabel", background =kfg.Konfig.BLOCK_BACKGROUND)
 
     def schliessen(self):
         """ Generatorfenster schliessen """
@@ -146,7 +150,7 @@ class GeneratorController:
         """ Funktionsgenerator starten """
         self.t = threading.Thread(target=self.doit, args=(optionen,))
         self.t.start()
-        
+
     def stop(self):
         """ Funktionsgenerator beenden """
         self.t.do_run = False
@@ -175,9 +179,9 @@ class FunktionsGenerator:
     def erzeuge_daten(self):
         akt_zeit = datetime.now()
         t = int((akt_zeit - self.start_zeit).total_seconds())
-        ae_zugriff = DateiZugriff(Konfig.ANAEIN, Konfig.ANAMAXLAENGE)
+        ae_zugriff = DateiZugriff(kfg.Konfig.ANAEIN, kfg.Konfig.ANAMAXLAENGE)
         ae_daten= ae_zugriff.lesen_alle()
-        for i in range(Konfig.ANAMAXLAENGE):
+        for i in range(kfg.Konfig.ANAMAXLAENGE):
             eintrag = self.opt[i]
             if eintrag["aktiviert"] == 1:
                 ae_daten[i] = self.erzeuge_kanaldaten( t, eintrag)
@@ -186,28 +190,53 @@ class FunktionsGenerator:
     def erzeuge_kanaldaten(self, t, eintrag):
         wert = 0
         if eintrag["signalform"] == "Zufall":
-            A = float(eintrag["amplitude"]) 
-            wert =random.uniform(0,2*A) -A   
-            wert = round( wert,2) 
+            A = float(eintrag["amplitude"])
+            wert =random.uniform(0,2*A) -A
+            wert = round( wert,2)
         if eintrag["signalform"] == "Sinus":
-            A = float(eintrag["amplitude"]) 
-            T = float(eintrag["pdauer"]) 
-            wert = A * math.sin( 2 * math.pi * t / T) 
-            wert = round( wert,2) 
+            A = float(eintrag["amplitude"])
+            T = float(eintrag["pdauer"])
+            wert = A * math.sin( 2 * math.pi * t / T)
+            wert = round( wert,2)
         if eintrag["signalform"] == "Rechteck":
-            A = float(eintrag["amplitude"]) 
-            T = float(eintrag["pdauer"]) 
+            A = float(eintrag["amplitude"])
+            T = float(eintrag["pdauer"])
             t = t % T
             if t < T/2:
                 wert = 0
             else:
                 wert = A
-            wert = round( wert,2) 
+            wert = round( wert,2)
         if eintrag["signalform"] == "Dreieck":
-            A = float(eintrag["amplitude"]) 
-            T = float(eintrag["pdauer"]) 
+            A = float(eintrag["amplitude"])
+            T = float(eintrag["pdauer"])
             m = A/T
             t = t % T
             wert= m*t
-            wert = round( wert,2) 
-        return wert  
+            wert = round( wert,2)
+        return wert
+
+
+class AnalogeEingangsdatenAktualisierer:
+    """Klasse zum Aktualisieren der Eingangsdaten"""
+
+    def __init__(self, AE, beenden):
+        """Konstruktor wirft die eigentliche Aktualisieren der analogen Eingangsdaten an"""
+        t_1 = threading.Thread(
+            target=AnalogeEingangsdatenAktualisierer.aktualisieren,
+            args=(AE, beenden),
+            daemon=True,
+        )
+        t_1.start()
+
+    @staticmethod
+    def aktualisieren(AE, beenden):
+        """Aktualisieren der Daten für analoge Eingänge"""
+        while True:
+            ae_zugriff = DateiZugriff(kfg.Konfig.ANAEIN, kfg.Konfig.ANAMAXLAENGE)
+            ae_daten = ae_zugriff.lesen_alle()
+            for i in range(kfg.Konfig.ANAMAXLAENGE):
+                AE[i].set(ae_daten[i])
+            if beenden.get() is True:
+                break
+            time.sleep(kfg.Konfig.INTERVALL)

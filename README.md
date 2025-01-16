@@ -97,7 +97,7 @@ Es gibt mehrere Möglichkeiten zum Projet SimSTB beizutragen:
 
 ## Version
 
-V 0.3
+V 0.4
 
 
 ## License
