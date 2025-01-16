@@ -1,6 +1,6 @@
 """ simstb_gui.py - GUI
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  27.07.2021, 13.01.2024
+    Erstellt, Letzte Änderung:  27.07.2021, 16.01.2024
     """
 
 from tkinter import *
@@ -10,6 +10,7 @@ import datetime
 import threading
 import time
 import sys
+import screeninfo as si
 from simstb_konfig import Konfig
 from simstb_dateizugriff import DateiZugriff
 from simstb_setzer import Setzer
@@ -39,12 +40,23 @@ class GUI:
         # Hauptschleife GUI starten
         self.fenster.mainloop()
 
+    def fenstergroesse_festlegen(self):
+        monitor = si.get_monitors()[0]  # Holen des ersten Monitors
+        bildschirmhoehe = monitor.height
+        if 0.9 * bildschirmhoehe > 850:
+            fensterhoehe = 850
+        else:
+            fensterhoehe = 0.9 * bildschirmhoehe
+        fenstergroesse ="600x"+str(int(fensterhoehe))
+        return fenstergroesse
+
     def hauptrahmen_anlegen(self):
         # Fenster erstellen
         self.fenster = Tk(className="SimSTB - Simulationsumgebung")  # Rohes Fenster erstellen
         self.fenster.iconbitmap("simstb.ico")
         self.fenster.protocol("WM_DELETE_WINDOW", lambda: self.beenden())
-        self.fenster.geometry("600x750")
+        fenstergroesse = self.fenstergroesse_festlegen()
+        self.fenster.geometry(fenstergroesse)
         # Canvas in Fenster erstellen, um das Scrollen zu ermöglichen
         self.canvas = Canvas(self.fenster, bg=Konfig.HAUPT_BACKGROUND)
         self.canvas.grid(row=1, column=1, sticky="nsew")
