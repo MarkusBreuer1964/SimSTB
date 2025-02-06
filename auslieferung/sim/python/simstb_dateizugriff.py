@@ -2,11 +2,11 @@
     Das Modul Dateizugriff stellt zwei Funktionen zum Lesen und Schreiben der Austauschdateien
     zur Verfügung. Die Datenübergabe erfolgt jeweils als Liste.
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  28.07.2021, 10.01.2024
+    Erstellt, Letzte Änderung:  28.07.2021, 06.02.2025
     """
 
 import simstb_logger as log
-
+import simstb_konfig as kfg
 
 class DateiZugriff:
     """Klasse zum Zugriff auf die Austauschdateien"""
@@ -15,6 +15,10 @@ class DateiZugriff:
         """Konstruktor des Datenzugriffs auf die Austauschdateien"""
         self.dateiname = dateiname
         self.max_laenge = max_laenge
+        if dateiname in [kfg.Konfig.DIGEIN, kfg.Konfig.DIGAUS]:
+            self.reset_daten = ["0"] * self.max_laenge
+        else:
+            self.reset_daten = ["0.0"] * self.max_laenge
 
     def lesen_alle(self):
         """Zeilenweises einlesen der Daten und Rückgabe als Liste"""
@@ -28,15 +32,15 @@ class DateiZugriff:
             # Prüfen, ob die Anzahl der Daten stimmt
             if len(daten) != self.max_laenge:
                 log.msg_loggen(
-                    f"Datei {self.dateiname} Lesezugriff: Falsche Anzahl an Daten: {len(daten)} vorhanden, {self.max_laenge} erwartet, alles auf 0 gesetzt"
+                    f"Dateizugriff lesen_alle 1 - Falsche Anzahl an Daten: Datei {self.dateiname}, gelesen: {len(daten)}, erwartet: {self.max_laenge} -> alles auf 0 gesetzt"
                 )
-                daten = ["0.0"] * self.max_laenge
-                self.schreiben_alle(daten)
+                self.schreiben_alle(self.reset_daten)
+                daten = self.reset_daten
         except:
             # Fehler beim Lesen der Datei
-            daten = ["0.0"] * self.max_laenge
-            log.msg_loggen(f"Datei {self.dateiname} Lesezugriff: Fehler bei Dateizugriff: alles auf 0 gesetzt")
-            self.schreiben_alle(daten)
+            log.msg_loggen(f"Dateizugriff lesen_alle 2 - Allgemeine Exception: Datei {self.dateiname} -> alles auf 0 gesetzt")
+            self.schreiben_alle(self.reset_daten)
+            daten = self.reset_daten
 
         return daten
 
@@ -49,4 +53,4 @@ class DateiZugriff:
                     zeile = zeile.replace(".", ",")  # deutsches Komma in Austauschdatei
                     ausgabedatei.write(zeile)
         except:
-            log.msg_loggen(f"Datei {self.dateiname} Schreibzugriff: Fehler bei Dateizugriff")
+            log.msg_loggen(f"Dateizugriff schreiben_alle - Allgemeine Exception: Datei {self.dateiname} -> alles auf 0 gesetzt")

@@ -1,6 +1,6 @@
 """ simstb_gui.py - GUI
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  27.07.2021, 16.01.2024
+    Erstellt, Letzte Änderung:  27.07.2021, 06.02.2025
     """
 
 
@@ -10,9 +10,11 @@ from tkinter import messagebox
 import datetime
 import threading
 import time
+import os
 import sys
 import screeninfo as si
 from simstb_konfig import Konfig
+import simstb_logger as log
 from simstb_dateizugriff import DateiZugriff
 from simstb_setzer import Setzer
 from simstb_generator import GeneratorGUI
@@ -26,6 +28,11 @@ class GUI:
 
     def __init__(self):
         """Konstruktor, in dem das GUI des Simulators aufgebaut wird"""
+        # Log-Message rausschreiben
+        prozess_id =  str(os.getpid())
+        log.msg_loggen(
+                    f"SimSTB Gui - Simulator gestartet: PID {prozess_id}"
+                )
         # Fremdwerkzeuge initialisieren
         self.gen_gui = None
         self.dat_gui = None
@@ -184,6 +191,7 @@ class GUI:
             self.AA.append(eintrag)
 
         # Globale Knöpfe einfügen
+        ttk.Button(master=self.hauptrahmen, text="Info", command=lambda: self.info()).grid(column=1, row=5, sticky="NW")
         ttk.Button(master=self.hauptrahmen, text="Beenden", command=lambda: self.beenden()).grid(column=2, row=5, sticky="NE")
 
     def festlegen_Styles(self):
@@ -377,8 +385,26 @@ class GUI:
         if self.modell_gui_aktiv():
             self.mod_gui.schliessen()
         # Hauptprogramm beenden
-        sys.exit("Simulator SimSTB beendet")
+        prozess_id =  str(os.getpid())
+        log.msg_loggen(
+                    f"SimSTB Gui - Simulator beendet: PID {prozess_id}\n\n"
+                )
+        print ("Simulator SimSTB beendet")
+        sys.exit(0)
 
+    # Callback-Funktion für Info-Knopf
+
+    def info(self):
+        """SimSTB info"""
+        prozess_id =  str(os.getpid())
+        # info_text zusammenstellen
+        info_text="SimSTB\n"
+        info_text = info_text + "Version: 0.5\n"
+        info_text = info_text + "Erstellungsdatum: 06.02.2025\n\n"
+        info_text = info_text + "Prozess-ID: " + prozess_id + "\n"
+        messagebox.showinfo(
+            message=info_text, title="SimSTB Information"
+        )
 
 
 class AusgangsdatenAktualisierer:
