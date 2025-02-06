@@ -5,6 +5,7 @@
     Erstellt, Letzte Änderung:  28.07.2021, 06.02.2025
     """
 
+import filelock
 import simstb_logger as log
 import simstb_konfig as kfg
 
@@ -24,18 +25,23 @@ class DateiZugriff:
         """Zeilenweises einlesen der Daten und Rückgabe als Liste"""
         try:
             daten = []
-            with open(self.dateiname, "r", encoding="utf8") as eingabedatei:
-                for zeile in eingabedatei:
-                    zeile = zeile.replace(",", ".")  # deutsches Komma in Austauschdatei
-                    zeile = zeile.rstrip("\n")
-                    daten = daten + [zeile]
-            # Prüfen, ob die Anzahl der Daten stimmt
-            if len(daten) != self.max_laenge:
-                log.msg_loggen(
-                    f"Dateizugriff lesen_alle 1 - Falsche Anzahl an Daten: Datei {self.dateiname}, gelesen: {len(daten)}, erwartet: {self.max_laenge} -> alles auf 0 gesetzt"
-                )
-                self.schreiben_alle(self.reset_daten)
-                daten = self.reset_daten
+            # Erstelle ein FileLock-Objekt
+            lock_path = self.dateiname + ".lock"
+            lock = filelock.FileLock(lock_path)
+            # Versuche, die Datei zu sperren und darauf zuzugreifen
+            with lock:
+                with open(self.dateiname, "r", encoding="utf8") as eingabedatei:
+                    for zeile in eingabedatei:
+                        zeile = zeile.replace(",", ".")  # deutsches Komma in Austauschdatei
+                        zeile = zeile.rstrip("\n")
+                        daten = daten + [zeile]
+                # Prüfen, ob die Anzahl der Daten stimmt
+                if len(daten) != self.max_laenge:
+                    log.msg_loggen(
+                        f"Dateizugriff lesen_alle 1 - Falsche Anzahl an Daten: Datei {self.dateiname}, gelesen: {len(daten)}, erwartet: {self.max_laenge} -> alles auf 0 gesetzt"
+                    )
+                    self.schreiben_alle(self.reset_daten)
+                    daten = self.reset_daten
         except:
             # Fehler beim Lesen der Datei
             log.msg_loggen(f"Dateizugriff lesen_alle 2 - Allgemeine Exception: Datei {self.dateiname} -> alles auf 0 gesetzt")
