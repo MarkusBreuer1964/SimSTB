@@ -1,0 +1,360 @@
+<!-- simstb_dokumentation.html - Dokumentation SimSTB - HTML-Datei
+    Name, Organisaion:          Markus Breuer, BK-GuT
+    Erstellt, Letzte Änderung:  07.02.2025, 11.02.2025
+-->
+
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="simstb_dokumentation.js"></script>
+    <title>SimSTB Benutzerdokumentation</title>
+    <link rel="icon" type="image/x-icon" href="bilder/SimSTB-Logo.png">
+</head>
+
+<body>
+
+    <!-- Sidebar/menu -->
+    <div class="w3-sidebar w3-bar-block w3-border-right w3-light-blue " style="display:none;" id="mySidebar">
+        <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
+        <a href="#id_einführung" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Einführung</a>
+        <a href="#id_installation" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Installation</a>
+        <a href="#id_bedienung" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Bedienung</a>
+        <a href="#id_c_schnittstelle" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">C/C++
+            Schnittstelle</a>
+        <a href="#id_python_schnittstelle" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Python
+            Schnittstelle</a>
+    </div>
+
+    <!-- Top menu -->
+    <header class="w3-container w3-top w3-light-blue w3-large">
+        <a href="javascript:void(0)" class="w3-button w3-margin-right" onclick="w3_open()">☰</a>
+        <img class="w3-margin-right" src="bilder/SimSTB-Logo.png" alt="Simulator Logo" height="20"><b>SimSTB
+            Benutzerdokumentation</b>
+    </header>
+
+    <!-- !PAGE CONTENT! -->
+    <div onclick="w3_close()" class="w3-main" style="margin-top:40px;">
+
+        <!-- Installation -->
+        <div class="w3-container" id="id_einführung" style="scroll-margin-top: 40px;">
+            <h1 class="w3-xxxlarge w3-text-blue w3-bold w3-bottombar">Einführung</h1>
+            <p>Oft muss ein Programm nicht nur über die Konsole oder eine graphische Benutzeroberfläche mit dem Benutzer
+                kommunizieren,
+                sondern auch über analoge und digitale Schnittstellen mit einem technischen System. </p>
+            <img class="w3-image w3-border w3-border-light-blue" src="bilder/bild1.png"
+                alt="Kommunikation mit technischem System">
+            <p>Die Simulationsumgebung SimSTB erlaubt es, dies für Schulungszwecke auch ohne zusätzliche Hardware
+                mittels Simulation durchzuführen.</p>
+            <img class="w3-image w3-border  w3-border-light-blue" src="bilder/bild2.png"
+                alt="Aufbau des Simulators SimSTB">
+            <p>SimSTB besteht aus zwei Teilen:</p>
+            <ol class="w3-ol  w3-padding">
+                <li>Der eigentlichen Simulationsumgebung und Steuerprogrammen für diese. Die Steuerprogramme sind in
+                    <a href="#id_bedienung">Abschnitt 3</a> beschrieben, die Installation in <a
+                        href="#id_installation">Abschnitt 2</a> .
+                </li>
+                <li>Einer Programmier-Schnittstelle, um aus eigenen Programmen die Simulationsumgebung zu nutzen. Es
+                    sind eine C/C++-Schnittstelle und eine Python-Schnittstelle vorhanden. In <a
+                        href="#id_c_schnittstelle">Abschnitt 4 (C/C++) </a>
+                    und <a href="#id_c_schnittstelle">Abschnitt 5 (Python) </a> ist
+                    beschrieben, wie Sie eigene Programme erstellen können.</li>
+            </ol>
+
+        </div>
+
+        <!-- Installation -->
+        <div class="w3-container" id="id_installation" style="scroll-margin-top: 40px;">
+            <h1 class="w3-xxxlarge w3-text-blue w3-bold  w3-bottombar">Installation</h1>
+            <h3>Voraussetzungen</h3>
+            <ul class="w3-ol w3-padding">
+                <li>keine</li>
+            </ul>
+            <h3>Installation</h3>
+            <ol class="w3-ol w3-padding">
+                <li>Kopieren Sie das bereitgestellte Simulationsverzeichnis (in GitHub
+                    /auslieferung/sim) samt Unterverzeichnissen nach <code class="w3-codespan">C:\</code>. Solange Sie
+                    nur die
+                    Simulationsumgebung nutzen wollen, und keine Modifikationen an deren Quellcode
+                    vornehmen wollen brauchen Sie keine weiteren Dateien.</li>
+                <li>Kontrollieren Sie, ob folgende Verzeichnis-Struktur und Dateien vorhanden sind.
+                    <pre class="w3-panel w3-leftbar w3-border-blue w3-light-gray">
+                            <code class="notranslate">
+C:\SIM
+│   anaaus.txt
+│   anaein.txt
+│   digaus.txt
+│   digein.txt
+│   LICENSE.txt
+│   README.md
+│   simstb.log
+│
+├───beispiele
+│       beispiel.cpp
+│       beispiel.py
+│
+├───bin
+│       band_links.gif
+│       band_rechts.gif
+│       band_stopp.gif
+│       led_blau.png
+│       led_grau.png
+│       led_gruen.png
+│       modelle.json
+│       simstb.ico
+│       simstb_gui.exe
+│       simstb_modell_1.exe
+│       simstb_modell_2.exe
+│
+├───dokumentation
+│       SimSTB-Benutzerdokumentation.pdf
+│
+├───header
+│       simulation.h
+│
+├───lib
+│       simlib.lib
+│
+└───python
+        simstb_dateizugriff.py
+        simstb_konfig.py
+        simstb_logger.py
+        simulator.py</code>
+                    </pre>
+                </li>
+            </ol>
+
+            <h3>Quelldateien</h3>
+            <p>Bei der Simulationsumgebung SimSTB handelt es sich um Open Source Software. Diese steht über
+                <a href="https://markusbreuer1964.github.io/SimSTB/">GitHub</a> zur Verfügung.
+            </p>
+        </div>
+
+        <!-- Bedienung -->
+        <div class="w3-container" id="id_bedienung" style="scroll-margin-top: 40px;">
+            <h1 class="w3-xxxlarge w3-text-blue w3-bold w3-bottombar">Bedienung</h1>
+            <p>Im Unterverzeichnis <code class="w3-codespan">bin</code> finden Sie Programme zur Bedienung der
+                Simulationsumgebung:</p>
+            <h3>Simulations Steuerung und Monitoring</h3>
+            <p>Mit Hilfe des Programms <code class="w3-codespan">simstb_gui.exe</code> können Sie digitalen und analogen
+                Ein- und
+                Ausgänge überwachen und die Eingänge setzen. Die Werte werden im Sekundentakt
+                aktualisiert. Starten können Sie das Programm über einen einfachen Doppelklick auf die
+                Exe-Datei.</p>
+            <img class="w3-image w3-border  w3-border-light-blue" src="bilder/bild3.png"
+                alt="GUI des Simulators SimSTB">
+            <ul class="w3-ul">
+                <li>Durch Mausklick auf die digitalen Eingänge können Sie bei der Eingangsbelegung
+                    zwischen 0 und 1 wechseln.</li>
+                <li>Nach Auswahl eines analogen Eingangs können Sie dort einen analogen Zahlenwert
+                    eingeben. Als Dezimaltrennzeichen müssen Sie einen Punkt benutzen.</li>
+                <li>Mit Hilfe der nebenstehenden Knöpfe können Sie ganze
+                    Gruppen von Ein- bzw. Ausgängen zusammen setzen.</li>
+            </ul>
+            <h3>Datenaufzeichnung</h3>
+            <ul class="w3-ul">
+                <li>Mit Hilfe es Knopfs Datenaufzeichnung <img class="w3-image w3-border  w3-border-light-blue"
+                        src="bilder/bild4.png" alt="GUI des Simulators SimSTB"> können Sie
+                    eine Datenaufzeichnung starten.</li>
+                <li><img class="w3-image w3-border  w3-border-light-blue" src="bilder/bild5.png"
+                        alt="GUI des Simulators SimSTB"></li>
+                <li>Mit Hilfe der Knöpfe Starten und Stoppen kontrolieren Sie die
+                    Datenaufzeichnung. Solange die Aufzeichnung läuft werden jeweils alle digitalen
+                    und analogen Ein- und Ausgabewerte in eine CSV-Datei geschrieben.</li>
+            </ul>
+            <h3>Funktionsgenerator</h3>
+            <ul class="w3-ul">
+                <li>Mit Hilfe es Knopfs Funktionsgenerator <img class="w3-image w3-border  w3-border-light-blue"
+                        src="bilder/bild6.png" alt="GUI des Simulators SimSTB"> können Sie
+                    einen analogen Funktionsgenerator starten.</li>
+                <li><img class="w3-image w3-border  w3-border-light-blue" src="bilder/bild7.png"
+                        alt="GUI des Simulators SimSTB"></li>
+                <li>Hier können Sie einzelnen analogen Eingangskanäle aktivieren, die jeweilige
+                    Signalform auswählen und Parameter zur Signalform einstellen. Mit Hilfe der
+                    Knöpfe Starten und Stoppen kontrolieren Sie den Funktionsgenerator.</li>
+            </ul>
+            <h3>Log-Datei</h3>
+            <ul>
+                <li>Im Wurzelverzeichnis kann sich eine Log-Datei namens <code class="w3-codespan">simstb.log</code>
+                    befinden, welche Hinweise über aufgetretene Fehlsituationen gibt.</li>
+            </ul>
+        </div>
+
+
+        <!-- C/C++ Schnittstelle -->
+        <div class="w3-container" id="id_c_schnittstelle" style="scroll-margin-top: 40px;">
+            <h1 class="w3-xxxlarge w3-text-blue w3-bold w3-bottombar">C/C++ Schnittstelle</h1>
+            <h3>Einstellungen</h3>
+            <p>Um die Simulationsumgebung SimSTB nutzen zu können, müssen 4 Einstellungen
+                vorgenommen werden:</p>
+            <ol>
+                <li><b>Der Suchpfad für Header-Dateien muss erweitert werden.</b> Hier muss der <code
+                        class="w3-codespan">Pfad C:\
+                    Sim\header</code> ergänzt werden. Vorgenommen werden die Einstellungen unter
+                    <code class="w3-codespan">Projekt → Eigenschaften → VC++Verzeichnisse →
+                    Includeverzeichnisse → Bearbeiten.</code>
+                    <img class="w3-image w3-border w3-border-light-blue" src="bilder/bild10.png"
+                        alt="Suchpfad Headerdateien einstellen">
+                </li>
+                <li><b>Die Header-Datei <code class="w3-codespan">simulation.h</code> muss in der eigenen CPP-Datei
+                        inkludiert
+                        werden.</b> Dabei sind Anführungszeichen und keine spitzen Klammern zu verwenden. Im
+                    Beispiel-Code unten sieht man ein Beispiel hierfür.</li>
+                <li><b>Der Suchpfad für Bibliotheken muss erweitert werden.</b> Hier muss der <code class="w3-codespan">Pfad C:\
+                    Sim\lib</code> ergänzt werden. Vorgenommen werden die Einstellungen unter <code
+                        class="w3-codespan">Projekt →
+                    Eigenschaften → VC++Verzeichnisse → Includeverzeichnisse →
+                    Bearbeiten.</code><img class="w3-image w3-border w3-border-light-blue" src="bilder/bild11.png"
+                        alt="Suchpfad Bibliotheken einstellen"></li>
+                <li> <b>Die Bibliothek <code class="w3-codespan">simlib.lib</code> muss ergänzt werden.</b>
+                    Vorgenommen
+                    werden die
+                    Einstellungen unter <code class="w3-codespan">Projekt → Eigenschaften → Linker → Eingabe →
+                    Zusätzliche Abhängigkeiten → Bearbeiten.</code>
+                    <img class="w3-image w3-border w3-border-light-blue" src="bilder/bild12.png"
+                        alt="Bibliothek für Simulator hinzufügen">
+                </li>
+            </ol>
+            <p>Danach kann normal weiter programmiert werden, wobei man die vier Funktionen zur
+                Nutzung der Simulationsumgebung benutzen darf.</p>
+            <h3>Bemerkungen</h3>
+            <p>Bei der Bibliothek <code class="w3-codespan">simlib.lib</code> handelt es sich um eine 32-bit
+                Bibliothek.
+                Diese wurde
+                der Compileroption <code class="w3-codespan">/MDd</code> (Multithreaded-Debug-DLL) erstellt. Falls
+                eine
+                andere Version
+                benötigt wird, kann diese mit Hilfe der Open Source Dateien (siehe Abschnitt 2.3
+                Quelldateien) selber erstellt werden.</p>
+            <h3>Funktionsprototypen:</h3>
+            <pre class="w3-panel w3-leftbar w3-border-blue w3-light-gray">
+                <code class="notranslate">
+const int DIGMAXLAENGE = 16;
+const int ANAMAXLAENGE = 8;
+bool digEin( int id);
+void digAus( int id, bool wert);
+double anaEin( int id);
+void anaAus( int id, double wert);  </code>
+        </pre>
+            <h3>Beispiel-Code (Auszug; vollständig in Unterordner beispiele):</h3>
+            <pre class="w3-panel w3-leftbar w3-border-blue w3-light-gray">
+                <code class="notranslate">
+...
+#include "simulation.h"
+...
+int main()
+{
+bool ende = false;
+double wert;
+...
+while( ende != true)
+{
+wert = anaEin( 0);
+cout << wert << endl;
+Sleep( 1000);
+ende = digEin( 0);
+}
+digAus( 15, 1);
+anaAus( 7, -123.456);
+...
+}
+            </code>
+        </pre>
+        </div>
+
+        <!-- Python Schnittstelle -->
+        <div class="w3-container" id="id_python_schnittstelle" style="scroll-margin-top: 40px;">
+            <h1 class="w3-xxxlarge w3-text-blue w3-bold w3-bottombar">Python Schnittstelle</h1>
+            <h3>Benötigte Python Pakete:</h3>
+            <p>Damit die Python-Schnittstelle genutzt werden kann, muss das Paket <code
+                    class="w3-codespan">filelock</code> installiert sein.</p>
+            <pre class="w3-panel w3-leftbar w3-border-blue w3-light-gray">
+                <code class="notranslate">
+pip install filelock</code>
+            </pre>
+            <h3>Voraussetzungen</h3>
+            <p>
+                Damit das eigene Programm die Schnittstellenfunktionen nutzen kann muss man die Datei <code
+                    class="w3-codespan">simulator.py</code> importieren.
+                Hierzu dient die folgende Anweisung:
+                <code class="w3-codespan">import simulator as sim</code>
+                Damit das Modul <code class="w3-codespan">simulator.py</code> gefunden wird, muss der Python-Modul-Pfad
+                ergänzt werden.
+                Dies geschieht durch Anlegen bzw. Erweitern der Umgebungsvariablen <code
+                    class="w3-codespan">PYTHONPATH</code>.
+                Die Umgebungsvariable muss das Verzeichnis <code class="w3-codespan">C:\Sim\python</code> enthalten.
+            </p>
+            <h3>Schnittstellenfunktionen</h3>
+            <pre class="w3-panel w3-leftbar w3-border-blue w3-light-gray">
+                <code class="notranslate">
+DIGMAXLAENGE = 16
+ANAMAXLAENGE = 8
+
+def dig_ein( id)
+def dig_aus( id, wert)
+
+def ana_ein( id)
+def ana_aus( id, wert)</code>
+            </pre>
+            <ul>
+                <li>Der Parameter <code class="w3-codespan">id</code> ist vom Datentyp <code
+                        class="w3-codespan">int</code>.</li>
+                <li><code class="w3-codespan">id</code> ist zwischen 0 und 15 bei den beiden Funktionen für die
+                    digititale Ein- und Ausgabe.</li>
+                <li><code class="w3-codespan">id</code> ist zwischen 0 und 7 bei den beiden Funktionen für die analoge
+                    Ein- und Ausgabe.</li>
+                <li>Der Parameter <code class="w3-codespan">wert</code> ist vom Datentyp <code
+                        class="w3-codespan">bool</code> bei der digitalen Ausgabe, vom Datentyp <code
+                        class="w3-codespan">float</code> bei der
+                    analogen Ausgabe.</li>
+                <li>Die Funktion <code class="w3-codespan">dig_ein</code> gibt einen Wert vom Datentyp <code
+                        class="w3-codespan">bool</code> zurück. Die Funktion <code class="w3-codespan">ana_ein</code>
+                    gibt einen Wert
+                    vom Datentyp <code class="w3-codespan">float</code> zurück.</li>
+                <li>Wenn ein ungültiger Index genutzt wird, geben <code class="w3-codespan">dig_ein</code> und <code
+                        class="w3-codespan">ana_ein</code> <code class="w3-codespan">None</code> zurück.</li>
+                <li>Wenn ein ungültiger Index genutzt wird, speichern <code class="w3-codespan">dig_aus</code> und <code
+                        class="w3-codespan">ana_aus</code> nichts ab.</li>
+            </ul>
+            <h3>Log-Datei</h3>
+            <ul>
+                <li>Im Wurzelverzeichnis kann sich eine Log-Datei namens <code class="w3-codespan">simstb.log</code>
+                    befinden, welche Hinweise über aufgetretene Fehlsituationen gibt.</li>
+            </ul>
+            <h3>Beispiel-Code</h3>
+            <pre class="w3-panel w3-leftbar w3-border-blue w3-light-gray">
+                <code class="notranslate">
+...
+import simulator as sim
+...
+def test():
+    """ Testfunktion """
+    ende = False
+    ...
+    while ende != True:
+        wert = sim.ana_ein( 0)
+        print(wert)
+        time.sleep( 1)
+        ende = sim.dig_ein( 0)
+
+    sim.dig_aus( 15, 1)
+    sim.ana_aus( 7, -123.456)
+    ...
+test()</code>
+            </pre>
+        </div>
+
+        <!-- End page content -->
+    </div>
+
+    <!-- W3.CSS Container -->
+    <div class="w3-light-grey w3-container w3-padding-32" style="margin-top:75px;padding-right:58px">
+        <p class="w3-right">Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS"
+                target="_blank" class="w3-hover-opacity">w3.css</a></p>
+    </div>
+</body>
+
+</html>
