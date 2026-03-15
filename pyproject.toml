@@ -1,0 +1,50 @@
+# General project configuration  ######################################################################
+
+[project]
+name = "sim"
+version = "0.6.0"
+description = "SimSTB - Simulator für analoge und digitale Ein- und Ausgänge"
+authors = [
+    {name = "Markus Breuer",email = "markus.breuer@berufskolleg-aachen.de"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.10,<4.0.0"
+
+# Dependencies needed for production ######################################################################
+
+dependencies = [
+    "filelock (>=3.25.0,<4.0.0)",
+    "toml (>=0.10.2,<0.11.0)",
+    "screeninfo (>=0.8.1,<0.9.0)"
+]
+
+# Dependencies only needed for development ######################################################################
+
+[tool.poetry.group.dev.dependencies]
+pytest =">=9.0.2,<10.0.0"
+black = ">=26.1.0,<27.0.0"
+flake8 = ">=7.3.0,<8.0.0"
+pylint = ">=4.0.5,<5.0.0"
+
+# Werkzeug Einstellungen #################################################################################
+
+[tool.poetry]
+package-mode = true
+packages = [
+    {include = "sim_basis", from = "src"},
+    {include = "sim_beispiele", from = "src" },
+    {include = "sim_schnittstelle", from = "src" },
+    {include = "sim_werkzeuge", from = "src" },
+]
+
+[tool.poetry.scripts]
+simstb_gui = "sim_werkzeuge.simstb_gui:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

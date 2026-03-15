@@ -1,37 +1,14 @@
-# Unnützes der C-Library-Erstellung und des C++-Beispiels ausschliessen
-cprojekte/simlib/Debug/
-cprojekte/simlib/Release/
-cprojekte/simlib/ipch/
-cprojekte/simlib/simlib/Debug/
-cprojekte/simlib/simlib/Release/
+# Ignore temporary development directories and files ##########################################################
+.vscode/
+build/
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+auslieferung
 
-cprojekte/beispiel/Debug/
-cprojekte/beispiel/Release/
-cprojekte/beispiel/ipch/
-cprojekte/beispiel/beispiel/Debug/
-cprojekte/beispiel/beispiel/Release/
-
-# Python Zwischendateien ausschliessen
-python/__pycache__/
-python/.pytest_cache
-python/.vscode
-
-# Log-Daten (Datenaufzeichnung) ausschliessen
+# Ignore runtime directories and files ########################################################################
+data/
 *.log
-# Zip-Daten (Auslieferung) ausschliessen
-*.zip
-# Zwischedateien der Python->Exe Generierung (Auslieferung) ausschliessen
-*.spec
-
-#### Alte Java Einstellungen #######
-
-# JRE Bundle ausschliessen
-auslieferung/JarExe/bundlejre/
-
-# Java Binaries ausschliessen
-javaprojekte/SimSTB/bin/
-
-# Eclipse Einstellungen ausschliessen
-javaprojekte/.metadata/
-javaprojekte/.recommenders/
 

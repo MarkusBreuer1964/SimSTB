@@ -1,0 +1,28 @@
+ # Konfigurationsdatei für den Simulator SimSTB
+ 
+ # Log-Datei und Log-Level
+LOGDATEI = "./simstb.log"
+LOGLEVEL = "DEBUG"
+
+# Namen und Position der Austauschdateien
+ANAAUS = "data/anaaus.txt"  
+ANAEIN = "data/anaein.txt"
+DIGAUS = "data/digaus.txt"
+DIGEIN = "data/digein.txt"
+
+# Anzahl der Kanäle
+DIGMAXLAENGE = 16  
+ANAMAXLAENGE = 8 
+
+# GUI-Farben
+AKTIVE_BACKGROUND = "#90EE90"  
+HAUPT_BACKGROUND = "#b7d7e8"
+BLOCK_BACKGROUND = "#cfe0e8"
+
+# Intervall in Sekunden für die Aktualisierung der Anzeige
+INTERVALL = 1 
+
+# Signalformen für analogen Zufallgenerator
+SIGNALFORMEN = ["Zufall", "Sinus", "Rechteck", "Dreieck"]  
+
+MODELL_DATEI = "./modelle.json"
