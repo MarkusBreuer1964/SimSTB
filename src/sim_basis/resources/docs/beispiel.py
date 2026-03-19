@@ -2,11 +2,11 @@
         Das Modul Simulatorschnittstelle stellt vier Funktionen
         zur Simulation digitaler und analoger Ein- und Ausgaben bereit
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  21.06.2023
+    Erstellt, Letzte Änderung:  21.06.2023, 05.03.2026
     """
 
 import time
-import simulator as sim
+import sim_schnittstelle.simulator as sim
 
 
 def test():

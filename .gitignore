@@ -1,14 +1,15 @@
 # Ignore temporary development directories and files ##########################################################
-.vscode/
-build/
-dist/
-.venv/
-__pycache__/
+.github/
 .pytest_cache/
+.venv/
+.vscode/
+dist/
+__pycache__/
 .coverage
-auslieferung
+src/sim_basis/resourcees/
 
 # Ignore runtime directories and files ########################################################################
-data/
+sim/
 *.log
 
+    

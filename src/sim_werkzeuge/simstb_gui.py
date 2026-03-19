@@ -1,6 +1,6 @@
 """ simstb_gui.py - GUI
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  27.07.2021,15.03.2026
+    Erstellt, Letzte Änderung:  27.07.2021,18.03.2026
     """
 
 
@@ -14,6 +14,7 @@ import time
 import os
 import sys
 import screeninfo as si
+import sim_basis.version as ver
 import sim_basis.simstb_logger as log
 import sim_basis.simstb_konfig as kfg
 import sim_basis.simstb_dateizugriff as dzg
@@ -29,13 +30,25 @@ class GUI:
 
     def __init__(self):
         """Konstruktor, in dem das GUI des Simulators aufgebaut wird"""
+        # In Laufzeitumgebung wehseln, damit die Dateien im richtigen Verzeichnis liegen
+        try:
+            pfad = os.environ["SIMSTB_WURZEL"]
+            os.chdir(pfad)
+            print("SIMSTB_WURZEL gesetzt; Laufzeitverzeichnis gewechselt zu: " + pfad)
+        except KeyError:
+            pfad = os.getcwd()
+            print("Umgebungsvariable SIMSTB_WURZEL nichtgesetzt; Laufzeitverzeichnis bleibt: " + pfad)
+            sys.exit(1)
+        # Konfigurationsdatei laden
         konfigkonfigmanager = kfg.Konfig() 
         self.konfig = konfigkonfigmanager.konfiguration_bereitstellen()
-        # Logging initialisieren und Log-Message rausschreiben
+        # Logging initialisieren und Log-Messages rausschreiben
         log.logging_einrichten()
         self.logger = logging.getLogger(__name__)
         self.logger.info("SimSTB GUI - Simulator gestartet")
-       # Fremdwerkzeuge initialisieren
+        self.logger.debug("Arbeitsverzeichnis: " + os.getcwd())
+        self.logger.debug("Logdatei: " + self.konfig["LOGDATEI"])
+        # Fremdwerkzeuge initialisieren
         self.gen_gui = None
         self.dat_gui = None
         self.mod_gui = None
@@ -393,11 +406,12 @@ class GUI:
 
     def info(self):
         """SimSTB info"""
+        # Prozess-ID ermitteln
         prozess_id =  str(os.getpid())
-        # info_text zusammenstellen
+        # Version ermitteln   
         info_text="SimSTB\n"
-        info_text = info_text + "Version: 0.5\n"
-        info_text = info_text + "Erstellungsdatum: 06.02.2025\n\n"
+        info_text = info_text + "Version: " + ver.SIMSTB_VERSION + "\n"
+        info_text = info_text + "Erstellungsdatum: " + ver.SIMSTB_VERSION_DATE + "\n\n"
         info_text = info_text + "Prozess-ID: " + prozess_id + "\n"
         messagebox.showinfo(
             message=info_text, title="SimSTB Information"

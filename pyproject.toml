@@ -2,7 +2,7 @@
 
 [project]
 name = "sim"
-version = "0.6.0"
+version = "0.6.1"
 description = "SimSTB - Simulator für analoge und digitale Ein- und Ausgänge"
 authors = [
     {name = "Markus Breuer",email = "markus.breuer@berufskolleg-aachen.de"}
@@ -33,13 +33,14 @@ pylint = ">=4.0.5,<5.0.0"
 package-mode = true
 packages = [
     {include = "sim_basis", from = "src"},
-    {include = "sim_beispiele", from = "src" },
     {include = "sim_schnittstelle", from = "src" },
-    {include = "sim_werkzeuge", from = "src" },
+    {include = "sim_werkzeuge", from = "src" }
 ]
+include = ["src/sim_basis/resources/**/*"]
 
 [tool.poetry.scripts]
 simstb_gui = "sim_werkzeuge.simstb_gui:main"
+simstb_cli = "sim_werkzeuge.simstb_cli:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
