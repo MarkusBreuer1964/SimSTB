@@ -2,13 +2,28 @@
         Das Modul Simulatorschnittstelle stellt vier Funktionen
         zur Simulation digitaler und analoger Ein- und Ausgaben bereit
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  20.06.2023, 05.03.2026
+    Erstellt, Letzte Änderung:  20.06.2023, 20.03.2026
     """
 
+import os
+import sys
 import logging
 import sim_basis.simstb_logger as log
 import sim_basis.simstb_konfig as kfg
 import sim_basis.simstb_dateizugriff as dzg
+
+laufzeitumgebung = False
+def in_laufzeitumgebung_wechseln():
+    """In Laufzeitumgebung wehseln, damit die Dateien im richtigen Verzeichnis liegen"""
+    global laufzeitumgebung
+    if laufzeitumgebung is False:
+        try:
+            pfad = os.environ["SIMSTB_WURZEL"]
+            os.chdir(pfad)
+            laufzeitumgebung = True
+        except KeyError:
+            print("Fehler: Umgebungsvariable SIMSTB_WURZEL nichtgesetzt -> Programm wird beendet")
+            sys.exit(1)
 
 # Logger-Objekt auf Modulebene, damit es in allen Funktionen genutzt werden kann
 logger = None
@@ -21,6 +36,7 @@ def logging_lokal_einrichten():
 
 def dig_ein( id):
     """Schnittstellenfunktion und digitalen Eingang zu lesen """
+    in_laufzeitumgebung_wechseln()
     # Logging initialisieren und Log-Message rausschreiben
     logging_lokal_einrichten()
     logger.debug("dig_ein - Aufruf mit id: %d", id)
@@ -40,6 +56,7 @@ def dig_ein( id):
 
 def dig_aus( id, wert):
     """Schnittstellenfunktion und digitalen Ausgang zu setzen """
+    in_laufzeitumgebung_wechseln()
     logging_lokal_einrichten()
     logger.debug("dig_aus - Aufruf mit id: %d, wert: %d", id, wert)
     konfigkonfigmanager = kfg.Konfig() 
@@ -57,6 +74,7 @@ def dig_aus( id, wert):
 
 def ana_ein( id):
     """Schnittstellenfunktion und analogen Eingang zu lesen """
+    in_laufzeitumgebung_wechseln()  
     logging_lokal_einrichten()
     logger.debug("ana_ein - Aufruf mit id: %d", id)
     konfigkonfigmanager = kfg.Konfig() 
@@ -75,6 +93,7 @@ def ana_ein( id):
 
 def ana_aus( id, wert):
     """Schnittstellenfunktion und analogen Ausgang zu setzen """
+    in_laufzeitumgebung_wechseln()
     logging_lokal_einrichten()
     logger.debug("ana_aus - Aufruf mit id: %d, wert: %f", id, wert)
     konfigkonfigmanager = kfg.Konfig() 
