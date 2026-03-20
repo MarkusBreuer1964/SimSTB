@@ -1,6 +1,6 @@
 """ simstb_gui.py - GUI
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  27.07.2021,18.03.2026
+    Erstellt, Letzte Änderung:  27.07.2021,20.03.2026
     """
 
 
@@ -30,15 +30,6 @@ class GUI:
 
     def __init__(self):
         """Konstruktor, in dem das GUI des Simulators aufgebaut wird"""
-        # In Laufzeitumgebung wehseln, damit die Dateien im richtigen Verzeichnis liegen
-        try:
-            pfad = os.environ["SIMSTB_WURZEL"]
-            os.chdir(pfad)
-            print("SIMSTB_WURZEL gesetzt; Laufzeitverzeichnis gewechselt zu: " + pfad)
-        except KeyError:
-            pfad = os.getcwd()
-            print("Umgebungsvariable SIMSTB_WURZEL nichtgesetzt; Laufzeitverzeichnis bleibt: " + pfad)
-            sys.exit(1)
         # Konfigurationsdatei laden
         konfigkonfigmanager = kfg.Konfig() 
         self.konfig = konfigkonfigmanager.konfiguration_bereitstellen()
@@ -46,7 +37,9 @@ class GUI:
         log.logging_einrichten()
         self.logger = logging.getLogger(__name__)
         self.logger.info("SimSTB GUI - Simulator gestartet")
-        self.logger.debug("Arbeitsverzeichnis: " + os.getcwd())
+        self.logger.debug("AktuellesArbeitsverzeichnis: " + os.getcwd())
+        self.logger.debug("Basisverzeichnis: " + self.konfig["BASISVERZEICHNIS"])
+        self.logger.debug("Konfigurationsdatei: " + self.konfig["KONFIG_DATEINAME"])
         self.logger.debug("Logdatei: " + self.konfig["LOGDATEI"])
         # Fremdwerkzeuge initialisieren
         self.gen_gui = None

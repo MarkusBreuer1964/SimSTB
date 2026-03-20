@@ -7,8 +7,8 @@
 
 import filelock
 import logging
-# import sim_basis.simstb_logger as log
 import sim_basis.simstb_konfig as kfg
+from pathlib import Path
 
 class DateiZugriff:
     """Klasse zum Zugriff auf die Austauschdateien"""
@@ -30,7 +30,7 @@ class DateiZugriff:
         try:
             daten = []
             # Erstelle ein FileLock-Objekt
-            lock_path = self.dateiname + ".lock"
+            lock_path = str(Path(self.dateiname).with_suffix(".lock"))
             lock = filelock.FileLock(lock_path)
             # Versuche, die Datei zu sperren und darauf zuzugreifen
             with lock:
@@ -56,11 +56,15 @@ class DateiZugriff:
 
     def schreiben_alle(self, daten):
         """Komplettes zurückschreiben aller Daten einer Austauschdatei"""
-        try:
-            with open(self.dateiname, "w", encoding="utf8") as ausgabedatei:
-                for wert in daten:
-                    zeile = str(wert) + "\n"
-                    zeile = zeile.replace(".", ",")  # deutsches Komma in Austauschdatei
-                    ausgabedatei.write(zeile)
-        except:
-            self.logger.error(f"Dateizugriff schreiben_alle - Allgemeine Exception: Datei {self.dateiname} -> alles auf 0 gesetzt")
+        # Erstelle ein FileLock-Objekt
+        lock_path = str(Path(self.dateiname).with_suffix(".lock"))
+        lock = filelock.FileLock(lock_path)
+        with lock:
+            try:
+                with open(self.dateiname, "w", encoding="utf8") as ausgabedatei:
+                    for wert in daten:
+                        zeile = str(wert) + "\n"
+                        zeile = zeile.replace(".", ",")  # deutsches Komma in Austauschdatei
+                        ausgabedatei.write(zeile)
+            except:
+                self.logger.error(f"Dateizugriff schreiben_alle - Allgemeine Exception: Datei {self.dateiname} -> alles auf 0 gesetzt")

@@ -6,6 +6,7 @@
 
 import argparse
 import sim_basis.version as ver
+import sim_basis.simstb_konfig as kfg
 import sim_werkzeuge.simstb_gui as gui
 import sim_werkzeuge.simstb_init as init
 
@@ -47,8 +48,7 @@ def main():
     elif args.hilfe:
         parser.print_help()
     elif args.show_config:
-        print("Konfiguration anzeigen... (Funktion noch nicht implementiert)")
-        # show_config()
+        show_config()
     elif args.init:
         init.init_runtime()
     elif args.gui:
@@ -57,5 +57,13 @@ def main():
     else:
         parser.print_help()
 
+def show_config():
+        konfigkonfigmanager = kfg.Konfig() 
+        konfig = konfigkonfigmanager.konfiguration_bereitstellen()
+        print("\nAktuelle Konfiguration SimSTB (Pfade aufgelöst):\n")
+        for key, value in konfig.items():
+            print(f"{str(key):<20s} : {value}")
+        print("\n")
+        
 if __name__ == "__main__":
     main()
