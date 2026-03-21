@@ -8,11 +8,10 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 import datetime
-import threading
 import logging
-import time
 import os
 import sys
+import threading
 import screeninfo as si
 import sim_basis.version as ver
 import sim_basis.simstb_logger as log
@@ -52,8 +51,8 @@ class GUI:
         self.layout_feinschliff()
         # Eingangswerte laden und Aktualisierer starten
         self.aktualisieren_eingangswerte()
-        ZeitAktualisierer(self.datum, self.zeit)
-        AusgangsdatenAktualisierer(self.DA, self.AA)
+        aktualisierungsvektor = {"zeit": 1,"de": 0,"ae": 0,"da": 1,"aa": 1}
+        self.aktualisierer = Aktualisierer(self, aktualisierungsvektor)
         # Hauptschleife GUI starten
         self.fenster.mainloop()
 
@@ -352,8 +351,8 @@ class GUI:
     def funktionsgenerator(self):
         """Funktionsgenerator starten"""
         if self.funktionsgenerator_gui_aktiv() == False:
-            self.gen_gui = GeneratorGUI(self.fenster, self.AE)
-            # self.auto_aktualisieren_analoge_eingaenge()
+            self.gen_gui = GeneratorGUI(self)
+            
 
     # Callback-Funktion und Hilfsfunktionen für Datenaufzeichner - Unterrahmen 2
 
@@ -410,66 +409,74 @@ class GUI:
             message=info_text, title="SimSTB Information"
         )
 
+class Aktualisierer:
+    """Klasse zum Aktualisieren des GUI"""
 
-class AusgangsdatenAktualisierer:
-    """Klasse zum Aktualisieren der Ausgangsdaten"""
-
-    def __init__(self, DA, AA):
-        """Konstruktor wirft die eigentliche Aktualisieren der Ausgangsdaten an"""
-        t_1 = threading.Thread(
-            target=AusgangsdatenAktualisierer.aktualisieren,
-            args=(
-                DA,
-                AA,
-            ),
-            daemon=True,
-        )
-        t_1.start()
-
-    @staticmethod
-    def aktualisieren(DA, AA):
-        """Aktualisieren der Daten für digitale und analoge Ausgänge"""
+    def __init__(self, GUI, aktualisierungsvektor):
+        """Konstruktor wirft die eigentliche Aktualisieren des GUI an"""
+        self.GUI = GUI
+        self.aktualisierungsvektor = aktualisierungsvektor
+        # Konfigurationsdatei laden
         konfigkonfigmanager = kfg.Konfig() 
-        konfig = konfigkonfigmanager.konfiguration_bereitstellen()
-        while True:
-            da_zugriff = dzg.DateiZugriff(konfig["DIGAUS"], konfig["DIGMAXLAENGE"])
-            da_daten = da_zugriff.lesen_alle()
-            for i in range(konfig["DIGMAXLAENGE"]):
-                DA[i].set(da_daten[i])
-            aa_zugriff = dzg.DateiZugriff(konfig["ANAAUS"], konfig["ANAMAXLAENGE"])
-            aa_daten = aa_zugriff.lesen_alle()
-            for i in range(konfig["ANAMAXLAENGE"]):
-                AA[i].set(aa_daten[i])
-            time.sleep(konfig["INTERVALL"])
+        self.konfig = konfigkonfigmanager.konfiguration_bereitstellen()
+        #Logging initialisieren und Log-Messages rausschreiben
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Aktualisierer gestartet")
+        self.logger.debug("Aktualisierungsvektor - " + str(self.aktualisierungsvektor))
+        # Periodisches Aktualisieren des GUI anwerfen
+        self._lock = threading.Lock()
+        self.GUI.fenster.after(int(self.konfig["INTERVALL"])*1000, self.aktualisieren)
+        #self.konfig["INTERVALL"]
+    
+    def aktualisieren(self):
+        if self.aktualisierungsvektor["zeit"] == 1:
+            self.zeit_aktualisieren()
+        if self.aktualisierungsvektor["de"] == 1:
+            pass # bisher nicht erforderlich
+        if self.aktualisierungsvektor["ae"] == 1:
+            self.ae_aktualisieren()
+        if self.aktualisierungsvektor["da"] == 1:
+            self.da_aktualisieren()
+        if self.aktualisierungsvektor["aa"] == 1:
+            self.aa_aktualisieren()
+        self.GUI.fenster.after(int(self.konfig["INTERVALL"])*1000, self.aktualisieren)
 
-
-class ZeitAktualisierer:
-    """Klasse zum Aktualisieren der Zeit"""
-
-    def __init__(self, wertdatum, wertzeit):
-        """Konstruktor wirft die eigentliche Zeitsetzung an"""
-        t_2 = threading.Thread(
-            target=ZeitAktualisierer.aktualisieren,
-            args=(
-                wertdatum,
-                wertzeit,
-            ),
-            daemon=True,
-        )
-        t_2.start()
-
-    @staticmethod
-    def aktualisieren(wertdatum, wertzeit):
+    def zeit_aktualisieren(self):
         """Aktualisieren der Zeit"""
-        konfigkonfigmanager = kfg.Konfig() 
-        konfig = konfigkonfigmanager.konfiguration_bereitstellen()
-        while True:
-            datum = str(datetime.datetime.now().strftime("%d.%m.%Y"))
-            wertdatum.set(datum)
-            zeit = str(datetime.datetime.now().strftime("%H:%M:%S"))
-            wertzeit.set(zeit)
-            time.sleep(konfig["INTERVALL"])
+        datum = str(datetime.datetime.now().strftime("%d.%m.%Y"))
+        self.GUI.datum.set(datum)
+        zeit = str(datetime.datetime.now().strftime("%H:%M:%S"))
+        self.GUI.zeit.set(zeit)
 
+    def da_aktualisieren(self):
+        """Aktualisieren der digitalen Ausgänge"""
+        da_zugriff = dzg.DateiZugriff(self.konfig["DIGAUS"], self.konfig["DIGMAXLAENGE"])
+        da_daten = da_zugriff.lesen_alle()
+        for i in range(self.konfig["DIGMAXLAENGE"]):
+            self.GUI.DA[i].set(da_daten[i])
+
+    def aa_aktualisieren(self):
+        """Aktualisieren der analogen Ausgänge"""
+        aa_zugriff = dzg.DateiZugriff(self.konfig["ANAAUS"], self.konfig["ANAMAXLAENGE"])
+        aa_daten = aa_zugriff.lesen_alle()
+        for i in range(self.konfig["ANAMAXLAENGE"]):
+            self.GUI.AA[i].set(aa_daten[i])
+
+    def ae_aktualisieren(self):
+        """Aktualisieren der analogen Eingänge"""
+        ae_zugriff = dzg.DateiZugriff(self.konfig["ANAEIN"], self.konfig["ANAMAXLAENGE"])
+        ae_daten = ae_zugriff.lesen_alle()
+        for i in range(self.konfig["ANAMAXLAENGE"]):
+            self.GUI.AE[i].set(ae_daten[i])
+
+    def aktualisierungsvektor_setzen(self, key, value=1):
+        """Setzt einen Eintrag im Aktualisierungsvektor threadsicher"""
+        with self._lock:
+            if key not in self.aktualisierungsvektor:
+                self.logger.error("Unbekannter Schlüssel beim Setzen des Aktualisierungsvektors: " + key)
+            else:
+                self.aktualisierungsvektor[key] = value
+                self.logger.info("Aktualisierungsvektor aktualisiert. Neuer Aktualisierungsvektor: " + str(self.aktualisierungsvektor))
 
 # SimSTB starten
 def main():

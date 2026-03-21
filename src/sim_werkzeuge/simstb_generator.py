@@ -28,7 +28,7 @@ import sim_basis.simstb_dateizugriff as dzg
 class GeneratorGUI:
     """ Klasse Funktionsgenerator GUI """
 
-    def __init__(self, hauptfenster, AE):
+    def __init__(self, gui):
         """ Konstruktor, in dem das GUI des Funktionsgenerator aufgebaut wird """
         konfigkonfigmanager = kfg.Konfig() 
         self.konfig = konfigkonfigmanager.konfiguration_bereitstellen()
@@ -36,17 +36,15 @@ class GeneratorGUI:
         self.logger = logging.getLogger(__name__ + ".GeneratorGUI")
         self.logger.info("Funktionsgenerator GUI gestartet")
         self.gen_gui_aktiv = True
-        self.hauptfenster = hauptfenster
-        self.AE = AE
+        self.gui = gui
         self.controller = GeneratorController()
 
         # Top-Level Fenster für Funktionsgenerator anlegen
-        self.generatorfenster = Toplevel(self.hauptfenster)
+        self.generatorfenster = Toplevel(self.gui.fenster)
         self.generatorfenster.title("SimSTB - Funktionsgenerator")
         self.generatorfenster.protocol("WM_DELETE_WINDOW", lambda: self.schliessen())
 
-        self.eingangsaktualisierung_beenden = BooleanVar()
-        self.eingangsaktualisierung_beenden.set(False)
+        self.stop_event_ae = threading.Event()
 
         # Hauptrahmen anlegen
         hauptrahmen = ttk.Frame(master=self.generatorfenster, padding="5", style="Haupt.TFrame")
@@ -118,64 +116,89 @@ class GeneratorGUI:
         return opt
 
     def start(self):
-        """ Generatorfenster schliessen """
-        opt= self.exrahiere_optionen()
-        if self.controller.ist_am_laufen() == False:
-            self.eingangsaktualisierung_beenden.set(False)
-            AnalogeEingangsdatenAktualisierer( self.AE, self.eingangsaktualisierung_beenden)
-            self.controller.start( opt)
-            self.gen_status.set( "Generator aktiv")
+        """ Generator starten """
+        opt = self.exrahiere_optionen()
+        if not self.controller.ist_am_laufen():
+            # AE-Aktualisierung starten
+            self.gui.aktualisierer.aktualisierungsvektor_setzen("ae", 1)  # AE-Aktualisierung einschalten
+            # Generator starten
+            self.controller.start(opt)
+            # GUI-Status aktualisieren
+            self.gen_status.set("Generator aktiv")
             sblock = ttk.Style()
-            sblock.configure( "BlockStatusLabelGen.TLabel", background = self.konfig["AKTIVE_BACKGROUND"])
+            sblock.configure("BlockStatusLabelGen.TLabel", background=self.konfig["AKTIVE_BACKGROUND"])            
 
     def stop(self):
-        """ Generatorfenster schliessen """
-        if self.controller.ist_am_laufen() == True:
-            self.eingangsaktualisierung_beenden.set(True)
+        """ Generator stoppen """
+        if self.controller.ist_am_laufen():
+            # Stop AE-Aktualisierung
+            self.gui.aktualisierer.aktualisierungsvektor_setzen("ae", 0)  # AE-Aktualisierung ausschalten
+            # Generator stoppen
             self.controller.stop()
-            self.gen_status.set( "Generator nicht aktiv")
+                # GUI-Status aktualisieren
+            self.gen_status.set("Generator nicht aktiv")
             sblock = ttk.Style()
-            sblock.configure( "BlockStatusLabelGen.TLabel", background =self.konfig["BLOCK_BACKGROUND"])
+            sblock.configure("BlockStatusLabelGen.TLabel", background=self.konfig["BLOCK_BACKGROUND"])
 
     def schliessen(self):
         """ Generatorfenster schliessen """
-        if self.controller.ist_am_laufen() == True:
-            self.stop()
+        self.gui.aktualisierer.aktualisierungsvektor_setzen("ae", 0)  # AE-Aktualisierung ausschalten
+        if self.controller.ist_am_laufen():
+           self.controller.stop()              # Generator stoppen
         self.generatorfenster.destroy()
         self.gen_gui_aktiv = False
         self.logger.info("Funktionsgenerator GUI geschlossen")
 
+
 class GeneratorController:
+    """ Klasse Funktionsgenerator Controller (thread-safe) """
 
     def __init__(self):
-        """ Konstruktor des Genrator Controllers """
+        """ Konstruktor des Generator Controllers """
         self.t = None
+        self.stop_event = threading.Event()
         self.logger = logging.getLogger(__name__ + ".GeneratorController")
-    
+
     def start(self, optionen):
         """ Funktionsgenerator starten """
-        self.t = threading.Thread(target=self.doit, args=(optionen,))
+        if self.ist_am_laufen():
+            self.logger.warning("Funktionsgenerator läuft bereits")
+            return
+
+        self.stop_event.clear()
+        self.t = threading.Thread(target=self.doit, args=(optionen,), daemon=True)
         self.t.start()
 
     def stop(self):
         """ Funktionsgenerator beenden """
-        self.t.do_run = False
+        if not self.ist_am_laufen():
+            return
+
+        self.stop_event.set()
+        self.t.join()  # wartet sauber auf Thread-Ende
         self.t = None
 
     def ist_am_laufen(self):
-        if self.t == None:
-            return False
-        else:
-            return True
+        """ Test, ob Funktionsgenerator läuft """
+        return self.t is not None and self.t.is_alive()
 
     def doit(self, opt):
-        t = threading.current_thread()
+        """ Thread-Funktion für Generator """
         fkt_gen = FunktionsGenerator(opt)
         self.logger.info("Funktionsgenerator gestartet")
-        while getattr(t, "do_run",True):
-            fkt_gen.erzeuge_daten()
-            time.sleep(1)
-        self.logger.info("Funktionsgenerator beendet")
+
+        try:
+            while not self.stop_event.is_set():
+                try:
+                    fkt_gen.erzeuge_daten()
+                except Exception as e:
+                    self.logger.error(f"Fehler beim Erzeugen der Daten: {e}")
+
+                # Warte 1 Sekunde ODER sofort abbrechen bei Stop
+                self.stop_event.wait(1)
+        finally:
+            self.logger.info("Funktionsgenerator beendet")
+
 
 class FunktionsGenerator:
     def __init__(self,opt):
@@ -225,29 +248,3 @@ class FunktionsGenerator:
             wert = round( wert,2)
         return wert
 
-
-class AnalogeEingangsdatenAktualisierer:
-    """Klasse zum Aktualisieren der Eingangsdaten"""
-
-    def __init__(self, AE, beenden):
-        """Konstruktor wirft die eigentliche Aktualisieren der analogen Eingangsdaten an"""
-        t_1 = threading.Thread(
-            target=AnalogeEingangsdatenAktualisierer.aktualisieren,
-            args=(AE, beenden),
-            daemon=True,
-        )
-        t_1.start()
-
-    @staticmethod
-    def aktualisieren(AE, beenden):
-        """Aktualisieren der Daten für analoge Eingänge"""
-        konfigkonfigmanager = kfg.Konfig() 
-        konfig = konfigkonfigmanager.konfiguration_bereitstellen()
-        while True:
-            ae_zugriff = dzg.DateiZugriff(konfig["ANAEIN"], konfig["ANAMAXLAENGE"])  # Analoge Eingänge rausschreiben
-            ae_daten = ae_zugriff.lesen_alle()
-            for i in range(konfig["ANAMAXLAENGE"]):
-                AE[i].set(ae_daten[i])
-            if beenden.get() is True:
-                break
-            time.sleep(konfig["INTERVALL"])

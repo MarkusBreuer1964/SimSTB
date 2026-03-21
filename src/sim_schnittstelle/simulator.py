@@ -5,8 +5,6 @@
     Erstellt, Letzte Änderung:  20.06.2023, 20.03.2026
     """
 
-import os
-import sys
 import logging
 import sim_basis.simstb_logger as log
 import sim_basis.simstb_konfig as kfg
@@ -21,6 +19,8 @@ def logging_lokal_einrichten():
     if logger is None:
         log.logging_einrichten()
         logger = logging.getLogger(__name__)
+        logger.info("Simulatorschnittstelle - Neuer Zugriff auf Simulatorschnittstelle - Logger initialisiert")
+        logger.info("Simulatorschnittstelle - Logging initialisiert")
 
 def dig_ein( id):
     """Schnittstellenfunktion und digitalen Eingang zu lesen """

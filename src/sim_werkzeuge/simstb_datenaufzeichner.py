@@ -15,12 +15,13 @@
     Organisaion:        STB
 
     Erstellt:           06.08.2021
-    Letzte Änderung:    15.03.2026
+    Letzte Änderung:    21.03.2026
     """
 
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+from pathlib import Path
 import threading
 import logging
 import time
@@ -107,16 +108,17 @@ class DatenaufzeichnerGUI:
     def start(self):
         """ DatenaufzeichnerGUI schliessen """
         opt = self.exrahiere_optionen()
-        if not self.controller.ist_am_laufen():
-            self.controller.start(opt)
-            self.gen_status.set("Datenaufzeichner aktiv")
-            sblock = ttk.Style()
-            sblock.configure("BlockStatusLabelDat.TLabel", background=self.konfig["AKTIVE_BACKGROUND"])
+        if self.controller.ist_am_laufen():
+            return
+        self.controller.start(opt)
+        self.gen_status.set("Datenaufzeichner aktiv")
+        sblock = ttk.Style()
+        sblock.configure("BlockStatusLabelDat.TLabel", background=self.konfig["AKTIVE_BACKGROUND"])
 
     def stop(self):
         """ Generatorfenster schliessen """
         if self.controller.ist_am_laufen():
-            self.controller.stop()
+            threading.Thread(target=self._stop_background, daemon=True).start()
             self.gen_status.set("Datenaufzeichner nicht aktiv")
             sblock = ttk.Style()
             sblock.configure("BlockStatusLabelDat.TLabel", background=self.konfig["BLOCK_BACKGROUND"])
@@ -129,6 +131,16 @@ class DatenaufzeichnerGUI:
         self.dat_gui_aktiv = False
         self.logger.info("Datenaufzeichner GUI geschlossen")
 
+    def _stop_background(self):
+        self.controller.stop()
+
+        # GUI-Update im Hauptthread!
+        self.hauptfenster.after(0, self._update_gui_stopped)
+
+    def _update_gui_stopped(self):
+        self.gen_status.set("Datenaufzeichner nicht aktiv")
+        sblock = ttk.Style()
+        sblock.configure("BlockStatusLabelDat.TLabel", background=self.konfig["BLOCK_BACKGROUND"])
 
 class DatenaufzeichnerController:
     """ Klasse Datenaufzeichner Controller """
@@ -136,33 +148,49 @@ class DatenaufzeichnerController:
     def __init__(self):
         """ Konstruktor des Datenaufzeichner Controllers """
         self.t = None
+        self.stop_event = threading.Event()
         self.logger = logging.getLogger(__name__ + ".DatenaufzeichnerController")
 
     def start(self, optionen):
         """ Datenaufzeichner starten """
-        self.t = threading.Thread(target=self.doit, args=(optionen,))
+        if self.ist_am_laufen():
+            self.logger.warning("Datenaufzeichner läuft bereits")
+            return
+
+        self.stop_event.clear()
+        self.t = threading.Thread(target=self.doit, args=(optionen,), daemon=True)
         self.t.start()
 
     def stop(self):
         """ Datenaufzeichner beenden """
-        self.t.do_run = False
+        if not self.ist_am_laufen():
+            return
+
+        self.stop_event.set()
+        self.t.join()  # wartet sauber auf Thread-Ende
         self.t = None
 
     def ist_am_laufen(self):
-        """ Test, ob Datenaufzeichner läuft"""
-        if self.t is None:
-            return False
-        else:
-            return True
+        """ Test, ob Datenaufzeichner läuft """
+        return self.t is not None and self.t.is_alive()
 
     def doit(self, opt):
-        t = threading.current_thread()
+        """ Thread-Funktion """
         dat_gen = Datenaufzeichner(opt)
         self.logger.info("Datenaufzeichner gestartet")
-        while getattr(t, "do_run", True):
-            dat_gen.schreibe_daten()
-            time.sleep(opt["intervall"])
-        self.logger.info("Datenaufzeichner beendet")
+
+        try:
+            while not self.stop_event.is_set():
+                try:
+                    dat_gen.schreibe_daten()
+                except Exception as e:
+                    self.logger.error(f"Fehler beim Schreiben der Daten: {e}")
+
+                # Wartet intervall Sekunden ODER bricht sofort ab bei stop_event
+                self.stop_event.wait(opt["intervall"])
+
+        finally:
+            self.logger.info("Datenaufzeichner beendet")
 
 class Datenaufzeichner:
     """ Klasse für eigentliche Aufzeichnung"""
@@ -171,7 +199,7 @@ class Datenaufzeichner:
         """ Konstruktor des Datenaufzeichners """
         konfigkonfigmanager = kfg.Konfig() 
         self.konfig = konfigkonfigmanager.konfiguration_bereitstellen()
-        self.dateiname = opt["dateiname"]
+        self.dateiname = str(Path(self.konfig["BASISVERZEICHNIS"]) / Path(opt["dateiname"]))
         self.schreibe_kopfzeile()
 
     def schreibe_kopfzeile(self):

@@ -3,7 +3,7 @@
  
  # Log-Datei und Log-Level
 LOGDATEI = "./simstb.log"
-LOGLEVEL = "DEBUG"
+LOGLEVEL = "INFO"
 
 # Namen und Position der Austauschdateien
 ANAAUS = "data/anaaus.txt"  
