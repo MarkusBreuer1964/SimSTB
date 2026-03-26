@@ -1,8 +1,8 @@
 # General project configuration  ######################################################################
 
 [project]
-name = "sim"
-version = "0.6.1"
+name = "simstb"
+version = "0.6.0a3"
 description = "SimSTB - Simulator für analoge und digitale Ein- und Ausgänge"
 authors = [
     {name = "Markus Breuer",email = "markus.breuer@berufskolleg-aachen.de"}
@@ -35,8 +35,11 @@ packages = [
     {include = "sim_basis", from = "src"},
     {include = "sim_schnittstelle", from = "src" },
     {include = "sim_werkzeuge", from = "src" }
-]
-include = ["src/sim_basis/resources/**/*"]
+    ]
+include = [
+    { path = "src/sim_basis/resources", format = "wheel" },
+    { path = "src/sim_basis/resources", format = "sdist" }
+    ]
 
 [tool.poetry.scripts]
 simstb_gui = "sim_werkzeuge.simstb_gui:main"

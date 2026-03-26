@@ -2,7 +2,7 @@
         Das Modul Simulatorschnittstelle stellt vier Funktionen
         zur Simulation digitaler und analoger Ein- und Ausgaben bereit
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  20.06.2023, 20.03.2026
+    Erstellt, Letzte Änderung:  20.06.2023, 22.03.2026
     """
 
 import logging
@@ -19,8 +19,7 @@ def logging_lokal_einrichten():
     if logger is None:
         log.logging_einrichten()
         logger = logging.getLogger(__name__)
-        logger.info("Simulatorschnittstelle - Neuer Zugriff auf Simulatorschnittstelle - Logger initialisiert")
-        logger.info("Simulatorschnittstelle - Logging initialisiert")
+        logger.info("Simulatorschnittstelle - Neuer Zugriff auf Simulatorschnittstelle über Simulatorschnittstelle")
 
 def dig_ein( id):
     """Schnittstellenfunktion und digitalen Eingang zu lesen """

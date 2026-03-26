@@ -41,19 +41,23 @@ def resources_zusammenstellen():
     os.makedirs(zielverzeichnis)
 
     # Verzeichnis mit Austauschdateien kopieren
-    os.makedirs(os.path.join(zielverzeichnis, "daten"), exist_ok=True)
+    os.makedirs(os.path.join(zielverzeichnis, "data"), exist_ok=True)
     quellverzeichnis = "templates/daten"
-    datenverzeichnis = os.path.join(zielverzeichnis, "daten")
+    datenverzeichnis = os.path.join(zielverzeichnis, "data")
     shutil.copytree(quellverzeichnis, datenverzeichnis, dirs_exist_ok=True)
  
     # Verzeichnis mit Dokumentation zusammenkopieren
-    os.makedirs(os.path.join(zielverzeichnis, "docs"), exist_ok=True)
-    quelldatei = "docs/SimSTB-Benutzerdokumentation.pdf"
-    zieldatei = os.path.join(zielverzeichnis, "docs", "SimSTB-Benutzerdokumentation.pdf")
+    os.makedirs(os.path.join(zielverzeichnis, "doc"), exist_ok=True)
+    os.makedirs(os.path.join(zielverzeichnis, "doc", "bilder"), exist_ok=True)
+    quelldatei = "doc/SimSTB-Benutzerdokumentation.pdf"
+    zieldatei = os.path.join(zielverzeichnis, "doc", "SimSTB-Benutzerdokumentation.pdf")
     shutil.copy(quelldatei, zieldatei)
-    quelldatei = "docs/beispiel.py"
-    zieldatei = os.path.join(zielverzeichnis, "docs", "beispiel.py")
+    quelldatei = "doc/beispiel.py"
+    zieldatei = os.path.join(zielverzeichnis, "doc", "beispiel.py")
     shutil.copy(quelldatei, zieldatei)
+    quelldatei = "doc/bilder"
+    zieldatei = os.path.join(zielverzeichnis, "doc", "bilder")
+    shutil.copytree(quelldatei, zieldatei, dirs_exist_ok=True)
 
     # Einzeldateien direkt in ressources kopieren
     quelldatei_liste = ["CONTRIBUTING.md", "LICENSE.txt", "README.md","templates/config.toml", "templates/modelle.json"]

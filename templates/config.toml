@@ -1,5 +1,5 @@
  # Konfigurationsdatei für den Simulator SimSTB
- # ale Pfade ausgehend von der Umgebungsvariablen SIMSTB_WURZEL
+ # alle Pfade ausgehend von der Umgebungsvariablen SIMSTB_WURZEL
  
  # Log-Datei und Log-Level
 LOGDATEI = "./simstb.log"

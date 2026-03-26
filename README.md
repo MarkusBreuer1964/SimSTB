@@ -5,11 +5,13 @@ Die Simulationsumgebung SimSTB ist für die Ausbildung im Bereich Python-Program
 Oft muss ein Programm nicht nur über die Konsole oder eine graphische Oberfläche mit dem Benutzer kommunizieren, sondern auch über analoge und digitale Schnittstellen mit einem technischen System. Die Simulationsumgebung SimSTB erlaubt es, dies für Schulungszwecke auch ohne zusätzliche Hardware 
 mittels Simulation durchzuführen.
 
-Durch das Einbinden des Simulatorpakets `sim` stehen dem Schüler vier einfach zu nutzende Funktionen für die digitale und analoge Ein- und Ausgabe zur Verfügung. Die analogen und digitalen Werte können über eine graphische Oberfläche bequem überwacht und gesetzt werden.
+![Einsatzkontext](./doc/bilder/einsatzkontext.png)
+
+Durch das Einbinden des Simulatorpakets `simstb` stehen dem Schüler vier einfach zu nutzende Funktionen für die digitale und analoge Ein- und Ausgabe zur Verfügung. Die analogen und digitalen Werte können über eine graphische Oberfläche bequem überwacht und gesetzt werden.
 
 ## Installation
 
-1. Installieren Sie das Simulator-Paket mit dem Befehl `pip install sim`
+1. Installieren Sie das Simulator-Paket mit dem Befehl `pip install simstb`
 2. Prüfen Sie mit `pip list`, ob das Paket installiert wurde.
 3. Prüfen Sie mit `simstb_cli --version`, ob das Kommandozeilenwerkzeug korrekt installiert wurde.
 4. Bauen Sie mit `simstb_cli --init` die Laufzeitumgebung auf. Hierzu wird ein Ordner `sim` mit der Laufzeitumgebung im aktuellen Arbeitsverzeichnis angelegt. Achten Sie darauf, sich beim Aufruf im richtigen Verzeichnis zu befinden.
@@ -42,6 +44,8 @@ Durch das Einbinden des Simulatorpakets `sim` stehen dem Schüler vier einfach z
 
 Mit Hilfe des Programms simstb_gui können Sie digitalen und analogen Ein- und Ausgänge überwachen und die Eingänge setzen. Die Werte werden im Sekundentakt aktualisiert. Starten können Sie das Simulator GUI mit in der Kommandozeile mit `simstb_gui` oder `simstb_cli --gui`.
 
+![SimSTB](./doc/bilder/simstb_gui.png)
+
 ### 2. Erstellung eigener Programme für die Simulationsumgebung SimSTB
 
 Mit Hilfe der vier Funktionen:
@@ -67,7 +71,7 @@ In der Datei __SimSTB-Benutzerdokumentation.pdf__ finden Sie eine ausführrliche
 
 ## Version
 
-V 0.6.1
+V 0.6.0aX
 
 ## License
 

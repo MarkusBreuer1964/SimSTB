@@ -1,6 +1,6 @@
 """ simstb_init.py - Initialisierungder Laufzeitumgebung
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  17.03.2026
+    Erstellt, Letzte Änderung:  17.03.2026, 25.3.2026
     """
 
 from pathlib import Path
@@ -28,6 +28,7 @@ def init_runtime():
     sim_dir = current_dir / "sim"
     data_dir = sim_dir / "data"
     doc_dir = sim_dir / "doc"
+    bilder_dir = doc_dir /"bilder"
     try:
         # Hauptverzeichnis 'sim' erstellen
         sim_dir.mkdir(exist_ok=False)
@@ -35,7 +36,8 @@ def init_runtime():
         # Unterverzeichnisse 'data' und 'doc' erstellen
         data_dir.mkdir(exist_ok=False)
         doc_dir.mkdir(exist_ok=False)
-        print(f"Unterverzeichnisse '{data_dir}' und '{doc_dir}' erstellt.")
+        bilder_dir.mkdir(exist_ok=False)
+        print(f"Unterverzeichnisse '{data_dir}', '{doc_dir}' und '{bilder_dir}' erstellt.")
     except FileExistsError:
         print(f"Fehler: Das Verzeichnis '{sim_dir}' existiert bereits.")
         sys.exit(11)
@@ -45,13 +47,19 @@ def init_runtime():
     
     # 4. Dateien in doc-Unterverzeichnis und data-Unterverzeichnis kopieren
     ziel = doc_dir
-    ressourcen_pfad = files("sim_basis.resources.docs") 
+    ressourcen_pfad = files("sim_basis.resources.doc") 
+    for quelle in ressourcen_pfad.iterdir():
+        if quelle.is_file():
+            shutil.copy2(quelle, ziel)
+    print(f"Verzeichnis {ziel} mit Dateien gefüllt.")
+    ziel = bilder_dir
+    ressourcen_pfad = files("sim_basis.resources.doc.bilder") 
     for quelle in ressourcen_pfad.iterdir():
         if quelle.is_file():
             shutil.copy2(quelle, ziel)
     print(f"Verzeichnis {ziel} mit Dateien gefüllt.")
     ziel = data_dir
-    ressourcen_pfad = files("sim_basis.resources.daten") 
+    ressourcen_pfad = files("sim_basis.resources.data") 
     for quelle in ressourcen_pfad.iterdir():
         if quelle.is_file():
             shutil.copy2(quelle, ziel)
@@ -65,5 +73,8 @@ def init_runtime():
             shutil.copy2(quelle, ziel)
     print(f"Verzeichnis {ziel} mit Dateien gefüllt.")
 
-    print("Laufzeitumgebung erfolgreich initialisiert.")
+    print(f"Laufzeitumgebung '{sim_dir}' erfolgreich initialisiert.\n")
 
+    # 6. Hinweis auf Umgebungsvariable ausgeben
+    print(f"Bitte setzen Sie die Umgebungsvariable SIMSTB_WURZEL auf den Pfad {sim_dir} der Laufzeitumgebung.\n")
+    

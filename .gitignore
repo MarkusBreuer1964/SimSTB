@@ -6,7 +6,7 @@
 dist/
 __pycache__/
 .coverage
-src/sim_basis/resourcees/
+src/sim_basis/resources/
 
 # Ignore runtime directories and files ########################################################################
 sim/

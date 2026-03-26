@@ -1,8 +1,9 @@
  # Konfigurationsdatei für den Simulator SimSTB
+ # alle Pfade ausgehend von der Umgebungsvariablen SIMSTB_WURZEL
  
  # Log-Datei und Log-Level
 LOGDATEI = "./simstb.log"
-LOGLEVEL = "DEBUG"
+LOGLEVEL = "INFO"
 
 # Namen und Position der Austauschdateien
 ANAAUS = "data/anaaus.txt"  

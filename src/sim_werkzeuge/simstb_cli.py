@@ -1,17 +1,17 @@
 """ simstb_cli.py - CLI-Werkzeug für Projekt SimSTB
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  17.03.2026, 18.03.2026
+    Erstellt, Letzte Änderung:  17.03.2026, 22.03.2026
     """
 
 
+from pathlib import Path
+import os
+import sys
 import argparse
 import sim_basis.version as ver
 import sim_basis.simstb_konfig as kfg
 import sim_werkzeuge.simstb_gui as gui
 import sim_werkzeuge.simstb_init as init
-
-# from .config import show_config
-# from .runtime import init_runtime, start_gui
 
 def main():
     parser = argparse.ArgumentParser(description="CLI-Werkeug für Projekt SimSTB")
@@ -58,11 +58,22 @@ def main():
         parser.print_help()
 
 def show_config():
-        konfigkonfigmanager = kfg.Konfig() 
-        konfig = konfigkonfigmanager.konfiguration_bereitstellen()
-        print("\nAktuelle Konfiguration SimSTB (Pfade aufgelöst):\n")
-        for key, value in konfig.items():
-            print(f"{str(key):<20s} : {value}")
+        try:
+            basisverzeichnis = Path(os.getenv("SIMSTB_WURZEL"))
+            print(f"\nUmgebungsvariable SIMSTB_WURZEL gesetzt: {basisverzeichnis}\n")
+        except Exception as e:
+            print("Umgebungsvariable SIMSTB_WURZEL nicht gesetzt -> Bitte Umgebungsvariable SIMSTB_WURZEL setzen -> Programmabbruch")
+            sys.exit(1)
+        try:
+            konfigkonfigmanager = kfg.Konfig() 
+            konfig = konfigkonfigmanager.konfiguration_bereitstellen()
+            print("Aktuelle Konfiguration SimSTB (Pfade aufgelöst):\n")
+            for key, value in konfig.items():
+                print(f"{str(key):<20s} : {value}")
+        except Exception as e:
+            print(f"Fehler beim Laden der Konfigurationsdatei: {e}")
+            print("Bitte Konfigurationsdatei überprüfen")
+            print("Aufbau der Laufzeitumgebung mit simstb_cli --init vergessen?")
         print("\n")
         
 if __name__ == "__main__":
