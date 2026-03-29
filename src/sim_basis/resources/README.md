@@ -2,8 +2,7 @@
 
 Die Simulationsumgebung SimSTB ist für die Ausbildung im Bereich Python-Programmierung geeignet. Sie ist insbesondere für den Unterricht bei (elektro)technischen Schülern gedacht.
 
-Oft muss ein Programm nicht nur über die Konsole oder eine graphische Oberfläche mit dem Benutzer kommunizieren, sondern auch über analoge und digitale Schnittstellen mit einem technischen System. Die Simulationsumgebung SimSTB erlaubt es, dies für Schulungszwecke auch ohne zusätzliche Hardware 
-mittels Simulation durchzuführen.
+Oft muss ein Programm nicht nur über die Konsole oder eine graphische Oberfläche mit dem Benutzer kommunizieren, sondern auch über analoge und digitale Schnittstellen mit einem technischen System. Die Simulationsumgebung SimSTB erlaubt es, dies für Schulungszwecke auch ohne zusätzliche Hardware mittels Simulation durchzuführen.
 
 ![Einsatzkontext](./doc/bilder/einsatzkontext.png)
 
@@ -18,31 +17,33 @@ Durch das Einbinden des Simulatorpakets `simstb` stehen dem Schüler vier einfac
 5. Kontrollieren Sie, ob folgende Verzeichnis-Struktur und Dateien vorhanden sind.
 
         ``` 
-        SIM
-        │   config.toml
-        │   CONTRIBUTING.md
-        │   LICENSE.txt
-        │   modelle.json
-        │   README.md
-        │
-        ├───data
-        │       anaaus.txt
-        │       anaein.txt
-        │       digaus.txt
-        │       digein.txt
-        │
-        └───doc
-                beispiel.py
-                SimSTB-Benutzerdokumentation.pdf
+        sim
+        ├── config.toml
+        ├── CONTRIBUTING.md
+        ├── data
+        │   ├── anaaus.txt
+        │   ├── anaein.txt
+        │   ├── digaus.txt
+        │   └── digein.txt
+        ├── doc
+        │   ├── beispiel.py
+        │   ├── bilder
+        │   │   ├── band_links.gif
+        │   │   ├── band_rechts.gif
+        │   │   ├── ...
+        │   └── SimSTB-Benutzerdokumentation.pdf
+        ├── LICENSE.txt
+        ├── modelle.json
+        └── README.md
         ```
 
-6. Erstellen Sie eine Umgebungsvariable namens `SIMSTB_WURZEL`, welches auf das Simulationsverzeichnis zeigt.
+6. Erstellen Sie eine Umgebungsvariable namens `SIMSTB_WURZEL`, welches auf das Simulationsverzeichnis `sim` zeigt.
 
 ## Benutzung
 
 ### 1. Simulations Steuerung und Monitor
 
-Mit Hilfe des Programms simstb_gui können Sie digitalen und analogen Ein- und Ausgänge überwachen und die Eingänge setzen. Die Werte werden im Sekundentakt aktualisiert. Starten können Sie das Simulator GUI mit in der Kommandozeile mit `simstb_gui` oder `simstb_cli --gui`.
+Mit Hilfe des Programms `simstb_gui` können Sie die digitalen und analogen Ein- und Ausgänge überwachen und die Eingänge setzen. Die Werte werden im Sekundentakt aktualisiert. Starten können Sie die Simulator GUI in der Kommandozeile mit `simstb_gui` oder `simstb_cli --gui`.
 
 ![SimSTB](./doc/bilder/simstb_gui.png)
 

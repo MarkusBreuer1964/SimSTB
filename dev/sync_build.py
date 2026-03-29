@@ -1,13 +1,15 @@
 """ sync_build.py - Das Skript erzeugt a) eine version.py mit den Build-Daten und stellt b) die zum Aufbau der Laufzeitumgebung notwendigen 
 Daten unter src/sim_basis/resources zusammen.
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  15.03.2026, 18.03.2026
+    Erstellt, Letzte Änderung:  15.03.2026, 29.03.2026
     """
-# build_timestamp.py
+
+
 from datetime import datetime
 import toml
 import shutil
 import os
+from importlib.resources import files
 
 
 def hauptprogramm():
@@ -65,6 +67,7 @@ def resources_zusammenstellen():
         zieldatei = os.path.join(zielverzeichnis, os.path.basename(quelldatei))
         shutil.copy(quelldatei, zieldatei)
     print(f"2. Ressourcen unter {zielverzeichnis} zusammengestellt.")
+
 
 if __name__ == "__main__":
     hauptprogramm()

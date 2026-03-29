@@ -1,25 +1,46 @@
-# General project configuration  ######################################################################
+# Allgemeine Projekt Einstellungen  ######################################################################
 
 [project]
 name = "simstb"
-version = "0.6.0a3"
+version = "0.6.0a4"
 description = "SimSTB - Simulator für analoge und digitale Ein- und Ausgänge"
-authors = [
-    {name = "Markus Breuer",email = "markus.breuer@berufskolleg-aachen.de"}
-]
-license = {text = "MIT"}
+license = "MIT"
 readme = "README.md"
-requires-python = ">=3.10,<4.0.0"
-
-# Dependencies needed for production ######################################################################
+requires-python = ">=3.10"
+authors = [ {name ="Markus Breuer", email="markus.breuer@berufskolleg-aachen.de"}]
+keywords = [ "education", "simulation", "automation" ]
+package-mode = true
 
 dependencies = [
     "filelock (>=3.25.0,<4.0.0)",
-    "toml (>=0.10.2,<0.11.0)",
-    "screeninfo (>=0.8.1,<0.9.0)"
+    "screeninfo (>=0.8.1,<0.9.0)",
+    "toml (>=0.10.2,<=0.10.2)"
 ]
 
-# Dependencies only needed for development ######################################################################
+[project.scripts]
+simstb_cli = "sim_werkzeuge.simstb_cli:main"
+simstb_gui = "sim_werkzeuge.simstb_gui:main"
+simstb_modell_1 = "sim_werkzeuge.simstb_modell_1:hauptprogramm"
+simstb_modell_2 = "sim_werkzeuge.simstb_modell_2:hauptprogramm"
+
+# Poetry Einstellungen  ######################################################################
+
+[tool.poetry]
+packages = [
+    {include = "sim_basis", from = "src"},
+    {include = "sim_schnittstelle", from = "src" },
+    {include = "sim_werkzeuge", from = "src" }
+    ]
+
+include = [
+    { path = "src/sim_basis/resources", format = "wheel" },
+    { path = "src/sim_basis/resources", format = "sdist" }
+    ]
+
+# Entwicklungsabhängigkeiten ######################################################################
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest =">=9.0.2,<10.0.0"
@@ -27,27 +48,13 @@ black = ">=26.1.0,<27.0.0"
 flake8 = ">=7.3.0,<8.0.0"
 pylint = ">=4.0.5,<5.0.0"
 
-# Werkzeug Einstellungen #################################################################################
-
-[tool.poetry]
-package-mode = true
-packages = [
-    {include = "sim_basis", from = "src"},
-    {include = "sim_schnittstelle", from = "src" },
-    {include = "sim_werkzeuge", from = "src" }
-    ]
-include = [
-    { path = "src/sim_basis/resources", format = "wheel" },
-    { path = "src/sim_basis/resources", format = "sdist" }
-    ]
-
-[tool.poetry.scripts]
-simstb_gui = "sim_werkzeuge.simstb_gui:main"
-simstb_cli = "sim_werkzeuge.simstb_cli:main"
+# Build Einstellungen #################################################################################
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# Werkzeug Einstellungen #################################################################################
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

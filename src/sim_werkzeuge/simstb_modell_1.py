@@ -8,18 +8,20 @@
     Organisaion:        STB
 
     Erstellt:           09.08.2021
-    Letzte Änderung:    
+    Letzte Änderung:    26.03.2026
     """
 
 from tkinter import *
 from tkinter import ttk
-from tkinter import messagebox
-import time
+import os
+import logging
 import sys
 from tkinter import font
 from tkinter.font import Font
-from simstb_konfig import Konfig
-from simstb_dateizugriff import DateiZugriff
+from importlib.resources import files, as_file
+import sim_basis.simstb_logger as log
+import sim_basis.simstb_konfig as kfg
+import sim_basis.simstb_dateizugriff as dzg
 
 ANZAHL_LED = 8
 
@@ -29,14 +31,28 @@ class Modell_1:
     def __init__(self, hauptfenster):
         """ Konstruktor, in dem das GUI für Modell 1 aufgebaut wird """
         self.fenster = hauptfenster
-        self.fenster.iconbitmap("simstb.ico")
         self.fenster.protocol("WM_DELETE_WINDOW", lambda: self.beenden())
+        # Konfigurationsdatei laden
+        konfigkonfigmanager = kfg.Konfig() 
+        self.konfig = konfigkonfigmanager.konfiguration_bereitstellen()
+        # Logging initialisieren und Log-Messages rausschreiben
+        log.logging_einrichten()
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Modell 1 - LED-Streifen gestartet")
+        self.logger.debug("AktuellesArbeitsverzeichnis: " + os.getcwd())
+        self.logger.debug("Basisverzeichnis: " + self.konfig["BASISVERZEICHNIS"])
+        self.logger.debug("Konfigurationsdatei: " + self.konfig["KONFIG_DATEINAME"])
+        self.logger.debug("Logdatei: " + self.konfig["LOGDATEI"])
         
         # Styles festlegen
         self.festlegen_Styles()
 
-        self.led_aus = PhotoImage(file="led_grau.png")
-        self.led_an = PhotoImage(file="led_blau.png")
+        # Bilder laden
+        bilder = files("sim_basis.resources.doc.bilder")
+        with as_file(bilder / "led_grau.png") as p:
+            self.led_aus = PhotoImage(file=str(p))
+        with as_file(bilder / "led_blau.png") as p:
+            self.led_an = PhotoImage(file=str(p))
 
         # Hauptrahmen anlegen
         hauptrahmen = ttk.Frame(master=self.fenster, padding="5", style="Haupt.TFrame")
@@ -74,17 +90,17 @@ class Modell_1:
         sblock.configure('TButton', font=("Tahoma", 11 ))
         sblock.configure('TCheckbutton', font=("Tahoma", 11))
 
-        sblock.configure( "Haupt.TFrame", background = Konfig.HAUPT_BACKGROUND)
-        sblock.configure( "HauptLabel2.TLabel", background =Konfig.HAUPT_BACKGROUND, font=("Tahoma", 11, "bold"))
-        sblock.configure( "HauptLabel1.TLabel", background =Konfig.HAUPT_BACKGROUND, font=("Tahoma", 24, "bold"))
+        sblock.configure( "Haupt.TFrame", background = self.konfig["HAUPT_BACKGROUND"], relief=RAISED)
+        sblock.configure( "HauptLabel2.TLabel", background =self.konfig["HAUPT_BACKGROUND"], font=("Tahoma", 11, "bold"))
+        sblock.configure( "HauptLabel1.TLabel", background =self.konfig["HAUPT_BACKGROUND"], font=("Tahoma", 24, "bold"))
 
-        sblock.configure( "Block.TFrame", background = Konfig.BLOCK_BACKGROUND, relief=RAISED)
-        sblock.configure( "BlockLabel2.TLabel", background =Konfig.BLOCK_BACKGROUND, font=("Tahoma", 11, "bold"))
-        sblock.configure( "BlockLabel.TLabel", background =Konfig.BLOCK_BACKGROUND)
-        sblock.configure( "BlockStatusLabelGen.TLabel", background =Konfig.BLOCK_BACKGROUND, font=("Tahoma", 11, "bold"))
-        sblock.configure( "BlockStatusLabelDat.TLabel", background =Konfig.BLOCK_BACKGROUND, font=("Tahoma", 11, "bold"))
-        sblock.configure( "BlockCheckbutton.TCheckbutton", background = Konfig.BLOCK_BACKGROUND)
-        sblock.configure( "Unterblock.TFrame", background = Konfig.BLOCK_BACKGROUND)
+        sblock.configure( "Block.TFrame", background = self.konfig["BLOCK_BACKGROUND"], relief=RAISED)
+        sblock.configure( "BlockLabel2.TLabel", background =self.konfig["BLOCK_BACKGROUND"], font=("Tahoma", 11, "bold"))
+        sblock.configure( "BlockLabel.TLabel", background =self.konfig["BLOCK_BACKGROUND"])
+        sblock.configure( "BlockStatusLabelGen.TLabel", background =self.konfig["BLOCK_BACKGROUND"], font=("Tahoma", 11, "bold"))
+        sblock.configure( "BlockStatusLabelDat.TLabel", background =self.konfig["BLOCK_BACKGROUND"], font=("Tahoma", 11, "bold"))
+        sblock.configure( "BlockCheckbutton.TCheckbutton", background = self.konfig["BLOCK_BACKGROUND"])
+        sblock.configure( "Unterblock.TFrame", background = self.konfig["BLOCK_BACKGROUND"], relief=RAISED)
 
     def setzen_abstaende(self, hauptrahmen, unterrahmen1):
         """ Feinschliff Layout - Abstände zwischen Fensterelementen setzen"""
@@ -100,7 +116,7 @@ class Modell_1:
         self.fenster.after(1000, self.aktualisieren)
 
     def aktualisieren_ausgangswerte(self):
-        da_zugriff = DateiZugriff(Konfig.DIGAUS, Konfig.DIGMAXLAENGE)
+        da_zugriff = dzg.DateiZugriff(self.konfig["DIGAUS"], self.konfig["DIGMAXLAENGE"])
         da_daten= da_zugriff.lesen_alle()
         for i in range(ANZAHL_LED):
             if int(da_daten[i]) == 0:
@@ -113,7 +129,7 @@ class Modell_1:
 
     def beenden(self):
         """ Modell 1 beenden """
-        sys.exit ("Modell 1 beendet")
+        sys.exit (0)
 
 
 def hauptprogramm():
@@ -121,4 +137,6 @@ def hauptprogramm():
     TS = Modell_1(fenster)  # Oberfläche Simulator aufbauen
     fenster.mainloop()  # Hauptschleife starten
 
-hauptprogramm()
+
+if __name__ == "__main__":
+    hauptprogramm()

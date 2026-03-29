@@ -481,6 +481,7 @@ class Aktualisierer:
 # SimSTB starten
 def main():
     GUI()
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()

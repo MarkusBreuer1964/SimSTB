@@ -1,6 +1,6 @@
 """ simstb_cli.py - CLI-Werkzeug für Projekt SimSTB
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  17.03.2026, 22.03.2026
+    Erstellt, Letzte Änderung:  17.03.2026, 26.03.2026
     """
 
 
@@ -14,7 +14,7 @@ import sim_werkzeuge.simstb_gui as gui
 import sim_werkzeuge.simstb_init as init
 
 def main():
-    parser = argparse.ArgumentParser(description="CLI-Werkeug für Projekt SimSTB")
+    parser = argparse.ArgumentParser(description="CLI-Werkzeug für Projekt SimSTB")
     parser.add_argument(
         "--version",
         action="store_true",
@@ -49,6 +49,7 @@ def main():
         parser.print_help()
     elif args.show_config:
         show_config()
+
     elif args.init:
         init.init_runtime()
     elif args.gui:
@@ -56,6 +57,7 @@ def main():
         gui.main()
     else:
         parser.print_help()
+    sys.exit(0)
 
 def show_config():
         try:

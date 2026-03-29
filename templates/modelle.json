@@ -2,12 +2,12 @@
     {
         "nr": 1,
         "name": "Modell 1 - LED Streifen",
-        "exe": "simstb_modell_1.exe"
+        "exe": "simstb_modell_1"
     },
     {
         "nr": 2,
         "name": "Modell 2 - Fließband (in Arbeit)",
-        "exe": "simstb_modell_2.exe"
+        "exe": "simstb_modell_2"
     }
    
 ]
