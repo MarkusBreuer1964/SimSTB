@@ -2,7 +2,7 @@
 
 [project]
 name = "simstb"
-version = "0.6.0a4"
+version = "1.0.0"
 description = "SimSTB - Simulator für analoge und digitale Ein- und Ausgänge"
 license = "MIT"
 readme = "README.md"
