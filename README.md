@@ -72,7 +72,7 @@ In der Datei __SimSTB-Benutzerdokumentation.pdf__ finden Sie eine ausführrliche
 
 ## Version
 
-V 0.6.0aX
+Aktuelle Version: 1.0.0
 
 ## License
 

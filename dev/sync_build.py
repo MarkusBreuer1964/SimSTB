@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 """ sync_build.py - Das Skript erzeugt a) eine version.py mit den Build-Daten und stellt b) die zum Aufbau der Laufzeitumgebung notwendigen 
 Daten unter src/sim_basis/resources zusammen.
     Name, Organisaion:          Markus Breuer, STMB
-    Erstellt, Letzte Änderung:  15.03.2026, 29.03.2026
+    Erstellt, Letzte Änderung:  15.03.2026, 15.07.2026
     """
 
 
@@ -15,7 +17,9 @@ from importlib.resources import files
 def hauptprogramm():
     """Hauptprogramm des Skripts, das die version.py erstellt und die Ressourcen zusammenstellt"""
     print("Starte Vorbereitung der Build-Phase ...")
-    versions_datei_erstellen()
+    version, _ = versions_datei_erstellen()
+    readme_version_aktualisieren(version)
+    tox_ini_version_aktualisieren(version)
     resources_zusammenstellen()
     print("Build-Phase vorbereitet")
 
@@ -30,6 +34,57 @@ def versions_datei_erstellen():
         f.write(f"SIMSTB_VERSION='{version}'\n")
         f.write(f"SIMSTB_VERSION_DATE='{zeit}'\n")
     print(f"1. version.py mit Version {version} und Datum {zeit} erstellt.")
+    return version, zeit
+
+
+def readme_version_aktualisieren(version):
+    """Update the version line in README.md."""
+    readme_pfad = "README.md"
+
+    with open(readme_pfad, "r", encoding="utf-8") as datei:
+        zeilen = datei.readlines()
+
+    aktualisierte_zeilen = []
+    versionszeile_gefunden = False
+
+    for zeile in zeilen:
+        if zeile.startswith("Aktuelle Version: "):
+            aktualisierte_zeilen.append(f"Aktuelle Version: {version}\n")
+            versionszeile_gefunden = True
+        else:
+            aktualisierte_zeilen.append(zeile)
+
+    if versionszeile_gefunden:
+        with open(readme_pfad, "w", encoding="utf-8") as datei:
+            datei.writelines(aktualisierte_zeilen)
+        print(f"2. README.md Version auf {version} aktualisiert.")
+    else:
+        print("2. Hinweis: Keine Versionszeile in README.md gefunden.")
+
+
+def tox_ini_version_aktualisieren(version):
+    """Update the PACKAGE_VERSION line in tox.ini."""
+    tox_pfad = "tox.ini"
+
+    with open(tox_pfad, "r", encoding="utf-8") as datei:
+        zeilen = datei.readlines()
+
+    aktualisierte_zeilen = []
+    versionszeile_gefunden = False
+
+    for zeile in zeilen:
+        if zeile.startswith("    PACKAGE_VERSION = "):
+            aktualisierte_zeilen.append(f"    PACKAGE_VERSION = {version}\n")
+            versionszeile_gefunden = True
+        else:
+            aktualisierte_zeilen.append(zeile)
+
+    if versionszeile_gefunden:
+        with open(tox_pfad, "w", encoding="utf-8") as datei:
+            datei.writelines(aktualisierte_zeilen)
+        print(f"3. tox.ini Version auf {version} aktualisiert.")
+    else:
+        print("3. Hinweis: Keine PACKAGE_VERSION-Zeile in tox.ini gefunden.")
 
 
 def resources_zusammenstellen():
@@ -66,7 +121,7 @@ def resources_zusammenstellen():
     for quelldatei in quelldatei_liste:
         zieldatei = os.path.join(zielverzeichnis, os.path.basename(quelldatei))
         shutil.copy(quelldatei, zieldatei)
-    print(f"2. Ressourcen unter {zielverzeichnis} zusammengestellt.")
+    print(f"4. Ressourcen unter {zielverzeichnis} zusammengestellt.")
 
 
 if __name__ == "__main__":

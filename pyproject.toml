@@ -14,7 +14,8 @@ package-mode = true
 dependencies = [
     "filelock (>=3.25.0,<4.0.0)",
     "screeninfo (>=0.8.1,<0.9.0)",
-    "toml (>=0.10.2,<=0.10.2)"
+    "toml (>=0.10.2,<=0.10.2)",
+    "tox (>=4.56.4,<5.0.0)"
 ]
 
 [project.scripts]

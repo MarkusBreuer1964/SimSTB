@@ -3,13 +3,14 @@
     Erstellt, Letzte Änderung:  26.03.2026
     """
 
+from importlib.metadata import version
 import pytest
 import subprocess
 
 def test_simstb_cli_version():
     """Prüft, ob simstb_cli --version korrekt ausgeführt wird."""
     
-    
+    expected_version = version("simstb")
     result = subprocess.run(
         ["simstb_cli", "--version"],
         capture_output=True, 
@@ -19,6 +20,8 @@ def test_simstb_cli_version():
     assert result.returncode == 0
     output = result.stdout.strip()  
     assert "version" in output.lower()
+    assert expected_version in output.lower()
+    
 
 
 
