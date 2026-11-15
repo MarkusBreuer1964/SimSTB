@@ -2,17 +2,17 @@
 
 [project]
 name = "simstb"
-version = "1.0.0"
+version = "1.0.1"
 description = "SimSTB - Simulator für analoge und digitale Ein- und Ausgänge"
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 authors = [ {name ="Markus Breuer", email="markus.breuer@berufskolleg-aachen.de"}]
 keywords = [ "education", "simulation", "automation" ]
 package-mode = true
 
 dependencies = [
-    "filelock (>=3.25.0,<4.0.0)",
+    "filelock (>=4.2.1,<5.0.0)",
     "screeninfo (>=0.8.1,<0.9.0)",
     "toml (>=0.10.2,<=0.10.2)",
     "tox (>=4.56.4,<5.0.0)"
@@ -41,7 +41,7 @@ include = [
 # Entwicklungsabhängigkeiten ######################################################################
 
 [tool.poetry.dependencies]
-python = ">=3.10,<4.0.0"
+python = ">=3.12,<4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest =">=9.0.2,<10.0.0"
